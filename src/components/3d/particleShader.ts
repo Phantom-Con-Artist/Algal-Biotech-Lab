@@ -2,7 +2,7 @@ import { glowFragment, interactionGlsl } from './interactionGlsl';
 
 export const vertexShader = /* glsl */ `
   attribute vec3 aP1; attribute vec3 aP2; attribute vec3 aP3; attribute vec3 aP4;
-  attribute vec3 aP5; attribute vec3 aP6; attribute vec3 aP7;
+  attribute vec3 aP5; attribute vec3 aP6; attribute vec3 aP7; attribute vec3 aP8;
   attribute vec4 aRand;
   attribute float aAccent;
 
@@ -28,11 +28,11 @@ export const vertexShader = /* glsl */ `
     float s = base + t;
 
     float w0 = w(s, 0.0); float w1 = w(s, 1.0); float w2 = w(s, 2.0); float w3 = w(s, 3.0);
-    float w4 = w(s, 4.0); float w5 = w(s, 5.0); float w6 = w(s, 6.0); float w7 = w(s, 7.0);
+    float w4 = w(s, 4.0); float w5 = w(s, 5.0); float w6 = w(s, 6.0); float w7 = w(s, 7.0); float w8 = w(s, 8.0);
 
-    vec3 p = position * w0 + aP1 * w1 + aP2 * w2 + aP3 * w3 + aP4 * w4 + aP5 * w5 + aP6 * w6 + aP7 * w7;
+    vec3 p = position * w0 + aP1 * w1 + aP2 * w2 + aP3 * w3 + aP4 * w4 + aP5 * w5 + aP6 * w6 + aP7 * w7 + aP8 * w8;
     float acc = bit(aAccent, 0.0) * w0 + bit(aAccent, 1.0) * w1 + bit(aAccent, 2.0) * w2 + bit(aAccent, 3.0) * w3
-              + bit(aAccent, 4.0) * w4 + bit(aAccent, 5.0) * w5 + bit(aAccent, 6.0) * w6 + bit(aAccent, 7.0) * w7;
+              + bit(aAccent, 4.0) * w4 + bit(aAccent, 5.0) * w5 + bit(aAccent, 6.0) * w6 + bit(aAccent, 7.0) * w7 + bit(aAccent, 8.0) * w8;
 
     // In transit each point swings out on its own arc, so a morph reads as a burst, not a slide.
     float mid = sin(3.14159265 * t);

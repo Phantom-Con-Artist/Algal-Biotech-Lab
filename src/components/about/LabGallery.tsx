@@ -15,10 +15,10 @@ export function LabGallery() {
       <ul
         ref={track}
         aria-label={t.listLabel}
-        className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-[11vw] pb-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 md:gap-8 md:px-[calc(50%-320px)] lg:-mx-12 [&::-webkit-scrollbar]:hidden"
+        className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-[11vw] pb-4 [-ms-overflow-style:none] [scrollbar-width:none] sm:-mx-8 md:gap-8 md:px-[calc(50%-320px)] lg:-mx-12 lg:gap-10 lg:px-[calc(50%-430px)] xl:px-[calc(50%-520px)] [&::-webkit-scrollbar]:hidden"
       >
         {LAB_GALLERY.map((src, i) => (
-          <li key={src} className="w-[78vw] shrink-0 snap-center will-change-transform md:w-[640px]">
+          <li key={src} className="w-[78vw] shrink-0 snap-center will-change-transform md:w-[640px] lg:w-[860px] xl:w-[1040px]">
             <img
               src={src}
               alt={t.alts[i]}

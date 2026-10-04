@@ -38,6 +38,7 @@ export function BloomField({ count, reduced }: { count: number; reduced: boolean
     const data = buildBloom(count);
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(data.positions, 3));
+    geo.setAttribute('aOrigin', new THREE.BufferAttribute(data.origins, 3));
     geo.setAttribute('aBirth', new THREE.BufferAttribute(data.birth, 1));
     geo.setAttribute('aRand', new THREE.BufferAttribute(data.random, 4));
     return { geometry: geo, core: makeMaterial(0), halo: makeMaterial(1) };

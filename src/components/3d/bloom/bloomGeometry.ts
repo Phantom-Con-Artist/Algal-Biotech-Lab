@@ -2,6 +2,8 @@ import { gauss, mulberry32, unitVec, type Rng } from '../shapes/buffer';
 
 export interface BloomData {
   positions: Float32Array;
+  /** The seed cell each point grew from; points travel out from here as they are born. */
+  origins: Float32Array;
   /** Growth threshold (0..1) at which each point appears. */
   birth: Float32Array;
   /** x = unused, y = size, z = tone, w = phase */
@@ -10,10 +12,15 @@ export interface BloomData {
 
 const COLONIES = 16;
 
-/** Branching filaments grown from seed cells, plus free-floating spores. */
+/**
+ * Branching filaments grown from seed cells, plus free-floating spores. The
+ * first colony sits at the centre and the rest start later the further out they
+ * are, so the whole bloom spreads from the middle outward.
+ */
 export function buildBloom(count: number, seed = 7): BloomData {
   const rng: Rng = mulberry32(seed);
   const positions = new Float32Array(count * 3);
+  const origins = new Float32Array(count * 3);
   const birth = new Float32Array(count);
   const random = new Float32Array(count * 4);
   for (let i = 0; i < random.length; i++) random[i] = rng();
@@ -22,8 +29,8 @@ export function buildBloom(count: number, seed = 7): BloomData {
   let n = 0;
 
   for (let c = 0; c < COLONIES; c++) {
-    const origin = [gauss(rng) * 2.2, gauss(rng) * 1.9, gauss(rng) * 1.1];
-    const delay = rng() * 0.18;
+    const origin = c === 0 ? [0, 0, 0] : [gauss(rng) * 2.2, gauss(rng) * 1.9, gauss(rng) * 1.1];
+    const delay = Math.min(0.24, Math.hypot(origin[0], origin[1], origin[2]) * 0.07);
     const steps: number[] = [];
     const start = n;
 
@@ -54,12 +61,16 @@ export function buildBloom(count: number, seed = 7): BloomData {
       }
       tips = tips.concat(next);
     }
-    for (let k = 0; k < steps.length; k++) birth[start + k] = delay + 0.74 * (steps[k] / Math.max(step, 1));
+    for (let k = 0; k < steps.length; k++) {
+      birth[start + k] = delay + 0.7 * (steps[k] / Math.max(step, 1));
+      origins.set(origin, (start + k) * 3);
+    }
   }
 
   for (; n < count; n++) {
-    positions.set([gauss(rng) * 3.6, gauss(rng) * 3.0, gauss(rng) * 2.0], n * 3);
-    birth[n] = rng() * 0.9;
+    const p = [gauss(rng) * 3.6, gauss(rng) * 3.0, gauss(rng) * 2.0];
+    positions.set(p, n * 3);
+    birth[n] = Math.min(0.92, Math.hypot(p[0], p[1], p[2]) * 0.13 + rng() * 0.2);
   }
-  return { positions, birth, random };
+  return { positions, origins, birth, random };
 }

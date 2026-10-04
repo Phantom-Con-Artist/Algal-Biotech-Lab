@@ -5,7 +5,11 @@ import { cultureFlask } from './flask';
 import { loop, suspension } from './vessel';
 import { wordmark, type WordmarkRaster } from './wordmark';
 
-/** Morph targets, in story order. Index = scroll stage. The last one becomes the lab's wordmark once it has loaded. */
+/**
+ * Morph targets, in story order. Index = scroll stage. The second-to-last is the
+ * loose culture shown behind the focus areas; the last becomes the lab's wordmark
+ * once it has loaded.
+ */
 const SEQUENCE: ShapeFn[] = [
   suspension(0.7),
   cell,
@@ -14,6 +18,7 @@ const SEQUENCE: ShapeFn[] = [
   polymerChain,
   cultureFlask,
   loop,
+  suspension(0.7),
   suspension(0.7),
 ];
 
