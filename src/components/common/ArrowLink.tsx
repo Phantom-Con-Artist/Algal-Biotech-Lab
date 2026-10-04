@@ -14,8 +14,8 @@ interface Props {
 
 const base = 'group inline-flex min-h-11 items-center gap-2.5 text-sm font-medium transition-colors';
 const variants = {
-  solid: 'bg-leaf px-5 text-ink hover:bg-paper',
-  line: 'border-b border-line text-paper hover:border-leaf hover:text-leaf',
+  solid: 'reticle px-6 font-mono text-xs uppercase tracking-[0.14em] text-paper hover:text-leaf',
+  line: 'measure text-paper hover:text-leaf',
 };
 
 export function ArrowLink({ children, to, href, onClick, variant = 'line', className }: Props) {

@@ -17,6 +17,9 @@ export const sceneState = {
   hue: 0,
 };
 
+/** Where the foreground shape currently sits on screen (NDC), written by the scene every frame. */
+export const sceneFocus = { x: 0, y: 0, strength: 1 };
+
 const listeners = new Set<Listener>();
 
 export function setScene(next: Partial<typeof sceneState>): void {

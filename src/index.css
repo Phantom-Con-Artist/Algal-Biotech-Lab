@@ -64,6 +64,35 @@
     transform: none;
   }
 
+  /* Reticle: four corner ticks, as on a microscope eyepiece graticule. They close into a frame on hover. */
+  .reticle {
+    --tick: 9px;
+    --tick-color: var(--color-leaf);
+    --stroke: linear-gradient(var(--tick-color), var(--tick-color));
+    background-image: var(--stroke), var(--stroke), var(--stroke), var(--stroke), var(--stroke), var(--stroke), var(--stroke), var(--stroke);
+    background-repeat: no-repeat;
+    background-position: left top, left top, right top, right top, left bottom, left bottom, right bottom, right bottom;
+    background-size: var(--tick) 1px, 1px var(--tick), var(--tick) 1px, 1px var(--tick), var(--tick) 1px, 1px var(--tick), var(--tick) 1px, 1px var(--tick);
+    transition: background-size 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.3s;
+  }
+  a.reticle:hover,
+  button.reticle:hover,
+  .reticle:focus-visible,
+  .group\/reticle:hover .reticle {
+    --tick: 51%;
+  }
+
+  /* Measure: a hairline that is drawn left to right, like a measurement being taken. */
+  .measure {
+    background: linear-gradient(var(--color-leaf), var(--color-leaf)) no-repeat left bottom / 0% 1px,
+      linear-gradient(var(--color-line), var(--color-line)) no-repeat left bottom / 100% 1px;
+    transition: background-size 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.3s;
+  }
+  .measure:hover,
+  .measure:focus-visible {
+    background-size: 100% 1px, 100% 1px;
+  }
+
   .scroll-cue::after {
     content: "";
     display: block;
@@ -85,6 +114,7 @@
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
   .scroll-cue::after { animation: none; }
+  .reticle, .measure { transition: none; }
 }
 
 ::-webkit-scrollbar { width: 8px; }

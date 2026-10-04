@@ -1,23 +1,50 @@
-import { ShapeBuffer, TAU, gauss, type ShapeFn } from './buffer';
+import { ShapeBuffer, TAU, gauss, unitVec, type ShapeFn } from './buffer';
 
-/** Double helix with base-pair rungs; a short run of rungs is accented as the "switch" site. */
+/** `groove` is the angle between the strands: just short of opposite, so the rungs still cross near the axis. */
+const HELIX = { turns: 2.1, length: 7.4, radius: 1.3, rungs: 18, groove: 2.75 };
+
+/** A point on one backbone strand of the helix, at t in 0..1 along its length. */
+function strandPoint(t: number, strand: 0 | 1): [number, number, number] {
+  const a = t * HELIX.turns * TAU + strand * HELIX.groove;
+  return [HELIX.radius * Math.cos(a), (t - 0.5) * HELIX.length, HELIX.radius * Math.sin(a)];
+}
+
+/**
+ * B-form DNA: two tubular backbones offset to leave a major and a minor groove,
+ * a phosphate bead at every step, and discrete base-pair rungs split at the
+ * hydrogen bond. A short run of rungs is accented as the "switch" site.
+ */
 export const helix: ShapeFn = (count, rng) => {
   const b = new ShapeBuffer(count);
-  const turns = 3.4;
   for (let i = 0; i < count; i++) {
-    const t = rng();
-    const y = (t - 0.5) * 7.2;
-    const a = t * turns * TAU;
-    if (rng() < 0.82) {
-      const strand = rng() < 0.5 ? 0 : Math.PI;
-      const r = 1.1 + gauss(rng) * 0.045;
-      b.set(i, r * Math.cos(a + strand), y, r * Math.sin(a + strand));
+    const g = rng();
+    const strand = rng() < 0.5 ? 0 : 1;
+    if (g < 0.46) {
+      const [x, y, z] = strandPoint(rng(), strand);
+      const [nx, ny, nz] = unitVec(rng);
+      b.set(i, x + nx * 0.1, y + ny * 0.1, z + nz * 0.1);
+    } else if (g < 0.62) {
+      const k = Math.floor(rng() * HELIX.rungs);
+      const [x, y, z] = strandPoint((k + 0.5) / HELIX.rungs, strand);
+      const [nx, ny, nz] = unitVec(rng);
+      b.set(i, x + nx * 0.2, y + ny * 0.2, z + nz * 0.2);
     } else {
-      const u = rng() * 2 - 1;
-      b.set(i, 1.05 * u * Math.cos(a), y, 1.05 * u * Math.sin(a), t > 0.42 && t < 0.52);
+      const k = Math.floor(rng() * HELIX.rungs);
+      const t = (k + 0.5) / HELIX.rungs;
+      const from = strandPoint(t, 0);
+      const to = strandPoint(t, 1);
+      let u = rng();
+      while (Math.abs(u - 0.5) < 0.045) u = rng();
+      b.set(
+        i,
+        from[0] + (to[0] - from[0]) * u + gauss(rng) * 0.026,
+        from[1] + gauss(rng) * 0.026,
+        from[2] + (to[2] - from[2]) * u + gauss(rng) * 0.026,
+        k >= 8 && k <= 10,
+      );
     }
   }
-  b.rotateZ(0.3);
+  b.rotateZ(0.32);
   return b;
 };
 

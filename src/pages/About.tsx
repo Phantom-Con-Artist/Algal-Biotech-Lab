@@ -36,7 +36,7 @@ export default function About() {
         <SectionHeader number="03" label={a.sections.srf.label} title={a.sections.srf.title} />
         <div className="grid gap-16 md:grid-cols-2 md:gap-12 lg:gap-20">
           {SRFS.map((m, i) => (
-            <Reveal key={m.id} delay={i * 120}><ResearcherCard member={m} /></Reveal>
+            <Reveal key={m.id} delay={i * 120}><ResearcherCard member={m} index={i + 1} /></Reveal>
           ))}
         </div>
       </Container>

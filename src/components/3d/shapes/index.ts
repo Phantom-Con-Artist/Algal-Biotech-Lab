@@ -1,7 +1,8 @@
 import { mulberry32, type ShapeFn } from './buffer';
 import { apoptosis, cell } from './organic';
 import { helix, polymerChain } from './molecular';
-import { loop, reactor, suspension } from './vessel';
+import { cultureFlask } from './flask';
+import { loop, suspension } from './vessel';
 
 /** Morph targets, in story order. Index = scroll stage. */
 const SEQUENCE: ShapeFn[] = [
@@ -10,7 +11,7 @@ const SEQUENCE: ShapeFn[] = [
   helix,
   apoptosis,
   polymerChain,
-  reactor,
+  cultureFlask,
   loop,
   suspension(0.7),
 ];
