@@ -23,8 +23,8 @@ export const vertexShader = /* glsl */ `
   void main() {
     float base = floor(uStage);
     float f = uStage - base;
-    float delay = aRand.x * 0.35;
-    float t = smoothstep(0.0, 1.0, clamp((f - delay) / 0.65, 0.0, 1.0));
+    float delay = aRand.x * 0.42;
+    float t = smoothstep(0.0, 1.0, clamp((f - delay) / 0.58, 0.0, 1.0));
     float s = base + t;
 
     float w0 = w(s, 0.0); float w1 = w(s, 1.0); float w2 = w(s, 2.0); float w3 = w(s, 3.0);
@@ -34,9 +34,17 @@ export const vertexShader = /* glsl */ `
     float acc = bit(aAccent, 0.0) * w0 + bit(aAccent, 1.0) * w1 + bit(aAccent, 2.0) * w2 + bit(aAccent, 3.0) * w3
               + bit(aAccent, 4.0) * w4 + bit(aAccent, 5.0) * w5 + bit(aAccent, 6.0) * w6 + bit(aAccent, 7.0) * w7 + bit(aAccent, 8.0) * w8;
 
-    // In transit each point swings out on its own arc, so a morph reads as a burst, not a slide.
+    // In transit the shape bursts: every point is thrown outward along its own direction, swept
+    // round the axis and pulled toward the viewer, then falls back into the next shape.
     float mid = sin(3.14159265 * t);
-    p += vec3(sin(aRand.w * 37.0 + uTime * 0.8), cos(aRand.w * 23.0 + uTime * 0.6), sin(aRand.w * 51.0 + uTime * 0.7)) * mid * 1.6;
+    float burst = mid * mid * (3.0 - 2.0 * mid);
+    vec3 scatter = vec3(sin(aRand.w * 37.0 + uTime * 0.5), cos(aRand.w * 23.0 + uTime * 0.4), sin(aRand.w * 51.0 + uTime * 0.45));
+    float turn = burst * (0.9 + 1.5 * aRand.x);
+    float cs = cos(turn);
+    float sn = sin(turn);
+    p.xz = mat2(cs, -sn, sn, cs) * p.xz;
+    p += normalize(p + scatter * 1.4) * burst * (1.4 + 4.2 * fract(aRand.w * 7.31));
+    p.z += burst * fract(aRand.w * 3.17) * 2.6;
     p += 0.035 * uMotion * vec3(sin(uTime * 0.6 + aRand.w * 40.0), cos(uTime * 0.5 + aRand.w * 31.0), sin(uTime * 0.4 + aRand.w * 23.0));
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
@@ -61,7 +69,7 @@ export const vertexShader = /* glsl */ `
     float depth = mix(0.3, 1.15, smoothstep(-centre.z + 4.0, -centre.z - 4.0, dist));
 
     float size = 0.5 + pow(aRand.y, 3.0) * 2.4;
-    gl_PointSize = clamp(size * (1.0 + 0.5 * acc + 0.8 * lit) * uSize / dist, 1.3 * uPixelRatio, 11.0 * uPixelRatio);
+    gl_PointSize = clamp(size * (1.0 + 0.5 * acc + 0.8 * lit + 0.5 * burst) * uSize / dist, 1.3 * uPixelRatio, 11.0 * uPixelRatio);
 
     vec3 green = mix(vec3(0.08, 0.62, 0.40), vec3(0.45, 0.98, 0.60), aRand.z);
     green = mix(green, vec3(0.82, 1.0, 0.90), step(0.93, aRand.z));
@@ -69,7 +77,7 @@ export const vertexShader = /* glsl */ `
     vColor = mix(vColor, vec3(0.92, 1.0, 0.95), min(1.0, lit) * 0.6);
 
     float twinkle = 0.82 + 0.18 * sin(uTime * 1.3 + aRand.w * 60.0);
-    vAlpha = uDim * twinkle * depth * key * (0.7 + 0.3 * aRand.y) * (1.0 + 0.9 * lit);
+    vAlpha = uDim * twinkle * depth * key * (0.7 + 0.3 * aRand.y) * (1.0 + 0.9 * lit) * (1.0 + 0.35 * burst);
   }
 `;
 

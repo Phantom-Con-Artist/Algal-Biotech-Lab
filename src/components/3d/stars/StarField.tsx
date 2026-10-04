@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { load } from '../quality';
 import { pointer } from '../pointer';
 import { sceneFocus } from '../sceneState';
 import { interactionUniforms, updateInteraction } from '../sceneUniforms';
@@ -13,8 +14,7 @@ const SCROLL_RATE = 0.006;
 /** The sea of stars behind everything. It slides with the scroll and leans away from the pointer. */
 export function StarField({ count, reduced }: { count: number; reduced: boolean }) {
   const ref = useRef<THREE.Points>(null!);
-  const invalidate = useThree((s) => s.invalidate);
-  const scroll = useRef(0);
+  const scroll = useRef(typeof window === 'undefined' ? 0 : window.scrollY);
 
   const { geometry, material } = useMemo(() => {
     const data = buildStars(count);
@@ -48,14 +48,10 @@ export function StarField({ count, reduced }: { count: number; reduced: boolean 
     [geometry, material],
   );
 
-  useEffect(() => {
-    scroll.current = window.scrollY;
-    const onScroll = () => invalidate();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [invalidate]);
-
-  useFrame((state, delta) => {
+  useFrame((state, elapsed) => {
+    // Returning from a background tab gives one huge time step; cap it so nothing lurches.
+    const delta = Math.min(elapsed, 0.05);
+    geometry.setDrawRange(0, Math.ceil(count * load.fraction));
     const u = material.uniforms;
     const k = reduced ? 1 : 1 - Math.exp(-delta * 5);
     scroll.current += (window.scrollY - scroll.current) * k;

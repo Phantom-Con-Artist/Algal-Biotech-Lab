@@ -96,7 +96,7 @@ export function FocusStage() {
                   alt={t.areas[area.id].alts[k] ?? ''}
                   width={1200}
                   height={670}
-                  loading={i === 0 ? 'eager' : 'lazy'}
+                  loading="lazy"
                   decoding="async"
                   className="aspect-[16/9] w-full border border-line object-cover"
                 />

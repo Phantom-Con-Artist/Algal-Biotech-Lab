@@ -32,16 +32,24 @@ export interface BuiltShapes {
   random: Float32Array;
 }
 
-export function buildShapes(count: number, raster: WordmarkRaster | null): BuiltShapes {
+/** Builds every morph target. The last stage holds a loose culture until `wordmarkPositions` replaces it. */
+export function buildShapes(count: number): BuiltShapes {
   const accentMask = new Float32Array(count);
-  const sequence = raster ? [...SEQUENCE.slice(0, -1), wordmark(raster)] : SEQUENCE;
-  const positions = sequence.map((fn, shapeIndex) => {
+  const positions = SEQUENCE.map((fn, shapeIndex) => {
     const buf = fn(count, mulberry32(1000 + shapeIndex * 97));
-    for (let i = 0; i < count; i++) accentMask[i] += buf.accent[i] * 2 ** shapeIndex;
+    // The last stage is never accented, so swapping in the wordmark later needs no new mask.
+    if (shapeIndex < STAGE_COUNT - 1) {
+      for (let i = 0; i < count; i++) accentMask[i] += buf.accent[i] * 2 ** shapeIndex;
+    }
     return buf.pos;
   });
   const rng = mulberry32(42);
   const random = new Float32Array(count * 4);
   for (let i = 0; i < random.length; i++) random[i] = rng();
   return { positions, accentMask, random };
+}
+
+/** Point positions for the final stage once the lab mark and its typeface have loaded. */
+export function wordmarkPositions(count: number, raster: WordmarkRaster): Float32Array {
+  return wordmark(raster)(count, mulberry32(1000 + (STAGE_COUNT - 1) * 97)).pos;
 }

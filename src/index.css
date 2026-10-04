@@ -93,6 +93,21 @@
     background-size: 100% 1px, 100% 1px;
   }
 
+  /* Shown instead of the 3D scene where WebGL is unavailable. */
+  .static-sky {
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, #cfe3ff 50%, transparent 51%),
+      radial-gradient(1px 1px at 31% 62%, #ffffff 50%, transparent 51%),
+      radial-gradient(2px 2px at 47% 27%, #ffd2a8 50%, transparent 51%),
+      radial-gradient(1px 1px at 58% 81%, #cfe3ff 50%, transparent 51%),
+      radial-gradient(1px 1px at 69% 44%, #ffffff 50%, transparent 51%),
+      radial-gradient(2px 2px at 83% 14%, #9dffcf 50%, transparent 51%),
+      radial-gradient(1px 1px at 91% 70%, #cfe3ff 50%, transparent 51%),
+      radial-gradient(60% 50% at 75% 45%, rgb(111 227 160 / 0.1), transparent 70%);
+    background-size: 420px 380px, 510px 440px, 630px 520px, 370px 410px, 450px 350px, 710px 600px, 390px 470px, 100% 100%;
+    opacity: 0.8;
+  }
+
   .scroll-cue::after {
     content: "";
     display: block;

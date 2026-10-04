@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { load } from '../quality';
 import { buildBloom } from './bloomGeometry';
 import { BLOOM_PALETTE, bloomFragment, bloomVertex } from './bloomShader';
 import { sceneState, subscribeScene } from '../sceneState';
@@ -29,7 +30,14 @@ function makeMaterial(halo: number): THREE.ShaderMaterial {
 }
 
 /** Algae colonies that grow, change colour and bloom as the focus section is scrolled. */
-export function BloomField({ count, reduced }: { count: number; reduced: boolean }) {
+interface Props {
+  count: number;
+  reduced: boolean;
+  /** Draw the wide glow pass behind the colonies. */
+  glow: boolean;
+}
+
+export function BloomField({ count, reduced, glow }: Props) {
   const group = useRef<THREE.Group>(null!);
   const invalidate = useThree((s) => s.invalidate);
   const cur = useRef({ vis: 0, growth: 0, hue: 0, yaw: 0, side: 0 });
@@ -53,9 +61,13 @@ export function BloomField({ count, reduced }: { count: number; reduced: boolean
     [geometry, core, halo],
   );
 
-  useEffect(() => subscribeScene(invalidate), [invalidate]);
+  // With reduced motion nothing animates, so a frame is drawn only when the scene state changes.
+  useEffect(() => (reduced ? subscribeScene(invalidate) : undefined), [reduced, invalidate]);
 
-  useFrame((state, delta) => {
+  useFrame((state, elapsed) => {
+    // Returning from a background tab gives one huge time step; cap it so nothing lurches.
+    const delta = Math.min(elapsed, 0.05);
+    geometry.setDrawRange(0, Math.ceil(count * load.fraction));
     const c = cur.current;
     const kv = reduced ? 1 : 1 - Math.exp(-delta * 4);
     const kg = reduced ? 1 : 1 - Math.exp(-delta * 7);
@@ -67,7 +79,7 @@ export function BloomField({ count, reduced }: { count: number; reduced: boolean
     group.current.visible = c.vis > 0.004;
     if (!group.current.visible) return;
 
-    const size = 46 * state.gl.getPixelRatio() * (state.size.height / 1000);
+    const size = 46 * load.pointScale * state.gl.getPixelRatio() * (state.size.height / 1000);
     for (const m of [core, halo]) {
       const u = m.uniforms;
       u.uGrowth.value = c.growth;
@@ -87,7 +99,7 @@ export function BloomField({ count, reduced }: { count: number; reduced: boolean
 
   return (
     <group ref={group} visible={false}>
-      <points geometry={geometry} material={halo} frustumCulled={false} />
+      {glow && <points geometry={geometry} material={halo} frustumCulled={false} />}
       <points geometry={geometry} material={core} frustumCulled={false} />
     </group>
   );

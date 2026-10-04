@@ -13,7 +13,7 @@ interface Props {
  * Spores shed by the pointer (three-nebula): a drifting trail as it moves and a
  * burst when it clicks. Not mounted when reduced motion is requested.
  */
-export function SporeField({ limit }: Props) {
+export default function SporeField({ limit }: Props) {
   const group = useRef<THREE.Group>(null!);
   const spores = useRef<SporeSystem | null>(null);
   const seenPulses = useRef(pointer.pulses);

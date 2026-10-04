@@ -43,7 +43,7 @@ export function useChapterScroll(sections: MutableRefObject<(HTMLElement | null)
       } else if (mid > centers[0]) {
         let i = 0;
         while (i < last - 2 && mid >= centers[i + 1]) i++;
-        stage = i + smoothstep(0.25, 0.75, (mid - centers[i]) / (centers[i + 1] - centers[i]));
+        stage = i + smoothstep(0.16, 0.84, (mid - centers[i]) / (centers[i + 1] - centers[i]));
       }
       setScene({ target: stage, dim: 1, side: null });
       setActive(stage > last - 0.5 ? last : Math.min(Math.round(stage), last - 1));

@@ -10,8 +10,51 @@
     <meta property="og:title" content="Algal Biotechnology Laboratory · CUTN" />
     <meta property="og:description" content="Ten micrometres wide. A whole factory inside. Microalgal biotechnology at the Central University of Tamil Nadu." />
     <meta property="og:type" content="website" />
+    <link rel="preload" as="image" href="/loader-mark.png" />
+    <style>
+      /* Loading screen: styled here so it paints before the app's stylesheet and scripts arrive. */
+      html { background: #050a07; }
+      html:has(#loader:not([data-done])) { overflow: hidden; }
+      #loader {
+        position: fixed; inset: 0; z-index: 100; display: grid; place-items: center;
+        background: #050a07; color: #e8f1ea; text-align: center;
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        transition: opacity 0.7s ease, visibility 0s linear 0.7s;
+      }
+      #loader[data-done] { opacity: 0; visibility: hidden; pointer-events: none; }
+      #loader .frame { position: relative; padding: 2.25rem 1.75rem; max-width: 22rem; }
+      #loader .frame::before, #loader .frame::after {
+        content: ""; position: absolute; width: 10px; height: 10px; border: 0 solid #6fe3a0;
+      }
+      #loader .frame::before { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+      #loader .frame::after { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+      #loader img { display: block; width: 84px; height: auto; margin: 0 auto 1.5rem; }
+      #loader .name { margin: 0; font-size: 1.35rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+      #loader .place {
+        margin: 0.85rem 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.6875rem; line-height: 1.9; letter-spacing: 0.14em; text-transform: uppercase; color: #8ea396;
+      }
+      #loader .bar { height: 1px; margin: 1.6rem auto 0; width: 9rem; background: #1b2b22; overflow: hidden; }
+      #loader .bar::after {
+        content: ""; display: block; height: 100%; width: 40%; background: #6fe3a0;
+        animation: loader-run 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+      @keyframes loader-run { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+      @media (prefers-reduced-motion: reduce) {
+        #loader { transition: none; }
+        #loader .bar::after { animation: none; width: 100%; }
+      }
+    </style>
   </head>
   <body>
+    <div id="loader" role="status" aria-live="polite">
+      <div class="frame">
+        <img src="/loader-mark.png" alt="" width="192" height="167" />
+        <p class="name">Algal Biotechnology Laboratory</p>
+        <p class="place">Department of Microbiology<br />Central University of Tamil Nadu</p>
+        <div class="bar" aria-hidden="true"></div>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

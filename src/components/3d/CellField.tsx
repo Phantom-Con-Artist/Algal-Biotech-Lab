@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { buildShapes, STAGE_COUNT } from './shapes';
+import { load } from './quality';
+import { buildShapes, STAGE_COUNT, wordmarkPositions } from './shapes';
 import { fragmentShader, vertexShader } from './particleShader';
 import { sceneFocus, sceneState, subscribeScene } from './sceneState';
 import { pointer } from './pointer';
 import { useWordmark } from '../../hooks/useWordmark';
 import { interactionUniforms, updateInteraction } from './sceneUniforms';
+import { dismissLoader } from '../../utils/loader';
 
 /** Horizontal offset (in units of SIDE_X) of the shape at each stage; text sits on the opposite side. */
 const SIDE = [0.85, -1, 1, -1, 1, -1, 1, 1, 1];
@@ -17,6 +19,9 @@ const SIDE_X = 3.3;
 const HALF_VIEW = 11 * Math.tan((45 * Math.PI) / 360);
 const LAST = STAGE_COUNT - 1;
 const TURN = Math.PI * 2;
+const MAX_STEP = 0.05;
+/** A change of more than this many stages at once is a page change, not a scroll. */
+const JUMP = 1.5;
 
 interface Props {
   count: number;
@@ -26,12 +31,13 @@ interface Props {
 export function CellField({ count, reduced }: Props) {
   const ref = useRef<THREE.Points>(null!);
   const invalidate = useThree((s) => s.invalidate);
-  const cur = useRef({ stage: sceneState.target, dim: sceneState.dim, yaw: 0, tiltX: 0, tiltY: 0, side: SIDE[0], bloom: 0, spin: 0 });
+  const cur = useRef({ stage: sceneState.target, dim: sceneState.dim, yaw: 0, tiltX: 0, tiltY: 0, side: SIDE[0], bloom: 0, spin: 0, fade: 1, jumping: false });
 
-  const raster = useWordmark();
+  const { raster, settled } = useWordmark();
+  const frames = useRef(0);
 
   const { geometry, material } = useMemo(() => {
-    const shapes = buildShapes(count, raster);
+    const shapes = buildShapes(count);
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(shapes.positions[0], 3));
     for (let i = 1; i < STAGE_COUNT; i++) {
@@ -56,7 +62,17 @@ export function CellField({ count, reduced }: Props) {
       },
     });
     return { geometry: geo, material: mat };
-  }, [count, reduced, raster]);
+  }, [count, reduced]);
+
+  // The wordmark arrives after the first paint; it is written into the existing buffer, so nothing is rebuilt.
+  useEffect(() => {
+    if (raster) {
+      const last = geometry.getAttribute(`aP${LAST}`) as THREE.BufferAttribute;
+      last.array.set(wordmarkPositions(count, raster));
+      last.needsUpdate = true;
+    }
+    invalidate();
+  }, [geometry, count, raster, settled, invalidate]);
 
   useEffect(
     () => () => {
@@ -66,26 +82,47 @@ export function CellField({ count, reduced }: Props) {
     [geometry, material],
   );
 
-  useEffect(() => subscribeScene(invalidate), [invalidate]);
+  // With reduced motion nothing animates, so a frame is drawn only when the scene state changes.
+  useEffect(() => (reduced ? subscribeScene(invalidate) : undefined), [reduced, invalidate]);
 
-  useFrame((state, delta) => {
+  useFrame((state, elapsed) => {
+    // A tab that was in the background hands back one huge time step; treat it as a single ordinary frame.
+    const delta = Math.min(elapsed, MAX_STEP);
+    geometry.setDrawRange(0, Math.ceil(count * load.fraction));
+    // The loading screen lifts only once the scene is really drawing and its last shape is in place.
+    frames.current += 1;
+    if (settled && frames.current >= (reduced ? 1 : 3)) dismissLoader();
     const c = cur.current;
     const k = reduced ? 1 : 1 - Math.exp(-delta * 4.5);
-    const before = c.stage;
-    c.stage += (sceneState.target - c.stage) * k;
-    // Scrolling between chapters throws the shape into a spin that then settles.
-    c.spin += (Math.min(4, Math.abs(c.stage - before) / Math.max(delta, 0.001)) - c.spin) * k;
+    // Moving between pages would drag the cloud through every shape in between. Instead it fades
+    // out, takes the new shape unseen, and fades back in.
+    if (Math.abs(sceneState.target - c.stage) > JUMP) c.jumping = true;
+    if (c.jumping) {
+      c.fade += (0 - c.fade) * Math.min(1, k * 2.5);
+      c.spin *= 1 - k;
+      if (c.fade < 0.03) {
+        c.stage = sceneState.target;
+        c.side = sceneState.side ?? SIDE[Math.min(Math.round(c.stage), LAST)];
+        c.jumping = false;
+      }
+    } else {
+      c.fade += (1 - c.fade) * k;
+      const before = c.stage;
+      c.stage += (sceneState.target - c.stage) * k;
+      // Scrolling between chapters throws the shape into a spin that then settles.
+      c.spin += (Math.min(1.2, Math.abs(c.stage - before) / Math.max(delta, 0.001)) - c.spin) * k;
+    }
     c.dim += (sceneState.dim - c.dim) * k;
 
     const obj0 = ref.current;
     const u = material.uniforms;
     c.bloom += (sceneState.bloom - c.bloom) * k;
     u.uStage.value = Math.min(c.stage, LAST);
-    u.uDim.value = c.dim * (1 - c.bloom);
+    u.uDim.value = c.dim * (1 - c.bloom) * c.fade;
     obj0.visible = c.bloom < 0.995;
     if (!reduced) u.uTime.value += delta;
     u.uPixelRatio.value = state.gl.getPixelRatio();
-    u.uSize.value = 46 * state.gl.getPixelRatio() * (state.size.height / 1000);
+    u.uSize.value = 46 * load.pointScale * state.gl.getPixelRatio() * (state.size.height / 1000);
     updateInteraction(u, state.size.width / state.size.height, k);
 
     const narrow = state.size.width < 768;
