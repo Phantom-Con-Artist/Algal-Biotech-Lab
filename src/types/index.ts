@@ -1,51 +1,90 @@
+export type PublicationType = 'article' | 'chapter' | 'preprint';
+
 export interface Publication {
   id: string;
   title: string;
   authors: string[];
-  journal: string;
+  venue: string;
   year: number;
   month?: string;
-  doi?: string;
+  detail?: string;
+  doi: string;
   pmid?: string;
-  type: 'journal' | 'book-chapter' | 'preprint';
-  isHighlighted?: boolean;
+  type: PublicationType;
+}
+
+export interface ProfileLinks {
+  orcid?: string;
+  scholar?: string;
+  researchGate?: string;
+  linkedin?: string;
+  profile?: string;
+  cv?: string;
+}
+
+export interface Milestone {
+  title: string;
+  place: string;
+  period: string;
+  note?: string;
 }
 
 export interface TeamMember {
   id: string;
   name: string;
-  alternativeNames?: string[];
+  shortName: string;
   role: string;
-  affiliation: string;
-  department: string;
-  institution: string;
+  group: 'pi' | 'srf';
+  photo: string;
+  photoPosition?: string;
   email: string;
-  phone?: string;
-  orcid?: string;
-  googleScholar?: string;
-  researchGate?: string;
-  linkedin?: string;
-  education: Array<{
-    degree: string;
-    institution: string;
-    year: string;
-    details?: string;
-  }>;
-  researchInterests: string[];
-  awardsAndFellowships: string[];
+  links: ProfileLinks;
+  bio: string;
+  focus: string[];
+  path: Milestone[];
+  honours: string[];
 }
 
-export interface ResearchThrust {
+export interface ResearchProgram {
   id: string;
+  number: string;
   title: string;
-  shortDescription: string;
-  icon: string;
+  summary: string;
   keywords: string[];
+  paperIds: string[];
+}
+
+export interface StoryChapter {
+  id: string;
+  label: string;
+  headline: string;
+  body: string;
+  figure: { value: string; caption: string };
+  paperId: string;
 }
 
 export interface Grant {
   title: string;
   agency: string;
-  duration: string;
+  period: string;
   role: string;
+}
+
+export interface Recognition {
+  year: string;
+  title: string;
+  body: string;
+}
+
+export interface Talk {
+  venue: string;
+  year: string;
+  title: string;
+  authors: string;
+}
+
+export interface NavItem {
+  to: string;
+  label: string;
+  number: string;
 }
