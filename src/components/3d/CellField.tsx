@@ -5,16 +5,18 @@ import { buildShapes, STAGE_COUNT } from './shapes';
 import { fragmentShader, vertexShader } from './particleShader';
 import { sceneFocus, sceneState, subscribeScene } from './sceneState';
 import { pointer } from './pointer';
+import { useWordmark } from '../../hooks/useWordmark';
 import { interactionUniforms, updateInteraction } from './sceneUniforms';
 
 /** Horizontal offset (in units of SIDE_X) of the shape at each stage; text sits on the opposite side. */
 const SIDE = [0.85, -1, 1, -1, 1, -1, 1, 1];
 /** Per-stage size so tall shapes (cell, helix, reactor) stay inside the viewport. */
-const SCALE = [1.15, 0.82, 0.74, 0.8, 0.95, 0.85, 0.78, 1.1];
+const SCALE = [1.15, 0.82, 0.74, 0.8, 0.95, 0.85, 0.78, 1];
 const SIDE_X = 3.3;
 /** Half the view height at the shape's depth: camera at z = 11 with a 45° field of view. */
 const HALF_VIEW = 11 * Math.tan((45 * Math.PI) / 360);
 const LAST = STAGE_COUNT - 1;
+const TURN = Math.PI * 2;
 
 interface Props {
   count: number;
@@ -26,8 +28,10 @@ export function CellField({ count, reduced }: Props) {
   const invalidate = useThree((s) => s.invalidate);
   const cur = useRef({ stage: sceneState.target, dim: sceneState.dim, yaw: 0, tiltX: 0, tiltY: 0, side: SIDE[0], bloom: 0, spin: 0 });
 
+  const raster = useWordmark();
+
   const { geometry, material } = useMemo(() => {
-    const shapes = buildShapes(count);
+    const shapes = buildShapes(count, raster);
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(shapes.positions[0], 3));
     for (let i = 1; i < STAGE_COUNT; i++) {
@@ -52,7 +56,7 @@ export function CellField({ count, reduced }: Props) {
       },
     });
     return { geometry: geo, material: mat };
-  }, [count, reduced]);
+  }, [count, reduced, raster]);
 
   useEffect(
     () => () => {
@@ -101,7 +105,10 @@ export function CellField({ count, reduced }: Props) {
     sceneFocus.strength = c.dim;
 
     if (!reduced) {
-      c.yaw += delta * (0.14 + c.spin * 1.4);
+      // The wordmark has to be read, so the turn winds down to face the viewer as the last stage arrives.
+      const facing = Math.max(0, c.stage - (LAST - 1));
+      c.yaw += delta * (0.14 + c.spin * 1.4) * (1 - facing);
+      c.yaw += (Math.round(c.yaw / TURN) * TURN - c.yaw) * k * facing;
       c.tiltX += (-pointer.y * 0.32 - c.tiltX) * k * 0.5;
       c.tiltY += (pointer.x * 0.55 - c.tiltY) * k * 0.5;
     }
