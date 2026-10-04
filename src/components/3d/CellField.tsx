@@ -20,7 +20,7 @@ interface Props {
 export function CellField({ count, reduced }: Props) {
   const ref = useRef<THREE.Points>(null!);
   const invalidate = useThree((s) => s.invalidate);
-  const cur = useRef({ stage: sceneState.target, dim: sceneState.dim, yaw: 0, tiltX: 0, tiltY: 0, side: SIDE[0] });
+  const cur = useRef({ stage: sceneState.target, dim: sceneState.dim, yaw: 0, tiltX: 0, tiltY: 0, side: SIDE[0], bloom: 0 });
   const pointer = useRef({ x: 0, y: 0 });
 
   const { geometry, material } = useMemo(() => {
@@ -75,9 +75,12 @@ export function CellField({ count, reduced }: Props) {
     c.stage += (sceneState.target - c.stage) * k;
     c.dim += (sceneState.dim - c.dim) * k;
 
+    const obj0 = ref.current;
     const u = material.uniforms;
+    c.bloom += (sceneState.bloom - c.bloom) * k;
     u.uStage.value = Math.min(c.stage, LAST);
-    u.uDim.value = c.dim;
+    u.uDim.value = c.dim * (1 - c.bloom);
+    obj0.visible = c.bloom < 0.995;
     if (!reduced) u.uTime.value += delta;
     u.uSize.value = 40 * state.gl.getPixelRatio() * (state.size.height / 1000);
 

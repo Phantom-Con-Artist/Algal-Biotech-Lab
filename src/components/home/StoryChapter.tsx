@@ -6,6 +6,7 @@ import { cn } from '../../utils/cn';
 import { Container } from '../layout/Container';
 import { Eyebrow } from '../common/Eyebrow';
 import { Reveal } from '../common/Reveal';
+import { useT } from '../../i18n/I18nProvider';
 
 interface Props {
   chapter: Chapter;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function StoryChapter({ chapter, number, side, sectionRef }: Props) {
+  const copy = useT().story.chapters[chapter.id];
   const paper = getPublication(chapter.paperId);
   const titleId = `chapter-${chapter.id}`;
 
@@ -22,15 +24,15 @@ export function StoryChapter({ chapter, number, side, sectionRef }: Props) {
     <section ref={sectionRef} aria-labelledby={titleId} className="relative flex min-h-svh items-end pb-12 pt-24 md:items-center md:pb-0">
       <Container>
         <Reveal className={cn('max-w-[33rem]', side === 'right' && 'md:ml-auto')}>
-          <Eyebrow number={number}>{chapter.label}</Eyebrow>
-          <h2 id={titleId} className="mt-4 font-serif text-[clamp(2.1rem,5.2vw,3.7rem)] leading-[1.02] tracking-[-0.015em]">
-            {chapter.headline}
+          <Eyebrow number={number}>{copy.label}</Eyebrow>
+          <h2 id={titleId} className="mt-4 font-serif text-[clamp(1.9rem,4.4vw,3.2rem)] leading-[1.02] tracking-[-0.015em]">
+            {copy.headline}
           </h2>
           <div className="mt-7 flex items-baseline gap-4 border-t border-line pt-5">
-            <span className="font-serif text-4xl leading-none md:text-5xl">{chapter.figure.value}</span>
-            <span className="max-w-[20ch] text-sm leading-snug text-mute">{chapter.figure.caption}</span>
+            <span className="font-serif text-4xl leading-none md:text-5xl">{copy.figure}</span>
+            <span className="max-w-[20ch] text-sm leading-snug text-mute">{copy.caption}</span>
           </div>
-          <p className="mt-5 text-[15px] leading-relaxed text-soft md:text-base">{chapter.body}</p>
+          <p className="mt-5 text-[15px] leading-relaxed text-soft md:text-base">{copy.body}</p>
           <a
             href={doiUrl(paper)}
             target="_blank"

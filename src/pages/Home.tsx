@@ -5,12 +5,14 @@ import { useDocumentTitle } from '../hooks/useDocumentTitle';
 import { Hero } from '../components/home/Hero';
 import { StoryChapter } from '../components/home/StoryChapter';
 import { ClosingChapter } from '../components/home/ClosingChapter';
+import { FocusSection } from '../components/focus/FocusSection';
+import { useT } from '../i18n/I18nProvider';
 import { ChapterRail } from '../components/home/ChapterRail';
-
-const RAIL_LABELS = ['Introduction', ...STORY.map((c) => c.label), 'The lab'];
 
 export default function Home() {
   useDocumentTitle();
+  const t = useT();
+  const railLabels = [t.story.railIntro, ...STORY.map((c) => t.story.chapters[c.id].label), t.closing.label];
   const sections = useRef<(HTMLElement | null)[]>([]);
   const active = useChapterScroll(sections);
 
@@ -31,8 +33,9 @@ export default function Home() {
           sectionRef={register(i + 1)}
         />
       ))}
-      <ClosingChapter sectionRef={register(STORY.length + 1)} number={pad(STORY.length + 1)} />
-      <ChapterRail active={active} labels={RAIL_LABELS} sections={sections} />
+      <FocusSection number={pad(STORY.length + 1)} />
+      <ClosingChapter sectionRef={register(STORY.length + 1)} number={pad(STORY.length + 2)} />
+      <ChapterRail active={active} labels={railLabels} sections={sections} />
     </>
   );
 }

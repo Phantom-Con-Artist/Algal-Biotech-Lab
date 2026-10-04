@@ -3,13 +3,18 @@ import { Check, Copy } from 'lucide-react';
 import type { Publication } from '../../types';
 import { doiUrl, formatCitation } from '../../utils/citation';
 import { AuthorList } from './AuthorList';
+import { MONTHS } from '../../data/publications';
+import { useI18n } from '../../i18n/I18nProvider';
 
-const TYPE_LABEL = { article: 'Article', chapter: 'Book chapter', preprint: 'Preprint' } as const;
 const action =
   'inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-soft transition-colors hover:text-leaf';
 
 export function PublicationItem({ pub }: { pub: Publication }) {
+  const { t, locale } = useI18n();
   const [copied, setCopied] = useState(false);
+  const month = pub.month
+    ? new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(2000, MONTHS.indexOf(pub.month), 1))
+    : String(pub.year);
 
   const copy = async () => {
     try {
@@ -24,8 +29,8 @@ export function PublicationItem({ pub }: { pub: Publication }) {
   return (
     <li className="grid gap-3 border-b border-line py-7 md:grid-cols-[9rem_1fr] md:gap-8">
       <div className="font-mono text-xs text-mute md:pt-1.5">
-        <p>{pub.month ?? pub.year}</p>
-        <p className="mt-1 text-leaf">{TYPE_LABEL[pub.type]}</p>
+        <p>{month}</p>
+        <p className="mt-1 text-leaf">{t.explore.types[pub.type]}</p>
       </div>
       <div>
         <h4 className="max-w-3xl text-[17px] font-medium leading-snug text-paper md:text-lg">{pub.title}</h4>
@@ -43,7 +48,7 @@ export function PublicationItem({ pub }: { pub: Publication }) {
           )}
           <button type="button" onClick={copy} className={action}>
             {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-            <span aria-live="polite">{copied ? 'Copied' : 'Copy citation'}</span>
+            <span aria-live="polite">{copied ? t.explore.copied : t.explore.copy}</span>
           </button>
         </div>
       </div>

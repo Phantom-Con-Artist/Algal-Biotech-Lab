@@ -1,18 +1,20 @@
-import { SERVICE, TALKS } from '../../data/recognition';
+import { TALKS } from '../../data/recognition';
+import { useT } from '../../i18n/I18nProvider';
 
 export function ServiceAndTalks() {
+  const t = useT().about;
   return (
     <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
       <div>
-        <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.14em] text-mute">Leadership and service</h3>
+        <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.14em] text-mute">{t.leadership}</h3>
         <ul className="border-t border-line">
-          {SERVICE.map((s) => (
+          {t.service.map((s) => (
             <li key={s} className="border-b border-line py-5 text-[15px] leading-relaxed text-soft">{s}</li>
           ))}
         </ul>
       </div>
       <div>
-        <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.14em] text-mute">Presented at</h3>
+        <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.14em] text-mute">{t.presentedAt}</h3>
         <ul className="border-t border-line">
           {TALKS.map((t) => (
             <li key={t.title} className="border-b border-line py-5">

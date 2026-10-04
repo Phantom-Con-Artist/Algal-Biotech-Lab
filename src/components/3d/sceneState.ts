@@ -5,7 +5,17 @@
  */
 type Listener = () => void;
 
-export const sceneState = { target: 0, dim: 1, side: null as number | null };
+export const sceneState = {
+  target: 0,
+  dim: 1,
+  side: null as number | null,
+  /** 0..1 visibility of the algae-bloom growth scene (replaces the morph field). */
+  bloom: 0,
+  /** 0..1 growth progress of the bloom colonies. */
+  growth: 0,
+  /** Continuous palette position: 0 biofuel, 1 carbon, 2 nutraceutical, 3 wastewater. */
+  hue: 0,
+};
 
 const listeners = new Set<Listener>();
 

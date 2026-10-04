@@ -2,8 +2,11 @@ import { useMemo, useState } from 'react';
 import { PUBLICATIONS } from '../../data/publications';
 import { PublicationFilters, type TypeFilter } from './PublicationFilters';
 import { PublicationItem } from './PublicationItem';
+import { fmt } from '../../i18n/config';
+import { useT } from '../../i18n/I18nProvider';
 
 export function PublicationList() {
+  const t = useT().explore;
   const [query, setQuery] = useState('');
   const [type, setType] = useState<TypeFilter>('all');
 
@@ -23,10 +26,10 @@ export function PublicationList() {
     <div>
       <PublicationFilters query={query} type={type} onQuery={setQuery} onType={setType} />
       <p className="mt-6 font-mono text-xs text-mute" aria-live="polite">
-        {byYear.total} of {PUBLICATIONS.length} works · authors from the lab in white · work before 2020 predates the lab
+        {fmt(t.count, { n: byYear.total, total: PUBLICATIONS.length })}
       </p>
 
-      {byYear.total === 0 && <p className="mt-16 text-soft">No publications match that search.</p>}
+      {byYear.total === 0 && <p className="mt-16 text-soft">{t.none}</p>}
 
       {byYear.groups.map(([year, items]) => (
         <section key={year} aria-label={String(year)} className="mt-10 grid gap-2 md:grid-cols-[9rem_1fr] md:gap-8">

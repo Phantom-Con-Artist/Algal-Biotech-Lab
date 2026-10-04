@@ -9,10 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource/instrument-serif": "^5.3.0",
-    "@fontsource/inter": "^5.1.0",
-    "@fontsource/jetbrains-mono": "^5.3.0",
-    "@fontsource/outfit": "^5.1.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
     "@react-three/drei": "^9.121.5",
     "@react-three/fiber": "^8.18.0",
     "clsx": "^2.1.1",

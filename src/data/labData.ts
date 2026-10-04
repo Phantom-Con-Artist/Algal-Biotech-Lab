@@ -3,8 +3,6 @@ import type { NavItem } from '../types';
 export const LAB_INFO = {
   name: 'Algal Biotechnology Laboratory',
   shortName: 'Algal Biotech Lab',
-  department: 'Department of Microbiology',
-  school: 'School of Life Sciences',
   institution: 'Central University of Tamil Nadu',
   institutionShort: 'CUTN',
   campus: 'Neelakudi Campus',
@@ -18,10 +16,10 @@ export const LAB_INFO = {
 } as const;
 
 export const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Home', number: '01' },
-  { to: '/explore', label: 'Explore', number: '02' },
-  { to: '/about', label: 'About Lab', number: '03' },
-  { to: '/contact', label: 'Contact Us', number: '04' },
+  { to: '/', key: 'home', number: '01' },
+  { to: '/explore', key: 'explore', number: '02' },
+  { to: '/about', key: 'about', number: '03' },
+  { to: '/contact', key: 'contact', number: '04' },
 ];
 
 export const DEVELOPER = {

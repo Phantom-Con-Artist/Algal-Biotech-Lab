@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { CellField } from './CellField';
+import { BloomField } from './bloom/BloomField';
 
 function particleCount(narrow: boolean): number {
   if (narrow) return 7000;
@@ -22,6 +23,7 @@ export default function SceneCanvas() {
         flat
       >
         <CellField count={particleCount(narrow)} reduced={reduced} />
+        <BloomField count={narrow ? 4500 : 10000} reduced={reduced} />
       </Canvas>
     </div>
   );

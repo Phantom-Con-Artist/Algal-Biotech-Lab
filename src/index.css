@@ -1,9 +1,8 @@
 @import "tailwindcss";
-@import "@fontsource/instrument-serif/400.css";
-@import "@fontsource/instrument-serif/400-italic.css";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource-variable/fraunces/full.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-mono/400.css";
 
 @theme {
   --color-ink: #050a07;
@@ -15,9 +14,10 @@
   --color-leaf: #6fe3a0;
   --color-ember: #ff7a4d;
 
-  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Fraunces: a soft, organic serif for display. IBM Plex: engineered, instrument-like text and data. */
+  --font-serif: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 @layer base {
@@ -90,3 +90,32 @@
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--color-ink); }
 ::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 4px; }
+
+/* Display serif: soft terminals, no "wonky" alternates, light weight at large sizes. */
+.font-serif {
+  font-variation-settings: "SOFT" 100, "WONK" 0;
+  font-weight: 340;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+/* CJK locales: the Latin webfonts have no CJK glyphs, so fall through to the reader's system fonts. */
+:root:lang(zh-Hans) {
+  --font-serif: "Fraunces Variable", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  --font-sans: "IBM Plex Sans", "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+}
+:root:lang(ja) {
+  --font-serif: "Fraunces Variable", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif CJK JP", serif;
+  --font-sans: "IBM Plex Sans", "Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", "Meiryo", sans-serif;
+}
+:root:lang(ko) {
+  --font-serif: "Fraunces Variable", "AppleMyungjo", "Nanum Myeongjo", "Noto Serif CJK KR", "Batang", serif;
+  --font-sans: "IBM Plex Sans", "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", sans-serif;
+  word-break: keep-all;
+}
+:root:is(:lang(zh-Hans), :lang(ja), :lang(ko)) .font-serif {
+  line-height: 1.22;
+  letter-spacing: 0;
+  font-weight: 500;
+  hyphens: manual;
+}

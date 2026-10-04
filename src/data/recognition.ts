@@ -1,11 +1,11 @@
 import type { Grant, Recognition, Talk } from '../types';
 
 export const GRANTS: Grant[] = [
-  { title: 'Start-up Research Grant (SRG)', agency: 'SERB, Department of Science and Technology, Government of India', period: '2021 – 2023', role: 'Principal Investigator' },
-  { title: 'Science Technology and Innovation (STI) Hub for SC/ST communities', agency: 'Department of Science and Technology, Government of India', period: '2021 – 2024', role: 'Co-Principal Investigator' },
-  { title: 'COFRADIC proteomic analysis', agency: 'European Horizon 2020, Sweden', period: '2019', role: 'Co-Principal Investigator' },
-  { title: 'Annual Instrument Grant (300,000 SEK)', agency: 'Umeå University, Sweden', period: '2018', role: 'Co-PI with Prof. Christiane Funk' },
-  { title: 'Research Grant (45,500 SEK)', agency: 'Gunnar & Ruth Björkmans Foundation, Sweden', period: '2018', role: 'Principal Investigator' },
+  { title: 'Start-up Research Grant (SRG)', agency: 'SERB, Department of Science and Technology, Government of India', period: '2021 – 2023', role: 'pi' },
+  { title: 'Science Technology and Innovation (STI) Hub for SC/ST communities', agency: 'Department of Science and Technology, Government of India', period: '2021 – 2024', role: 'copi' },
+  { title: 'COFRADIC proteomic analysis', agency: 'European Horizon 2020, Sweden', period: '2019', role: 'copi' },
+  { title: 'Annual Instrument Grant (300,000 SEK)', agency: 'Umeå University, Sweden', period: '2018', role: 'copiFunk' },
+  { title: 'Research Grant (45,500 SEK)', agency: 'Gunnar & Ruth Björkmans Foundation, Sweden', period: '2018', role: 'pi' },
 ];
 
 export const RECOGNITION: Recognition[] = [
@@ -17,12 +17,6 @@ export const RECOGNITION: Recognition[] = [
   { year: '2014', title: 'Best Oral Presentation', body: 'International Algal Biotechnology Symposium, Sheffield, UK' },
   { year: '2013–14', title: 'PrimerDesign Sponsorship Awards', body: 'Gold (2013) and Silver (2014), UK' },
   { year: '2011', title: 'Overseas Ph.D. Fellowship', body: 'Government of India' },
-];
-
-export const SERVICE: string[] = [
-  'Convener, National Symposium “Proteomics for Life: The Intra and Interplay of Proteins in Plants and Microbes”, CUTN with ICAR-IARI Rice Breeding and Genetics Research Centre, Aduthurai (18 March 2025)',
-  'Review Editor, Circular Economy section, Frontiers in Sustainability',
-  'Reviewer for Journal of Experimental Botany, World Journal of Microbiology and Biotechnology, Journal of Agronomy and Crop Science, Scientific African, Environmental Sustainability',
 ];
 
 export const TALKS: Talk[] = [

@@ -6,12 +6,15 @@ import { useScrolled } from '../../hooks/useScrolled';
 import { cn } from '../../utils/cn';
 import { Container } from './Container';
 import { MobileMenu } from './MobileMenu';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { useT } from '../../i18n/I18nProvider';
 import markSrc from '../../assets/brand/abl-mark.png';
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const scrolled = useScrolled();
   const { pathname } = useLocation();
+  const t = useT();
 
   useEffect(() => setOpen(false), [pathname]);
 
@@ -34,13 +37,13 @@ export function Header() {
       )}
     >
       <Container className="flex h-16 items-center justify-between">
-        <Link to="/" className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, home`}>
+        <Link to="/" className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, ${t.nav.home}`}>
           <img src={markSrc} alt="" width={30} height={26} className="h-[26px] w-auto" />
           <span className="text-[15px] font-medium tracking-tight">{LAB_INFO.shortName}</span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden md:block">
-          <ul className="flex items-center gap-9">
+        <nav aria-label={t.nav.primary} className="hidden items-center gap-8 md:flex">
+          <ul className="flex items-center gap-7 lg:gap-9">
             {NAV_ITEMS.map((item) => (
               <li key={item.to}>
                 <NavLink
@@ -56,11 +59,12 @@ export function Header() {
                   }
                 >
                   <span className="font-mono text-[11px] text-mute/70">{item.number}</span>
-                  {item.label}
+                  {t.nav[item.key]}
                 </NavLink>
               </li>
             ))}
           </ul>
+          <LanguageSwitcher />
         </nav>
 
         <button
@@ -68,7 +72,7 @@ export function Header() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
           className="-mr-2 grid h-11 w-11 place-items-center text-paper md:hidden"
         >
           {open ? <X size={22} /> : <Menu size={22} />}

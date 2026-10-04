@@ -1,6 +1,6 @@
 import type { Publication } from '../types';
 
-const MONTHS = [
+export const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
 ];

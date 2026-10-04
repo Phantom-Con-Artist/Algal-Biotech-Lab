@@ -22,44 +22,43 @@ export interface ProfileLinks {
   cv?: string;
 }
 
+/** Institution and dates of a career step; its title and note are translated in the dictionaries. */
 export interface Milestone {
-  title: string;
   place: string;
   period: string;
-  note?: string;
 }
 
 export interface TeamMember {
   id: string;
   name: string;
-  shortName: string;
-  role: string;
-  group: 'pi' | 'srf';
   photo: string;
   photoPosition?: string;
   email: string;
   links: ProfileLinks;
-  bio: string;
-  focus: string[];
   path: Milestone[];
-  honours: string[];
 }
 
+export type SrfKey = 'arathi' | 'subhisha';
+export type StoryId = 'cell' | 'switch' | 'limit' | 'reserve' | 'reactor' | 'loop';
+export type FocusId = 'biofuel' | 'carbon' | 'nutraceutical' | 'wastewater';
+export type ProgramId =
+  | 'transcriptional-engineering'
+  | 'stress-biology'
+  | 'carbon-concentrating'
+  | 'polyphosphate'
+  | 'biofuels'
+  | 'bioactives-bioeconomy';
+export type NavKey = 'home' | 'explore' | 'about' | 'contact';
+export type GrantRole = 'pi' | 'copi' | 'copiFunk';
+
 export interface ResearchProgram {
-  id: string;
+  id: ProgramId;
   number: string;
-  title: string;
-  summary: string;
-  keywords: string[];
   paperIds: string[];
 }
 
 export interface StoryChapter {
-  id: string;
-  label: string;
-  headline: string;
-  body: string;
-  figure: { value: string; caption: string };
+  id: StoryId;
   paperId: string;
 }
 
@@ -67,7 +66,7 @@ export interface Grant {
   title: string;
   agency: string;
   period: string;
-  role: string;
+  role: GrantRole;
 }
 
 export interface Recognition {
@@ -85,6 +84,15 @@ export interface Talk {
 
 export interface NavItem {
   to: string;
-  label: string;
+  key: NavKey;
   number: string;
+}
+
+export interface FocusArea {
+  id: FocusId;
+  number: string;
+  images: string[];
+  paperIds: string[];
+  /** CSS colour used for the glow behind the image cards. */
+  accent: string;
 }

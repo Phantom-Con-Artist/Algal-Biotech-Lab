@@ -1,5 +1,7 @@
 import type { MutableRefObject } from 'react';
 import { cn } from '../../utils/cn';
+import { fmt } from '../../i18n/config';
+import { useT } from '../../i18n/I18nProvider';
 
 interface Props {
   active: number;
@@ -8,14 +10,15 @@ interface Props {
 }
 
 export function ChapterRail({ active, labels, sections }: Props) {
+  const t = useT().story;
   return (
-    <nav aria-label="Story progress" className="fixed right-4 top-1/2 z-30 hidden -translate-y-1/2 lg:block xl:right-6">
+    <nav aria-label={t.progress} className="fixed right-4 top-1/2 z-30 hidden -translate-y-1/2 lg:block xl:right-6">
       <ul>
         {labels.map((label, i) => (
           <li key={label}>
             <button
               type="button"
-              aria-label={`Go to ${label}`}
+              aria-label={fmt(t.goTo, { label })}
               aria-current={i === active}
               onClick={() => sections.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
               className="group flex h-8 w-9 items-center justify-end"
