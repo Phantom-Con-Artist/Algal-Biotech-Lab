@@ -43,6 +43,7 @@ export function Header({ locale, nav, machineNote }: Props) {
   }));
 
   return (
+    <>
     <header className="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
       <Container className="flex h-16 items-center justify-between gap-6">
         <Link href={localePath(locale)} className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, ${nav.home}`}>
@@ -83,28 +84,32 @@ export function Header({ locale, nav, machineNote }: Props) {
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </Container>
-
-      {open && (
-        <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-paper md:hidden">
-          <Container as="nav" aria-label={nav.primary} className="flex min-h-full flex-col justify-between gap-10 py-8">
-            <ul className="border-t border-line">
-              {links.map((item) => (
-                <li key={item.key} className="border-b border-line">
-                  <Link
-                    href={item.href}
-                    aria-current={item.active ? 'page' : undefined}
-                    className={cn('flex min-h-16 items-baseline gap-4 text-3xl font-medium tracking-tight', item.active && 'text-leaf')}
-                  >
-                    <span className="font-mono text-xs text-mute">{item.number}</span>
-                    {nav[item.key]}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <LanguageSwitcher variant="list" locale={locale} label={nav.language} note={machineNote} />
-          </Container>
-        </div>
-      )}
     </header>
+
+    {/* A sibling of the header, not a child: the header's backdrop blur would otherwise become the containing
+        block for this fixed panel and collapse it to the header's height. */}
+    {open && (
+      <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper md:hidden">
+        <Container as="nav" aria-label={nav.primary} className="flex min-h-full flex-col justify-between gap-10 py-8">
+          <ul className="border-t border-line">
+            {links.map((item) => (
+              <li key={item.key} className="border-b border-line">
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={item.active ? 'page' : undefined}
+                  className={cn('flex min-h-16 items-center gap-4 text-3xl font-medium tracking-tight', item.active && 'text-leaf')}
+                >
+                  <span className="font-mono text-xs text-mute">{item.number}</span>
+                  {nav[item.key]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <LanguageSwitcher variant="list" locale={locale} label={nav.language} note={machineNote} />
+        </Container>
+      </div>
+    )}
+    </>
   );
 }
