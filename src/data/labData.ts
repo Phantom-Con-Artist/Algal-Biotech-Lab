@@ -32,4 +32,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const DEVELOPER = {
   name: 'Subhradeep Sarkar',
+  studio: 'Mavern',
+  url: 'https://mavern.in',
+  email: 'contact@mavern.in',
 };

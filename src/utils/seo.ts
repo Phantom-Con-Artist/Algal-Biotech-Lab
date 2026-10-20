@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { DEFAULT_LOCALE, getDictionary, LOCALES, localeInfo, localePath, type Locale } from '../i18n/config';
-import { LAB_INFO, SITE_URL } from '../data/labData';
+import { DEVELOPER, LAB_INFO, SITE_URL } from '../data/labData';
 
 export const absoluteUrl = (path: string) => `${SITE_URL}${path === '/' ? '' : path}` || SITE_URL;
 
@@ -58,6 +58,7 @@ export function rootMetadata(locale: Locale): Metadata {
     applicationName: LAB_INFO.name,
     authors: [{ name: LAB_INFO.name, url: SITE_URL }],
     publisher: LAB_INFO.institution,
+    creator: DEVELOPER.name,
     keywords: [
       'algal biotechnology', 'microalgae', 'Chlamydomonas reinhardtii', 'biofuels', 'carbon capture',
       'polyphosphate', 'biofertiliser', 'phycoremediation', 'nutraceuticals', 'microbiology',

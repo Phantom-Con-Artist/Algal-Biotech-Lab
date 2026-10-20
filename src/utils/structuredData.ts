@@ -1,5 +1,5 @@
 import { getDictionary, localeInfo, localePath, type Locale } from '../i18n/config';
-import { LAB_INFO, SITE_URL } from '../data/labData';
+import { DEVELOPER, LAB_INFO, SITE_URL } from '../data/labData';
 import { fullName, PI } from '../data/members';
 import type { LabMember, Publication } from '../types';
 import { absoluteUrl } from './seo';
@@ -53,6 +53,7 @@ export function siteGraph(locale: Locale) {
         name: t.meta.siteTitle,
         inLanguage: localeInfo(locale).htmlLang,
         publisher: { '@id': ORG_ID },
+        creator: { '@type': 'Person', name: DEVELOPER.name, url: DEVELOPER.url, email: DEVELOPER.email },
       },
     ],
   };

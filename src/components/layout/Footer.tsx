@@ -4,8 +4,10 @@ import { DEVELOPER, LAB_INFO, NAV_ITEMS } from '../../data/labData';
 import { getDictionary, localePath, type Locale } from '../../i18n/config';
 import { Container } from './Container';
 import cutnLogo from '../../assets/brand/cutn.webp';
+import mavernMark from '../../assets/brand/mavern-mark.webp';
 
 const link = 'measure inline-flex min-h-11 items-center text-sm text-deep-ink sm:min-h-0 sm:py-1';
+const credit = 'inline-flex min-h-11 items-center gap-1.5 text-deep-ink transition-colors hover:text-leaf-soft sm:min-h-0';
 
 export function Footer({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
@@ -62,7 +64,33 @@ export function Footer({ locale }: { locale: Locale }) {
 
       <Container className="flex flex-col gap-2 border-t border-deep-ink/15 py-6 font-mono text-[11px] text-deep-mute sm:flex-row sm:justify-between">
         <p>© {year} {t.lab.department}, {LAB_INFO.institution}</p>
-        <p>{t.footer.developedBy} {DEVELOPER.name}</p>
+        <p className="flex flex-col items-start sm:flex-row sm:items-center sm:gap-x-2">
+          <span className="inline-flex items-center gap-x-2">
+            <span>{t.footer.developedBy}</span>
+            <a href={DEVELOPER.url} target="_blank" rel="noopener" className={credit} title={DEVELOPER.studio}>
+              {/* The Mavern mark, masked so it takes the footer's ink, as on mavern.in. */}
+              <span
+                aria-hidden="true"
+                className="inline-block h-3.5 aspect-[803/665] bg-current"
+                style={{
+                  maskImage: `url(${mavernMark.src})`,
+                  WebkitMaskImage: `url(${mavernMark.src})`,
+                  maskSize: 'contain',
+                  WebkitMaskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                  WebkitMaskPosition: 'center',
+                }}
+              />
+              <span className="measure">{DEVELOPER.name}</span>
+            </a>
+          </span>
+          <span aria-hidden="true" className="hidden sm:inline">·</span>
+          <a href={`mailto:${DEVELOPER.email}`} className={credit}>
+            <span className="measure">{DEVELOPER.email}</span>
+          </a>
+        </p>
       </Container>
       {t.machineNote && (
         <Container className="pb-6 font-mono text-[11px] text-deep-mute">
