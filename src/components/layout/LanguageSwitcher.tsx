@@ -1,38 +1,27 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Check, Globe } from 'lucide-react';
-import { LOCALES } from '../../i18n/config';
-import { useI18n } from '../../i18n/I18nProvider';
+import { LOCALES, localePath, stripLocale, type Locale } from '../../i18n/config';
 import { cn } from '../../utils/cn';
 
-/** Inline grid of languages, used inside the mobile menu. */
-export function LanguageList() {
-  const { locale, setLocale, t } = useI18n();
-  return (
-    <div>
-      <p className="mb-2 font-mono text-xs uppercase tracking-[0.14em] text-mute">{t.nav.language}</p>
-      <ul className="grid grid-cols-3 gap-x-3">
-        {LOCALES.map((l) => (
-          <li key={l.code}>
-            <button
-              type="button"
-              lang={l.htmlLang}
-              aria-current={l.code === locale}
-              onClick={() => setLocale(l.code)}
-              className={cn('flex min-h-11 w-full items-center text-left text-sm', l.code === locale ? 'text-leaf' : 'text-soft')}
-            >
-              {l.name}
-            </button>
-          </li>
-        ))}
-      </ul>
-      {t.machineNote && <p className="mt-2 text-xs text-mute">{t.machineNote}</p>}
-    </div>
-  );
+interface Props {
+  locale: Locale;
+  label: string;
+  note: string;
+  /** 'menu' is the dropdown in the header; 'list' is the inline grid in the mobile menu. */
+  variant: 'menu' | 'list';
 }
 
-/** Header dropdown for wider screens. */
-export function LanguageSwitcher() {
-  const { locale, setLocale, t } = useI18n();
+/** Links to the same page in every language; each language has its own indexable URL. */
+function useLanguageLinks() {
+  const path = stripLocale(usePathname() ?? '/');
+  return LOCALES.map((l) => ({ ...l, href: localePath(l.code, path) }));
+}
+
+export function LanguageSwitcher({ locale, label, note, variant }: Props) {
+  const links = useLanguageLinks();
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
 
@@ -48,44 +37,56 @@ export function LanguageSwitcher() {
     };
   }, [open]);
 
+  const items = (
+    <ul className={variant === 'list' ? 'grid grid-cols-3 gap-x-3' : ''}>
+      {links.map((l) => (
+        <li key={l.code}>
+          <a
+            href={l.href}
+            hrefLang={l.htmlLang}
+            lang={l.htmlLang}
+            aria-current={l.code === locale ? 'true' : undefined}
+            className={cn(
+              'flex min-h-11 items-center justify-between gap-3 text-sm transition-colors',
+              variant === 'menu' && 'px-3 hover:bg-paper',
+              l.code === locale ? 'text-leaf' : 'text-ink-2 hover:text-ink',
+            )}
+          >
+            {l.name}
+            {variant === 'menu' && l.code === locale && <Check size={14} aria-hidden="true" />}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+
+  if (variant === 'list') {
+    return (
+      <div>
+        <p className="label mb-2">{label}</p>
+        {items}
+        {note && <p className="mt-2 text-xs text-mute">{note}</p>}
+      </div>
+    );
+  }
+
   return (
     <div ref={root} className="relative">
       <button
         type="button"
         aria-haspopup="true"
         aria-expanded={open}
-        aria-label={t.nav.language}
+        aria-label={label}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-11 items-center gap-2 font-mono text-xs uppercase text-mute transition-colors hover:text-paper"
+        className="flex h-11 items-center gap-2 font-mono text-xs uppercase text-ink-2 transition-colors hover:text-ink"
       >
         <Globe size={15} aria-hidden="true" />
         {locale}
       </button>
       {open && (
-        <div className="absolute right-0 top-full w-56 border border-line bg-ink p-2">
-          <ul>
-            {LOCALES.map((l) => (
-              <li key={l.code}>
-                <button
-                  type="button"
-                  lang={l.htmlLang}
-                  aria-current={l.code === locale}
-                  onClick={() => {
-                    setLocale(l.code);
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    'flex min-h-10 w-full items-center justify-between px-3 text-left text-sm transition-colors hover:bg-ink-2',
-                    l.code === locale ? 'text-leaf' : 'text-soft',
-                  )}
-                >
-                  {l.name}
-                  {l.code === locale && <Check size={14} aria-hidden="true" />}
-                </button>
-              </li>
-            ))}
-          </ul>
-          {t.machineNote && <p className="border-t border-line px-3 pb-1 pt-3 text-xs leading-snug text-mute">{t.machineNote}</p>}
+        <div className="absolute right-0 top-full mt-1 w-56 border border-line-strong bg-tile p-1.5 shadow-[0_12px_32px_-16px_oklch(0.22_0.02_158/0.25)]">
+          {items}
+          {note && <p className="border-t border-line px-3 pb-1 pt-3 text-xs leading-snug text-mute">{note}</p>}
         </div>
       )}
     </div>

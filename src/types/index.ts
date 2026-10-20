@@ -1,3 +1,5 @@
+import type { StaticImageData } from 'next/image';
+
 export type PublicationType = 'article' | 'chapter' | 'preprint';
 
 export interface Publication {
@@ -28,18 +30,40 @@ export interface Milestone {
   period: string;
 }
 
-export interface TeamMember {
-  id: string;
-  name: string;
-  photo: string;
-  photoPosition?: string;
-  email: string;
-  links: ProfileLinks;
-  path: Milestone[];
+export type MemberRole = 'pi' | 'srf' | 'phd' | 'jrf' | 'mentee' | 'trainee';
+export type MemberStatus = 'pi' | 'current' | 'alumni';
+
+/** A work listed by a member that is not in the lab's publication list. */
+export interface OtherWork {
+  citation: string;
+  href?: string;
 }
 
-export type SrfKey = 'arathi' | 'subhisha';
-export type StoryId = 'cell' | 'switch' | 'limit' | 'reserve' | 'reactor' | 'loop';
+export interface LabMember {
+  slug: string;
+  name: string;
+  /** Shown before the name, for example "Dr." */
+  honorific?: string;
+  status: MemberStatus;
+  role: MemberRole;
+  joined: number;
+  photo: StaticImageData;
+  photoPosition?: string;
+  education: string[];
+  interests: string[];
+  /** English biography. The PI's is translated and lives in the dictionaries instead. */
+  bio?: string;
+  fellowships: string[];
+  /** Spellings of this person's name in src/data/publications.ts, used to link their papers. */
+  authorNames: string[];
+  otherWorks: OtherWork[];
+  links: ProfileLinks;
+  /** Alumni only: their current position. */
+  now?: string;
+  /** Shown publicly only for the PI; students are reached through the lab address. */
+  email?: string;
+}
+
 export type FocusId = 'biofuel' | 'carbon' | 'nutraceutical' | 'wastewater';
 export type ProgramId =
   | 'transcriptional-engineering'
@@ -48,18 +72,13 @@ export type ProgramId =
   | 'polyphosphate'
   | 'biofuels'
   | 'bioactives-bioeconomy';
-export type NavKey = 'home' | 'explore' | 'about' | 'contact';
+export type NavKey = 'research' | 'people' | 'publications' | 'contact';
 export type GrantRole = 'pi' | 'copi' | 'copiFunk';
 
 export interface ResearchProgram {
   id: ProgramId;
   number: string;
   paperIds: string[];
-}
-
-export interface StoryChapter {
-  id: StoryId;
-  paperId: string;
 }
 
 export interface Grant {
@@ -83,7 +102,7 @@ export interface Talk {
 }
 
 export interface NavItem {
-  to: string;
+  path: string;
   key: NavKey;
   number: string;
 }
@@ -91,8 +110,6 @@ export interface NavItem {
 export interface FocusArea {
   id: FocusId;
   number: string;
-  images: string[];
+  images: StaticImageData[];
   paperIds: string[];
-  /** CSS colour used for the glow behind the image cards. */
-  accent: string;
 }

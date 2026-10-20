@@ -1,70 +1,74 @@
-import { Link } from 'react-router-dom';
+import Image from 'next/image';
+import Link from 'next/link';
 import { DEVELOPER, LAB_INFO, NAV_ITEMS } from '../../data/labData';
+import { getDictionary, localePath, type Locale } from '../../i18n/config';
 import { Container } from './Container';
-import { Eyebrow } from '../common/Eyebrow';
-import markSrc from '../../assets/brand/abl-mark.png';
-import { useT } from '../../i18n/I18nProvider';
-import cutnSrc from '../../assets/brand/cutn.png';
+import cutnLogo from '../../assets/brand/cutn.webp';
 
-const linkClass = 'inline-flex min-h-11 items-center text-sm text-soft transition-colors hover:text-leaf';
+const link = 'measure inline-flex min-h-11 items-center text-sm text-deep-ink sm:min-h-0 sm:py-1';
 
-export function Footer() {
-  const t = useT();
+export function Footer({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="relative z-10 border-t border-line bg-ink">
-      <Container className="grid gap-12 py-14 md:grid-cols-12 md:py-20">
+    <footer className="bg-deep text-deep-ink">
+      <Container className="grid gap-12 py-16 md:grid-cols-12 md:gap-8 md:py-20">
         <div className="md:col-span-5">
-          <div className="flex items-center gap-4">
-            <img src={markSrc} alt="" width={36} height={32} className="h-8 w-auto" />
-            <p className="font-serif text-2xl leading-tight">{LAB_INFO.name}</p>
+          <div className="flex items-start gap-4">
+            <Image src={cutnLogo} alt={LAB_INFO.institution} width={44} height={59} className="h-14 w-auto rounded-sm bg-deep-ink/95 p-1" />
+            <div>
+              <p className="text-xl font-semibold tracking-tight">{LAB_INFO.name}</p>
+              <p className="mt-2 text-sm leading-relaxed text-deep-mute">
+                {t.lab.department}, {t.lab.school}
+                <br />
+                {LAB_INFO.institution}
+              </p>
+            </div>
           </div>
-          <p className="mt-5 max-w-sm text-sm leading-relaxed text-mute">
-            {t.lab.department}, {t.lab.school}
-            <br />
-            {LAB_INFO.institution}
-            <br />
-            {LAB_INFO.address.join(', ')}
-          </p>
-          <a href={LAB_INFO.website} target="_blank" rel="noreferrer" aria-label={t.footer.cutn} className="mt-6 inline-block bg-paper p-2">
-            <img src={cutnSrc} alt="Central University of Tamil Nadu" width={56} height={54} className="h-14 w-auto" />
-          </a>
         </div>
 
         <nav aria-label={t.footer.quick} className="md:col-span-3 md:col-start-7">
-          <Eyebrow>{t.footer.quick}</Eyebrow>
-          <ul className="mt-3">
+          <p className="label mb-3 !text-deep-mute">{t.footer.quick}</p>
+          <ul>
             {NAV_ITEMS.map((item) => (
-              <li key={item.to}>
-                <Link to={item.to} className={linkClass}>{t.nav[item.key]}</Link>
+              <li key={item.key}>
+                <Link href={localePath(locale, item.path)} className={link}>{t.nav[item.key]}</Link>
               </li>
             ))}
-            <li>
-              <a href={LAB_INFO.website} target="_blank" rel="noreferrer" className={linkClass}>{t.footer.cutn}</a>
-            </li>
           </ul>
         </nav>
 
         <div className="md:col-span-3">
-          <Eyebrow>{t.footer.write}</Eyebrow>
-          <ul className="mt-3">
-            <li><a href={`mailto:${LAB_INFO.email}`} className={linkClass}>{LAB_INFO.email}</a></li>
-            <li><a href={LAB_INFO.phoneHref} className={linkClass}>{LAB_INFO.phone}</a></li>
-            <li><a href={LAB_INFO.mapHref} target="_blank" rel="noreferrer" className={linkClass}>{t.footer.map}</a></li>
+          <p className="label mb-3 !text-deep-mute">{t.footer.write}</p>
+          <ul>
+            <li><a href={`mailto:${LAB_INFO.email}`} className={link}>{LAB_INFO.email}</a></li>
+            <li><a href={LAB_INFO.phoneHref} className={link}>{LAB_INFO.phone}</a></li>
+            <li><a href={LAB_INFO.mapHref} target="_blank" rel="noopener" className={link}>{t.footer.map} ↗</a></li>
+            <li><a href={LAB_INFO.website} target="_blank" rel="noopener" className={link}>{t.footer.cutn} ↗</a></li>
           </ul>
         </div>
       </Container>
 
-      <div className="border-t border-line">
-        <Container className="flex flex-col gap-2 py-5 text-xs text-mute sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {LAB_INFO.name}, {LAB_INFO.institutionShort}
-            {t.machineNote && <span className="block sm:inline sm:before:mx-2 sm:before:content-['·']">{t.machineNote}</span>}
-          </p>
-          <p>
-            {t.footer.developedBy} <span className="text-paper">{DEVELOPER.name}</span>
-          </p>
+      {/* The name returns at full width: the page's close, set as large as the measure allows. */}
+      <Container>
+        <p
+          aria-hidden="true"
+          className="select-none whitespace-nowrap pb-[4.6vw] text-[12.4vw] font-medium leading-[0.82] tracking-[-0.06em] text-deep-ink/90"
+        >
+          {LAB_INFO.shortName}
+        </p>
+      </Container>
+
+      <Container className="flex flex-col gap-2 border-t border-deep-ink/15 py-6 font-mono text-[11px] text-deep-mute sm:flex-row sm:justify-between">
+        <p>© {year} {t.lab.department}, {LAB_INFO.institution}</p>
+        <p>{t.footer.developedBy} {DEVELOPER.name}</p>
+      </Container>
+      {t.machineNote && (
+        <Container className="pb-6 font-mono text-[11px] text-deep-mute">
+          <p>{t.machineNote}</p>
         </Container>
-      </div>
+      )}
     </footer>
   );
 }

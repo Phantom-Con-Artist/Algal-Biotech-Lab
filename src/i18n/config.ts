@@ -1,39 +1,58 @@
 import en from './locales/en';
+import fr from './locales/fr';
+import es from './locales/es';
+import de from './locales/de';
+import pl from './locales/pl';
+import sv from './locales/sv';
+import zh from './locales/zh';
+import ja from './locales/ja';
+import ko from './locales/ko';
 
 export type Dictionary = typeof en;
 
+/** `og` is the Open Graph locale; `htmlLang` is also the hreflang value. */
 export const LOCALES = [
-  { code: 'en', name: 'English', htmlLang: 'en' },
-  { code: 'fr', name: 'Français', htmlLang: 'fr' },
-  { code: 'es', name: 'Español', htmlLang: 'es' },
-  { code: 'de', name: 'Deutsch', htmlLang: 'de' },
-  { code: 'pl', name: 'Polski', htmlLang: 'pl' },
-  { code: 'sv', name: 'Svenska', htmlLang: 'sv' },
-  { code: 'zh', name: '简体中文', htmlLang: 'zh-Hans' },
-  { code: 'ja', name: '日本語', htmlLang: 'ja' },
-  { code: 'ko', name: '한국어', htmlLang: 'ko' },
+  { code: 'en', name: 'English', htmlLang: 'en', og: 'en_IN' },
+  { code: 'fr', name: 'Français', htmlLang: 'fr', og: 'fr_FR' },
+  { code: 'es', name: 'Español', htmlLang: 'es', og: 'es_ES' },
+  { code: 'de', name: 'Deutsch', htmlLang: 'de', og: 'de_DE' },
+  { code: 'pl', name: 'Polski', htmlLang: 'pl', og: 'pl_PL' },
+  { code: 'sv', name: 'Svenska', htmlLang: 'sv', og: 'sv_SE' },
+  { code: 'zh', name: '简体中文', htmlLang: 'zh-Hans', og: 'zh_CN' },
+  { code: 'ja', name: '日本語', htmlLang: 'ja', og: 'ja_JP' },
+  { code: 'ko', name: '한국어', htmlLang: 'ko', og: 'ko_KR' },
 ] as const;
 
 export type Locale = (typeof LOCALES)[number]['code'];
 
-/** Non-English dictionaries are separate chunks, fetched only when chosen. */
-export const LOADERS: Record<Exclude<Locale, 'en'>, () => Promise<{ default: Dictionary }>> = {
-  fr: () => import('./locales/fr'),
-  es: () => import('./locales/es'),
-  de: () => import('./locales/de'),
-  pl: () => import('./locales/pl'),
-  sv: () => import('./locales/sv'),
-  zh: () => import('./locales/zh'),
-  ja: () => import('./locales/ja'),
-  ko: () => import('./locales/ko'),
-};
+/** English lives at the site root; every other language under /{code}. */
+export const DEFAULT_LOCALE: Locale = 'en';
+export const PREFIXED_LOCALES = LOCALES.filter((l) => l.code !== DEFAULT_LOCALE).map((l) => l.code);
 
-export const STORAGE_KEY = 'abl-locale';
+const DICTIONARIES: Record<Locale, Dictionary> = { en, fr, es, de, pl, sv, zh, ja, ko };
 
-export const isLocale = (value: string | null): value is Locale => LOCALES.some((l) => l.code === value);
+export const isLocale = (value: string): value is Locale => LOCALES.some((l) => l.code === value);
+
+export const getDictionary = (locale: Locale): Dictionary => DICTIONARIES[locale];
+
+export const localeInfo = (locale: Locale) => LOCALES.find((l) => l.code === locale) ?? LOCALES[0];
+
+/** '/people' in 'fr' becomes '/fr/people'; the home page of 'fr' is '/fr'. */
+export function localePath(locale: Locale, path = '/'): string {
+  const clean = path === '/' ? '' : path;
+  return locale === DEFAULT_LOCALE ? clean || '/' : `/${locale}${clean}`;
+}
+
+/** Strips a language prefix: '/fr/people' becomes '/people'. */
+export function stripLocale(pathname: string): string {
+  const [, first, ...rest] = pathname.split('/');
+  if (first && isLocale(first) && first !== DEFAULT_LOCALE) return `/${rest.join('/')}`.replace(/\/$/, '') || '/';
+  return pathname || '/';
+}
 
 /** Replaces {placeholders} in a dictionary string. */
 export const fmt = (template: string, vars: Record<string, string | number>) =>
   template.replace(/\{(\w+)\}/g, (_, key: string) => String(vars[key] ?? ''));
 
-export { en };
+/** Narrows a route parameter; generateStaticParams guarantees it is a known code. */
+export const toLocale = (value: string): Locale => (isLocale(value) ? value : DEFAULT_LOCALE);

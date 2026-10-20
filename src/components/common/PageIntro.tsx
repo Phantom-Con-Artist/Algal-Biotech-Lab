@@ -1,25 +1,25 @@
-import type { ReactNode } from 'react';
 import { Container } from '../layout/Container';
-import { Eyebrow } from './Eyebrow';
-import { Reveal } from './Reveal';
 
 interface Props {
   number: string;
   label: string;
-  title: ReactNode;
+  title: string;
   lede: string;
 }
 
+/** Opening block of an inner page: label in the left column, a large ragged-right heading, then the lede. */
 export function PageIntro({ number, label, title, lede }: Props) {
   return (
-    <Container as="section" className="pb-14 pt-32 md:pb-24 md:pt-44">
-      <Reveal>
-        <Eyebrow number={number}>{label}</Eyebrow>
-        <h1 className="mt-6 max-w-[20ch] font-serif text-[clamp(2.4rem,6.6vw,5.5rem)] leading-[0.95] tracking-[-0.02em]">
-          {title}
-        </h1>
-        <p className="mt-8 max-w-xl text-base leading-relaxed text-soft md:text-lg">{lede}</p>
-      </Reveal>
+    <Container as="header" className="grid gap-6 pb-20 pt-14 lg:grid-cols-12 lg:gap-12 md:pb-32 md:pt-24">
+      <p className="label lg:col-span-3 lg:pt-4">
+        <span className="text-ink">{number}</span>
+        <span className="mx-2">/</span>
+        {label}
+      </p>
+      <div className="lg:col-span-9">
+        <h1 className="text-page max-w-[18ch] font-medium">{title}</h1>
+        <p className="text-lede mt-8 max-w-[48ch] text-ink-2 md:mt-10">{lede}</p>
+      </div>
     </Container>
   );
 }

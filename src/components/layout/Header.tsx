@@ -1,25 +1,33 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { LAB_INFO, NAV_ITEMS } from '../../data/labData';
-import { useScrolled } from '../../hooks/useScrolled';
+import { localePath, stripLocale, type Dictionary, type Locale } from '../../i18n/config';
 import { cn } from '../../utils/cn';
 import { Container } from './Container';
-import { MobileMenu } from './MobileMenu';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { useT } from '../../i18n/I18nProvider';
-import markSrc from '../../assets/brand/abl-mark.png';
+import mark from '../../assets/brand/abl-mark.webp';
 
-export function Header() {
+interface Props {
+  locale: Locale;
+  nav: Dictionary['nav'];
+  machineNote: string;
+}
+
+export function Header({ locale, nav, machineNote }: Props) {
   const [open, setOpen] = useState(false);
-  const scrolled = useScrolled();
-  const { pathname } = useLocation();
-  const t = useT();
+  const pathname = usePathname() ?? '/';
+  const current = stripLocale(pathname);
 
   useEffect(() => setOpen(false), [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (!open) return;
+    document.body.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
     window.addEventListener('keydown', onKey);
     return () => {
@@ -28,43 +36,40 @@ export function Header() {
     };
   }, [open]);
 
+  const links = NAV_ITEMS.map((item) => ({
+    ...item,
+    href: localePath(locale, item.path),
+    active: current === item.path || current.startsWith(`${item.path}/`),
+  }));
+
   return (
-    <>
-    <header
-      className={cn(
-        'fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300',
-        scrolled || open ? 'border-line bg-ink/85 backdrop-blur-md' : 'border-transparent',
-      )}
-    >
-      <Container className="flex h-16 items-center justify-between">
-        <Link to="/" className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, ${t.nav.home}`}>
-          <img src={markSrc} alt="" width={30} height={26} className="h-[26px] w-auto" />
-          <span className="text-[15px] font-medium tracking-tight">{LAB_INFO.shortName}</span>
+    <header className="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
+      <Container className="flex h-16 items-center justify-between gap-6">
+        <Link href={localePath(locale)} className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, ${nav.home}`}>
+          <Image src={mark} alt="" width={30} height={26} priority className="h-[26px] w-auto" />
+          <span className="text-base font-semibold tracking-tight">{LAB_INFO.shortName}</span>
+          <span className="label hidden border-l border-line-strong pl-3 sm:inline">{LAB_INFO.institutionShort}</span>
         </Link>
 
-        <nav aria-label={t.nav.primary} className="hidden items-center gap-8 md:flex">
-          <ul className="flex items-center gap-7 lg:gap-9">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) =>
-                    cn(
-                      'relative flex h-11 items-center gap-2 text-sm transition-colors hover:text-paper',
-                      isActive
-                        ? 'text-paper after:absolute after:inset-x-0 after:bottom-2 after:h-px after:bg-leaf'
-                        : 'text-mute',
-                    )
-                  }
+        <nav aria-label={nav.primary} className="hidden items-center gap-8 md:flex">
+          <ul className="flex items-center gap-6 lg:gap-8">
+            {links.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={item.href}
+                  aria-current={item.active ? 'page' : undefined}
+                  className={cn(
+                    'relative flex h-11 items-center gap-2 text-sm transition-colors',
+                    item.active ? 'text-ink after:absolute after:inset-x-0 after:bottom-2 after:h-px after:bg-leaf' : 'text-ink-2 hover:text-ink',
+                  )}
                 >
-                  <span className="font-mono text-[11px] text-mute/70">{item.number}</span>
-                  {t.nav[item.key]}
-                </NavLink>
+                  <span className="font-mono text-[10px] text-mute">{item.number}</span>
+                  {nav[item.key]}
+                </Link>
               </li>
             ))}
           </ul>
-          <LanguageSwitcher />
+          <LanguageSwitcher variant="menu" locale={locale} label={nav.language} note={machineNote} />
         </nav>
 
         <button
@@ -72,14 +77,34 @@ export function Header() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
-          className="-mr-2 grid h-11 w-11 place-items-center text-paper md:hidden"
+          aria-label={open ? nav.closeMenu : nav.openMenu}
+          className="-mr-2 grid h-11 w-11 place-items-center md:hidden"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </Container>
+
+      {open && (
+        <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 overflow-y-auto bg-paper md:hidden">
+          <Container as="nav" aria-label={nav.primary} className="flex min-h-full flex-col justify-between gap-10 py-8">
+            <ul className="border-t border-line">
+              {links.map((item) => (
+                <li key={item.key} className="border-b border-line">
+                  <Link
+                    href={item.href}
+                    aria-current={item.active ? 'page' : undefined}
+                    className={cn('flex min-h-16 items-baseline gap-4 text-3xl font-medium tracking-tight', item.active && 'text-leaf')}
+                  >
+                    <span className="font-mono text-xs text-mute">{item.number}</span>
+                    {nav[item.key]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <LanguageSwitcher variant="list" locale={locale} label={nav.language} note={machineNote} />
+          </Container>
+        </div>
+      )}
     </header>
-    {open && <MobileMenu />}
-    </>
   );
 }

@@ -40,10 +40,11 @@ This document sets the mandatory engineering standards for all agents, developer
 ---
 
 ## 3. Technology Stack & Coding Standards
-* **Framework**: React 18 / 19 with Vite & TypeScript (`strict: true`).
+* **Framework**: Next.js 16 (App Router, static export) with React 19 and TypeScript (`strict: true`).
 * **Styling**: Tailwind CSS (latest) with utility-first approach.
 * **Icons**: Lucide React (`lucide-react`) for clean, uniform iconography.
-* **3D & Visual FX**: Three.js, `@react-three/fiber`, `@react-three/drei`, `three-nebula`, and custom GPU point cloud shaders for biological microalgae / cellular particle visualizations.
+* **Visual FX**: Scroll-driven reveals in CSS (animate `transform` and `opacity` only). The hero organism is the one WebGL piece: a dependency-free shader in `src/components/home/organism/`, lazy-loaded, paused off screen, resolution-governed, still under reduced motion, with an SVG fallback. Do not add WebGL libraries.
+* **SEO**: Every page exports metadata through `src/views/metadata.ts` (canonical, hreflang, Open Graph) and adds JSON-LD from `src/utils/structuredData.ts`. New pages must also be listed in `src/app/sitemap.ts`.
 * **Type Safety**: Strictly typed props, models, and states. Disallow `any` types.
 
 ---
