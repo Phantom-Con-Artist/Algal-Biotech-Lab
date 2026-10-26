@@ -28,6 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
   { path: '/people', key: 'people', number: '02' },
   { path: '/publications', key: 'publications', number: '03' },
   { path: '/contact', key: 'contact', number: '04' },
+  { path: '/explore', key: 'explore', number: '05' },
 ];
 
 export const DEVELOPER = {

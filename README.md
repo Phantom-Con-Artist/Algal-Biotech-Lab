@@ -6,12 +6,14 @@ Website of the **Algal Biotechnology Laboratory**, Department of Microbiology, C
 
 | Page | Route | Content |
 |---|---|---|
-| Home | `/` | Statement and figures, focus areas, people, recent publications, the lab, how to join |
+| Home | `/` | One continuous 3D scroll: the Chlamydomonas cell peeled layer by layer, then how the lab works (culture, flasks, conditions, harvest, products), closing on the PI and links to every page |
 | Research | `/research` | The four focus areas and six research programmes, each linked to its papers |
 | People | `/people` | Principal investigator, researchers, alumni, funding and recognition, service and talks |
 | Profile | `/people/{name}` | One page per member: biography, interests, education, fellowships, publications |
 | Publications | `/publications` | Every work, grouped by year, with search, type filters, DOI links and citation copy |
 | Contact | `/contact` | Enquiry templates, contact details and directions |
+| Explore | `/explore` | The whole lab on one turning, full-screen 360° wall: people, achievements, programmes, papers, photographs |
+| Lab photo | `/lab/{slug}` | One photograph of the laboratory, opened from the Explore wall |
 
 Every page exists in nine languages. English is at the root; the others live under `/fr`, `/es`, `/de`, `/pl`, `/sv`, `/zh`, `/ja` and `/ko`. All translations other than English are machine-made and have not been reviewed. Member biographies are in English in every language.
 

@@ -1,12 +1,13 @@
 import { cn } from '../../utils/cn';
 
-/** Keyword chips: square, hairline, small. */
+/** Keywords as one readout line, separated by slashes. */
 export function Tags({ items, className }: { items: string[]; className?: string }) {
   return (
-    <ul className={cn('flex flex-wrap gap-1.5', className)}>
-      {items.map((item) => (
-        <li key={item} className="rounded-[2px] border border-line px-2 py-1 text-xs leading-none text-ink-2">
+    <ul className={cn('hud flex flex-wrap gap-x-2 gap-y-1 text-mute', className)}>
+      {items.map((item, i) => (
+        <li key={item} className="flex gap-2">
           {item}
+          {i < items.length - 1 && <span aria-hidden="true">/</span>}
         </li>
       ))}
     </ul>

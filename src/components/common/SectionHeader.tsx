@@ -6,24 +6,22 @@ interface Props {
   label: string;
   title: string;
   id?: string;
-  /** Optional link shown under the heading, typically "view all". */
+  /** Optional link set at the end of the readout line, typically "view all". */
   action?: ReactNode;
   className?: string;
 }
 
-/** Swiss section opener: a hairline rule, the numbered label in the left quarter, the heading across the rest. */
+/** Section opener: an instrument readout on a hairline (index, label, action), then the heading. */
 export function SectionHeader({ number, label, title, id, action, className }: Props) {
   return (
-    <header className={cn('mb-10 grid gap-5 border-t border-line-strong pt-5 md:mb-16 lg:grid-cols-12 lg:gap-12', className)}>
-      <p className="label lg:col-span-3 lg:pt-2">
+    <header className={cn('mb-10 md:mb-16', className)}>
+      <div className="hud flex items-center gap-4 text-mute">
         <span className="text-ink">{number}</span>
-        <span className="mx-2">/</span>
-        {label}
-      </p>
-      <div className="flex flex-col gap-5 lg:col-span-9 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-        <h2 id={id} className="text-h2 max-w-[20ch] font-medium">{title}</h2>
-        {action && <div className="shrink-0">{action}</div>}
+        <span>{label}</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-line-strong" />
+        {action}
       </div>
+      <h2 id={id} className="text-h2 mt-6 max-w-[22ch] md:mt-8">{title}</h2>
     </header>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Check, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { LOCALES, localePath, stripLocale, type Locale } from '../../i18n/config';
 import { cn } from '../../utils/cn';
 
@@ -47,13 +47,13 @@ export function LanguageSwitcher({ locale, label, note, variant }: Props) {
             lang={l.htmlLang}
             aria-current={l.code === locale ? 'true' : undefined}
             className={cn(
-              'flex min-h-11 items-center justify-between gap-3 text-sm transition-colors',
-              variant === 'menu' && 'px-3 hover:bg-paper',
-              l.code === locale ? 'text-leaf' : 'text-ink-2 hover:text-ink',
+              'flex min-h-11 items-center justify-between gap-3 text-[0.875rem] transition-colors',
+              variant === 'menu' && 'px-3 hover:bg-mist-hi',
+              l.code === locale ? 'text-ink' : 'text-ink-2 hover:text-ink',
             )}
           >
             {l.name}
-            {variant === 'menu' && l.code === locale && <Check size={14} aria-hidden="true" />}
+            {variant === 'menu' && l.code === locale && <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-eyespot" />}
           </a>
         </li>
       ))}
@@ -78,13 +78,13 @@ export function LanguageSwitcher({ locale, label, note, variant }: Props) {
         aria-expanded={open}
         aria-label={label}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-11 items-center gap-2 font-mono text-xs uppercase text-ink-2 transition-colors hover:text-ink"
+        className="hud flex h-11 items-center gap-2 text-ink-2 transition-colors hover:text-ink"
       >
         <Globe size={15} aria-hidden="true" />
         {locale}
       </button>
       {open && (
-        <div className="absolute right-0 top-full mt-1 w-56 border border-line-strong bg-tile p-1.5 shadow-[0_12px_32px_-16px_oklch(0.22_0.02_158/0.25)]">
+        <div className="ticks absolute right-0 top-full mt-1 w-56 bg-mist p-1.5 text-ink shadow-[0_16px_40px_-20px_oklch(0.24_0.018_245/0.4)]">
           {items}
           {note && <p className="border-t border-line px-3 pb-1 pt-3 text-xs leading-snug text-mute">{note}</p>}
         </div>

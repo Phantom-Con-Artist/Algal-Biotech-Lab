@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { fmt, getDictionary, localePath, type Locale } from '../i18n/config';
 import { fullName, PI_PATH } from '../data/members';
@@ -8,6 +7,7 @@ import type { LabMember } from '../types';
 import { breadcrumbs, personLd } from '../utils/structuredData';
 import { memberPath } from '../utils/lab';
 import { Container } from '../components/layout/Container';
+import { Leader } from '../components/common/ActionLink';
 import { JsonLd } from '../components/common/JsonLd';
 import { ProfileLinks } from '../components/common/ProfileLinks';
 import { Tags } from '../components/common/Tags';
@@ -24,16 +24,16 @@ export function MemberView({ member, locale }: { member: LabMember; locale: Loca
   return (
     <article>
       <Container className="pt-8 md:pt-12">
-        <Link href={localePath(locale, '/people')} className="group inline-flex min-h-11 items-center gap-2 text-sm font-medium text-ink-2 hover:text-ink">
-          <ArrowLeft size={16} aria-hidden="true" className="transition-transform group-hover:-translate-x-0.5" />
-          <span className="measure">{p.back}</span>
+        <Link href={localePath(locale, '/people')} className="hud group inline-flex min-h-11 items-center gap-3 text-ink-2 hover:text-ink">
+          <span className="rotate-180"><Leader /></span>
+          <span className="ruled">{p.back}</span>
         </Link>
       </Container>
 
       <Container className="grid gap-10 pb-28 pt-6 md:pb-44 md:pt-10 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-4">
           <div className="lg:sticky lg:top-24">
-            <div className="relative mx-auto aspect-[4/5] max-w-md overflow-hidden rounded-[4px] bg-line lg:max-w-none">
+            <div className="ticks mx-auto max-w-md p-2 text-ink/70 lg:max-w-none"><div className="relative aspect-[4/5] overflow-hidden bg-mist-lo">
               <Image
                 src={member.photo}
                 alt={fmt(t.common.portraitOf, { name: fullName(member) })}
@@ -42,9 +42,9 @@ export function MemberView({ member, locale }: { member: LabMember; locale: Loca
                 placeholder="blur"
                 sizes="(min-width: 1024px) 33vw, 28rem"
                 style={{ objectPosition: member.photoPosition }}
-                className="object-cover"
+                className="object-cover saturate-[0.85]"
               />
-            </div>
+            </div></div>
             <div className="mt-4">
               <ProfileLinks links={member.links} profileLabel={p.profileLink} />
             </div>
@@ -53,21 +53,21 @@ export function MemberView({ member, locale }: { member: LabMember; locale: Loca
 
         <div className="lg:col-span-8">
           <p className="label">{role}</p>
-          <h1 className="text-page mt-4 font-medium">{fullName(member)}</h1>
+          <h1 className="text-page mt-4">{fullName(member)}</h1>
           <p className="label mt-6">
             {member.status === 'alumni' ? `${p.alumniLabel} · ` : ''}
             {fmt(p.joined, { year: member.joined })}
           </p>
 
           {member.now && (
-            <p className="mt-6 max-w-[56ch] rounded-[4px] bg-leaf-soft px-5 py-4 text-base">
-              <span className="label mr-2 !text-leaf">{p.now}</span>
+            <p className="mt-6 max-w-[56ch] border-l border-ink py-1 pl-5">
+              <span className="hud mr-2 text-ink">{p.now}</span>
               {member.now}
             </p>
           )}
 
           {bio && <p className="text-lede mt-8 max-w-[60ch] text-ink-2">{bio}</p>}
-          {!isPi && locale !== 'en' && <p className="mt-3 text-sm text-mute">{p.bioNote}</p>}
+          {!isPi && locale !== 'en' && <p className="mt-3 text-[0.875rem] text-mute">{p.bioNote}</p>}
 
           {(isPi || member.interests.length > 0) && (
             <div className="mt-8">
@@ -86,7 +86,7 @@ export function MemberView({ member, locale }: { member: LabMember; locale: Loca
             )}
           </div>
 
-          <p className="mt-6 border-t border-line pt-6 text-base text-ink-2">
+          <p className="mt-6 border-t border-line pt-6 text-ink-2">
             {isPi ? (
               <a href={`mailto:${member.email}`} className="measure font-medium text-ink">{member.email}</a>
             ) : (

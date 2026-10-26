@@ -72,7 +72,7 @@ export type ProgramId =
   | 'polyphosphate'
   | 'biofuels'
   | 'bioactives-bioeconomy';
-export type NavKey = 'research' | 'people' | 'publications' | 'contact';
+export type NavKey = 'research' | 'people' | 'publications' | 'contact' | 'explore';
 export type GrantRole = 'pi' | 'copi' | 'copiFunk';
 
 export interface ResearchProgram {
@@ -112,4 +112,66 @@ export interface FocusArea {
   number: string;
   images: StaticImageData[];
   paperIds: string[];
+}
+
+/** Structures of the Chlamydomonas cell, in the order the hero takes them apart. */
+export type CellPartId =
+  | 'flagella'
+  | 'wall'
+  | 'membrane'
+  | 'eyespot'
+  | 'chloroplast'
+  | 'pyrenoid'
+  | 'storage'
+  | 'polyphosphate'
+  | 'nucleus';
+
+/** The stain that shows a structure under the microscope; each maps to a colour token. */
+export type Stain = 'chlorophyll' | 'carmine' | 'lugol' | 'nile' | 'toluidine' | 'janus' | 'eyespot' | 'glycoprotein' | 'membrane';
+
+export interface CellPart {
+  id: CellPartId;
+  key: number;
+  stain: Stain;
+  /** Node-name prefixes in public/models/chlamydomonas.glb that belong to this structure. */
+  nodes: string[];
+  /** Point the leader line touches, in micrometres, cell coordinates (Z towards the flagella). */
+  anchor: [number, number, number];
+  program?: ProgramId;
+  paperIds: string[];
+}
+
+/** Chapters of the second half of the home scroll: how the lab works. */
+export type JourneyId = 'culture' | 'cultivate' | 'stress' | 'harvest' | 'products';
+
+/** A readout pinned to an object in the lab scene, shown while its chapter is on screen. */
+export interface JourneyTag {
+  id: string;
+  chapter: JourneyId;
+  /** Lab node the tag points at (glTF node name), and an offset from its origin in centimetres, Blender axes. */
+  node: string;
+  offset: [number, number, number];
+}
+
+/** One panel of the 360-degree wall on the People page. */
+export interface WallTile {
+  id: string;
+  kind: 'person' | 'award' | 'grant' | 'photo' | 'count' | 'page' | 'programme' | 'focus' | 'paper';
+  /** Stain colour token of a programme's structure, shown as a swatch. */
+  stain?: Stain;
+  href: string;
+  image?: StaticImageData;
+  imagePosition?: string;
+  title: string;
+  sub: string;
+  meta: string;
+  /** Columns and rows the panel spans on the wall. */
+  w: 1 | 2;
+  h: 1 | 2 | 3 | 4;
+}
+
+/** A panel placed on the cylinder: its first column and row. */
+export interface PlacedTile extends WallTile {
+  col: number;
+  row: number;
 }

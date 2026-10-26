@@ -1,6 +1,6 @@
-import type { Dictionary } from '../config';
+import type { PartialDictionary } from '../config';
 
-const de: Dictionary = {
+const de: PartialDictionary = {
   machineNote: 'Maschinelle Übersetzung. Maßgeblich ist die englische Fassung.',
   lab: {
     department: 'Institut für Mikrobiologie',

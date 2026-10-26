@@ -20,10 +20,9 @@ export function ProfileLinks({ links, profileLabel }: { links: Links; profileLab
             href={links[key]}
             target="_blank"
             rel="noopener"
-            className="inline-flex min-h-11 items-center font-mono text-xs uppercase tracking-[0.08em] text-ink-2 transition-colors hover:text-leaf"
+            className="hud inline-flex min-h-11 items-center text-ink-2 transition-colors hover:text-ink"
           >
-            <span className="measure">{label || profileLabel}</span>
-            <span aria-hidden="true" className="ml-1 text-mute">↗</span>
+            <span className="ruled">{label || profileLabel}</span>
           </a>
         </li>
       ))}

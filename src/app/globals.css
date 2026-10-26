@@ -1,193 +1,226 @@
 @import "tailwindcss";
 
 /*
- * Swiss laboratory: warm paper, green-black ink, one chlorophyll accent.
- * Structure comes from hairlines and a 12-column grid, not from shadows or colour.
+ * Cold mist. The cell hangs in a pale, fogged field; the interface is a thin instrument layer over it:
+ * wide light headings, monospace readings, hairline leaders. Colour is rationed: the stain of the
+ * structure being read is the only saturated thing on screen, and the eyespot's vermilion marks action.
  */
-@theme {
-  --color-paper: oklch(0.968 0.007 110);
-  --color-tile: oklch(0.995 0.002 110);
-  --color-ink: oklch(0.22 0.02 158);
-  --color-ink-2: oklch(0.38 0.016 158);
-  --color-mute: oklch(0.5 0.012 158);
-  --color-line: oklch(0.22 0.02 158 / 0.12);
-  --color-line-strong: oklch(0.22 0.02 158 / 0.24);
-  --color-leaf: oklch(0.5 0.12 152);
-  --color-leaf-soft: oklch(0.94 0.04 150);
-  --color-deep: oklch(0.26 0.045 160);
-  --color-deep-ink: oklch(0.95 0.02 140);
-  --color-deep-mute: oklch(0.78 0.03 150);
+@theme static {
+  --color-mist: oklch(0.77 0.017 240);
+  --color-mist-hi: oklch(0.84 0.013 240);
+  --color-mist-lo: oklch(0.7 0.018 240);
+  --color-frost: oklch(0.975 0.004 240);
+  --color-ink: oklch(0.24 0.018 245);
+  --color-ink-2: oklch(0.3 0.018 245);
+  --color-mute: oklch(0.36 0.018 245);
+  --color-line: oklch(0.24 0.018 245 / 0.16);
+  --color-line-strong: oklch(0.24 0.018 245 / 0.38);
+  /* The deep end of the fog, for the footer and dense passages. */
+  --color-deep: oklch(0.27 0.016 245);
+  --color-deep-ink: oklch(0.93 0.008 240);
+  --color-deep-mute: oklch(0.74 0.014 240);
 
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Stains: each structure in the colour that shows it under the microscope */
+  --color-chlorophyll: oklch(0.55 0.14 148);
+  --color-carmine: oklch(0.5 0.17 12);
+  --color-lugol: oklch(0.42 0.12 290);
+  --color-nile: oklch(0.74 0.15 75);
+  --color-toluidine: oklch(0.52 0.15 335);
+  --color-janus: oklch(0.56 0.09 190);
+  --color-glycoprotein: oklch(0.62 0.05 110);
+  --color-membrane: oklch(0.66 0.1 65);
+  --color-eyespot: oklch(0.63 0.2 36);
+
+  /* Aliases kept for components that predate the mist world. */
+  --color-paper: var(--color-mist);
+  --color-tile: var(--color-frost);
+  --color-leaf: var(--color-ink);
+  --color-leaf-soft: var(--color-mist-hi);
+
+  --font-display: var(--font-unbounded), "Arial Black", ui-sans-serif, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-mono);
 
   --ease-out-quart: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
 
-  --text-display: clamp(3rem, 0.9rem + 6.6vw, 9.5rem);
-  --text-display--line-height: 0.92;
-  --text-display--letter-spacing: -0.05em;
-  --text-page: clamp(2.75rem, 1rem + 5vw, 7rem);
-  --text-page--line-height: 0.95;
-  --text-page--letter-spacing: -0.045em;
-  --text-h2: clamp(2rem, 1.1rem + 2.8vw, 4.25rem);
-  --text-h2--line-height: 1;
-  --text-h2--letter-spacing: -0.04em;
-  --text-h3: clamp(1.375rem, 1.1rem + 0.9vw, 2rem);
-  --text-h3--line-height: 1.12;
-  --text-h3--letter-spacing: -0.025em;
-  --text-lede: clamp(1.125rem, 1rem + 0.5vw, 1.5rem);
-  --text-lede--line-height: 1.5;
-  --text-lede--letter-spacing: -0.012em;
-  --text-stat: clamp(3rem, 1.6rem + 4vw, 6.5rem);
-  --text-stat--line-height: 0.9;
-  --text-stat--letter-spacing: -0.055em;
+  /* Fluid scales, 360px to 1440px. Unbounded is wide, so its sizes sit lower than a narrow face's. */
+  --text-display: clamp(2.125rem, calc(1.375rem + 3.333vw), 4.375rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-page: clamp(2rem, calc(1.375rem + 2.778vw), 3.875rem);
+  --text-page--line-height: 1.04;
+  --text-page--letter-spacing: -0.028em;
+  --text-h2: clamp(1.5rem, calc(1.125rem + 1.667vw), 2.625rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.022em;
+  --text-h3: clamp(1.0625rem, calc(0.979rem + 0.37vw), 1.3125rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lede: clamp(0.9375rem, calc(0.875rem + 0.278vw), 1.125rem);
+  --text-lede--line-height: 1.7;
+  --text-key: clamp(2.5rem, calc(1.75rem + 3.333vw), 4.75rem);
+  --text-key--line-height: 0.9;
+  --text-key--letter-spacing: -0.04em;
 }
 
 @layer base {
   html {
-    background: var(--color-paper);
+    background: var(--color-mist);
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem;
+    scrollbar-color: var(--color-mute) var(--color-mist);
   }
 
   body {
-    background: var(--color-paper);
+    /* The field brightens toward the middle, the way a lit fog does. */
+    background:
+      radial-gradient(120% 60rem at 50% 30rem, var(--color-mist-hi), transparent 70%),
+      var(--color-mist);
     color: var(--color-ink);
-    font-family: var(--font-sans);
-    font-size: 1.0625rem;
-    line-height: 1.6;
-    letter-spacing: -0.006em;
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     overflow-x: clip;
+    caret-color: var(--color-eyespot);
   }
 
-  h1, h2, h3 {
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 300;
     text-wrap: balance;
   }
 
-  p {
-    text-wrap: pretty;
-  }
+  p { text-wrap: pretty; }
 
   ::selection {
-    background: var(--color-leaf);
-    color: var(--color-paper);
+    background: var(--color-ink);
+    color: var(--color-frost);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-leaf);
-    outline-offset: 3px;
+    outline: 1.5px solid var(--color-ink);
+    outline-offset: 4px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
   }
 }
 
 @layer components {
-  /* Specimen label: the small uppercase mono line above every heading. */
+  /* Instrument readout: the small caps line used for callouts, measurements and indices. */
+  .hud {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.45;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
   .label {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    line-height: 1.4;
-    letter-spacing: 0.1em;
+    font-size: 0.6875rem;
+    line-height: 1.45;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-mute);
   }
-
-  /* Underline that grows from the left on hover, like a measurement being drawn. */
   .measure {
-    background: linear-gradient(currentColor, currentColor) no-repeat left bottom / 0% 1px;
-    transition: background-size 0.4s var(--ease-out-quart), color 0.25s;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
   }
-  .measure:hover,
-  .measure:focus-visible,
-  .group:hover .measure {
-    background-size: 100% 1px;
+
+  /* Index numerals beside a structure or a list entry. */
+  .key {
+    font-family: var(--font-display);
+    font-weight: 200;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Figure caption: the figure number set as a readout, the sentence in reading mono. */
+  .caption {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+  .caption b {
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-right: 0.6em;
+  }
+
+  /* Underline drawn as a hairline leader; it tightens toward the text on hover. */
+  .ruled {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+    transition: text-decoration-color 0.3s, text-underline-offset 0.4s var(--ease-out-quart);
+  }
+  .ruled:hover,
+  .ruled:focus-visible,
+  .group:hover .ruled {
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.22em;
+  }
+
+  /* A stain swatch: the colour chip beside a structure's name in every key on the site. */
+  .swatch {
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    background: var(--stain, currentColor);
+    flex: none;
+  }
+
+  /* Corner ticks around a region, the frame of a viewfinder rather than a box. */
+  .ticks {
+    background:
+      linear-gradient(currentColor, currentColor) top left / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) top left / 1px 10px no-repeat,
+      linear-gradient(currentColor, currentColor) top right / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) top right / 1px 10px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom left / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom left / 1px 10px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom right / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom right / 1px 10px no-repeat;
   }
 }
 
-/* Tiles rise into place as they enter the viewport. Pure CSS: browsers without scroll timelines show them at rest. */
+/* The Explore wall owns the whole screen: the page does not scroll and the site chrome steps aside. */
+html[data-fullscreen] { overflow: hidden; }
+html[data-fullscreen] body > header,
+html[data-fullscreen] body > footer,
+html[data-fullscreen] #mobile-menu { display: none; }
+
+/* Reading blocks surface out of the fog as they enter. Browsers without scroll timelines show them at rest. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .reveal {
       animation: reveal linear both;
       animation-timeline: view();
-      animation-range: entry 0% entry 40%;
+      animation-range: entry 0% entry 50%;
     }
   }
 }
 
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
 }
 
-/* CJK locales: Geist has no CJK glyphs, so fall through to the reader's system fonts and relax the tight tracking. */
-:root:lang(zh-Hans) { --font-sans: var(--font-geist), "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
-:root:lang(ja) { --font-sans: var(--font-geist), "Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", "Meiryo", sans-serif; }
-:root:lang(ko) { --font-sans: var(--font-geist), "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", sans-serif; word-break: keep-all; }
+/* CJK locales fall through to the reader's system fonts; headings relax their tight tracking. */
+:root:lang(zh-Hans) { --font-mono: var(--font-plex-mono), "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", monospace; --font-display: var(--font-unbounded), "PingFang SC", "Noto Sans CJK SC", sans-serif; }
+:root:lang(ja) { --font-mono: var(--font-plex-mono), "Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", monospace; --font-display: var(--font-unbounded), "Hiragino Sans", "Yu Gothic", sans-serif; }
+:root:lang(ko) { --font-mono: var(--font-plex-mono), "Apple SD Gothic Neo", "Noto Sans CJK KR", monospace; --font-display: var(--font-unbounded), "Apple SD Gothic Neo", sans-serif; word-break: keep-all; }
 :root:is(:lang(zh-Hans), :lang(ja), :lang(ko)) :is(h1, h2, h3) {
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-
-/* The hero organism: lobes strain apart and snap back; branching proboscides grow out, hold, and retract. */
-.liquid-blob,
-.evert {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.sway {
-  transform-box: view-box;
-  transform-origin: 500px 500px;
-}
-/* Under reduced motion (and before animation starts) the trees rest half-grown. */
-.evert { transform: scale(0.62); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .lobe-a { animation: lobe-a 9s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
-  .lobe-b { animation: lobe-b 9s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
-  .lobe-c { animation: lobe-c 9s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
-  .lobe-d { animation: lobe-d 14s ease-in-out infinite alternate; }
-  .lobe-e { animation: lobe-e 12s ease-in-out infinite alternate; }
-  .evert { animation-name: evert; animation-iteration-count: infinite; }
-  .sway { animation: sway 16s ease-in-out infinite alternate; }
-}
-[data-paused] * { animation-play-state: paused !important; }
-
-/* The two main lobes pull along a diagonal, thinning the neck between them, then rejoin with a slight overshoot. */
-@keyframes lobe-a {
-  0%, 100% { transform: translate(0, 0) scale(1, 1); }
-  42% { transform: translate(-30px, -20px) scale(1.06, 0.94); }
-  55% { transform: translate(-34px, -22px) scale(0.98, 1.03); }
-  68% { transform: translate(4px, 3px) scale(1.04, 0.97); }
-}
-@keyframes lobe-b {
-  0%, 100% { transform: translate(0, 0) scale(1, 1); }
-  42% { transform: translate(29px, 21px) scale(0.94, 1.06); }
-  55% { transform: translate(33px, 24px) scale(1.03, 0.98); }
-  68% { transform: translate(-3px, -3px) scale(0.97, 1.04); }
-}
-@keyframes lobe-c {
-  0%, 100% { transform: scale(1); }
-  45%, 55% { transform: scale(0.55); }
-  68% { transform: scale(1.08); }
-}
-@keyframes lobe-d { to { transform: translate(-18px, 15px) scale(1.12); } }
-@keyframes lobe-e { to { transform: translate(16px, -12px) scale(0.88); } }
-
-/* Eversion: shoots out fast, holds, then draws back slowly into the body. */
-@keyframes evert {
-  0% { transform: scale(0.1); animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
-  30% { transform: scale(1); animation-timing-function: ease-in-out; }
-  62% { transform: scale(0.94); animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1); }
-  92%, 100% { transform: scale(0.1); }
-}
-@keyframes sway {
-  from { transform: rotate(-3deg); }
-  to { transform: rotate(3deg); }
+  letter-spacing: 0;
+  line-height: 1.25;
 }

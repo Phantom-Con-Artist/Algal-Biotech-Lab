@@ -7,19 +7,17 @@ interface Props {
   lede: string;
 }
 
-/** Opening block of an inner page: label in the left column, a large ragged-right heading, then the lede. */
+/** Opening of an inner page: the page's readout line, a wide light title, then the lede. */
 export function PageIntro({ number, label, title, lede }: Props) {
   return (
-    <Container as="header" className="grid gap-6 pb-20 pt-14 lg:grid-cols-12 lg:gap-12 md:pb-32 md:pt-24">
-      <p className="label lg:col-span-3 lg:pt-4">
+    <Container as="header" className="pb-16 pt-14 md:pb-28 md:pt-24">
+      <div className="hud flex items-center gap-4 text-mute">
         <span className="text-ink">{number}</span>
-        <span className="mx-2">/</span>
-        {label}
-      </p>
-      <div className="lg:col-span-9">
-        <h1 className="text-page max-w-[18ch] font-medium">{title}</h1>
-        <p className="text-lede mt-8 max-w-[48ch] text-ink-2 md:mt-10">{lede}</p>
+        <span>{label}</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-line-strong" />
       </div>
+      <h1 className="text-page mt-8 max-w-[20ch] md:mt-12">{title}</h1>
+      <p className="text-lede mt-8 max-w-[52ch] text-ink-2 md:mt-10">{lede}</p>
     </Container>
   );
 }

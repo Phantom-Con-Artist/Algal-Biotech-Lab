@@ -3,7 +3,7 @@ import { LAB_INFO } from '../../data/labData';
 import { ArrowLink } from '../common/ArrowLink';
 import { BentoTile } from '../common/BentoTile';
 
-const link = 'measure inline-flex min-h-11 items-center text-lg font-medium break-all';
+const link = 'ruled inline-flex min-h-11 items-center font-display text-[1.0625rem] font-light break-all';
 
 export function ContactDetails({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);

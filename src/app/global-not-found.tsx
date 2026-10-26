@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { geist, plexMono } from './fonts';
+import { display, text } from './fonts';
 import { getDictionary } from '@/i18n/config';
 import { LAB_INFO } from '@/data/labData';
 import './globals.css';
@@ -14,14 +14,14 @@ export const metadata: Metadata = {
 /** Served for any URL that matches no page. It sits outside both root layouts, so it is self-contained. */
 export default function GlobalNotFound() {
   return (
-    <html lang="en" className={`${geist.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${display.variable} ${text.variable}`}>
       <body className="grid min-h-svh place-items-center px-4">
         <main className="w-full max-w-3xl py-24">
-          <p className="label">404 / {LAB_INFO.name}</p>
-          <h1 className="text-page mt-6 font-medium">{t.notFound.title}</h1>
+          <p className="hud text-mute">404 / {LAB_INFO.name}</p>
+          <h1 className="text-page mt-6">{t.notFound.title}</h1>
           <p className="text-lede mt-6 max-w-[44ch] text-ink-2">{t.notFound.body}</p>
-          <a href="/" className="mt-10 inline-flex min-h-11 items-center rounded-[4px] bg-ink px-5 text-sm font-medium text-paper hover:bg-leaf">
-            {t.notFound.home} →
+          <a href="/" className="hud ticks mt-10 inline-flex min-h-12 items-center gap-3 px-5 text-ink hover:bg-ink hover:text-frost">
+            {t.notFound.home}
           </a>
         </main>
       </body>

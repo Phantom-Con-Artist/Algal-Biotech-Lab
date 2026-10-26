@@ -1,6 +1,6 @@
-import type { Dictionary } from '../config';
+import type { PartialDictionary } from '../config';
 
-const ko: Dictionary = {
+const ko: PartialDictionary = {
   machineNote: '기계 번역입니다. 정확한 내용은 영어판을 기준으로 합니다.',
   lab: {
     department: '미생물학과',

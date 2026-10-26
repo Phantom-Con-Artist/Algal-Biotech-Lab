@@ -28,7 +28,7 @@ export function PublicationList({ t, htmlLang }: { t: PublicationStrings; htmlLa
   return (
     <div>
       <PublicationFilters t={t} query={query} type={type} onQuery={setQuery} onType={setType} />
-      <p className="label mt-6" aria-live="polite">
+      <p className="hud mt-6 text-mute" aria-live="polite">
         {fmt(t.count, { n: byYear.total, total: PUBLICATIONS.length })}
       </p>
 
@@ -36,7 +36,7 @@ export function PublicationList({ t, htmlLang }: { t: PublicationStrings; htmlLa
 
       {byYear.groups.map(([year, items]) => (
         <section key={year} aria-labelledby={`y${year}`} className="mt-12 border-t border-line-strong pt-5">
-          <h2 id={`y${year}`} className="text-h2 font-medium tabular-nums text-leaf">{year}</h2>
+          <h2 id={`y${year}`} className="key text-[clamp(2.5rem,1.8rem+3vw,4.5rem)] leading-none">{year}</h2>
           <ul>
             {items.map((pub) => (
               <PublicationItem key={pub.id} pub={pub} t={t} htmlLang={htmlLang} />

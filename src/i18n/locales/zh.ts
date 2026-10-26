@@ -1,6 +1,6 @@
-import type { Dictionary } from '../config';
+import type { PartialDictionary } from '../config';
 
-const zh: Dictionary = {
+const zh: PartialDictionary = {
   machineNote: '本页为机器翻译，内容以英文版为准。',
   lab: {
     department: '微生物学系',

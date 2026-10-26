@@ -11,11 +11,11 @@ export function Timeline({ items, titles, notes }: Props) {
     <ol className="border-t border-line">
       {items.map((m, i) => (
         <li key={m.place + m.period} className="grid gap-1 border-b border-line py-4 sm:grid-cols-[8rem_1fr] sm:gap-6">
-          <span className="font-mono text-xs text-mute sm:pt-0.5">{m.period}</span>
+          <span className="hud text-mute sm:pt-1">{m.period}</span>
           <div>
-            <p className="text-base font-medium">{titles[i]}</p>
-            <p className="text-sm text-ink-2">{m.place}</p>
-            {notes[i] && <p className="mt-0.5 text-sm text-mute">{notes[i]}</p>}
+            <p className="font-medium">{titles[i]}</p>
+            <p className="text-[0.875rem] text-ink-2">{m.place}</p>
+            {notes[i] && <p className="mt-0.5 text-[0.875rem] text-mute">{notes[i]}</p>}
           </div>
         </li>
       ))}

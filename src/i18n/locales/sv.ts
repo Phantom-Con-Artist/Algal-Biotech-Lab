@@ -1,6 +1,6 @@
-import type { Dictionary } from '../config';
+import type { PartialDictionary } from '../config';
 
-const sv: Dictionary = {
+const sv: PartialDictionary = {
   machineNote: 'Maskinöversättning. Den engelska versionen gäller.',
   lab: {
     department: 'Institutionen för mikrobiologi',

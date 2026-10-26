@@ -1,14 +1,20 @@
-import { Geist, IBM_Plex_Mono } from 'next/font/google';
+import { IBM_Plex_Mono, Unbounded } from 'next/font/google';
 
 /**
- * Geist for everything readable; Plex Mono for specimen labels, dates and DOIs. Both self-hosted at build time.
- * Only the Latin subset is preloaded; other subsets (Polish, for example) are still declared and load on demand.
+ * Unbounded, wide and light, for headings: the voice of an instrument's housing. IBM Plex Mono for
+ * everything read and measured, from HUD callouts to paper titles. Both self-hosted at build time;
+ * latin-ext covers Polish and Swedish.
  */
-export const geist = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' });
+export const display = Unbounded({
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-unbounded',
+  display: 'swap',
+});
 
-export const plexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: '400',
+export const text = IBM_Plex_Mono({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['300', '400', '500'],
+  style: ['normal', 'italic'],
   variable: '--font-plex-mono',
   display: 'swap',
 });

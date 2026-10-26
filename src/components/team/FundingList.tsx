@@ -12,11 +12,11 @@ export function FundingList({ locale }: { locale: Locale }) {
           {GRANTS.map((g) => (
             <li key={g.title} className="border-b border-line py-4 last:border-b-0">
               <div className="flex items-baseline justify-between gap-6">
-                <p className="text-base font-medium">{g.title}</p>
-                <span className="shrink-0 font-mono text-xs text-mute">{g.period}</span>
+                <p className="font-medium">{g.title}</p>
+                <span className="hud shrink-0 text-mute">{g.period}</span>
               </div>
-              <p className="mt-1 text-sm text-mute">{g.agency}</p>
-              <p className="mt-1 text-sm text-leaf">{t.grantRoles[g.role]}</p>
+              <p className="mt-1 text-[0.875rem] text-mute">{g.agency}</p>
+              <p className="hud mt-2 text-ink">{t.grantRoles[g.role]}</p>
             </li>
           ))}
         </ul>
@@ -26,10 +26,10 @@ export function FundingList({ locale }: { locale: Locale }) {
         <ul className="border-t border-line">
           {RECOGNITION.map((r) => (
             <li key={r.title + r.year} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-line py-4 last:border-b-0">
-              <span className="font-mono text-xs text-mute">{r.year}</span>
+              <span className="hud text-mute">{r.year}</span>
               <div>
-                <p className="text-base font-medium">{r.title}</p>
-                <p className="text-sm text-mute">{r.body}</p>
+                <p className="font-medium">{r.title}</p>
+                <p className="text-[0.875rem] text-mute">{r.body}</p>
               </div>
             </li>
           ))}

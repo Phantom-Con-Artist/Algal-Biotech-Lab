@@ -43,7 +43,7 @@ This document sets the mandatory engineering standards for all agents, developer
 * **Framework**: Next.js 16 (App Router, static export) with React 19 and TypeScript (`strict: true`).
 * **Styling**: Tailwind CSS (latest) with utility-first approach.
 * **Icons**: Lucide React (`lucide-react`) for clean, uniform iconography.
-* **Visual FX**: Scroll-driven reveals in CSS (animate `transform` and `opacity` only). The hero organism is the one WebGL piece: a dependency-free shader in `src/components/home/organism/`, lazy-loaded, paused off screen, resolution-governed, still under reduced motion, with an SVG fallback. Do not add WebGL libraries.
+* **Visual FX**: The home page is one continuous three.js scene (`src/components/home/cell/engine/`): the Chlamydomonas cell peels layer by layer, then the camera pulls back through a culture into the lab. Models are authored in Blender (`assets/blender/chlamydomonas.blend`, exported to `public/models/*.glb` with Draco); detail maps come from `assets/blender/gen_detail_maps.py`. three.js is the one WebGL library: the scene loads lazily, pauses off screen, adapts its pixel ratio to the frame rate, honours reduced motion, and every readout is plain DOM. The Explore page (`/explore`) is a CSS 3D wall, not WebGL. Elsewhere, motion is CSS (animate `transform` and `opacity`).
 * **SEO**: Every page exports metadata through `src/views/metadata.ts` (canonical, hreflang, Open Graph) and adds JSON-LD from `src/utils/structuredData.ts`. New pages must also be listed in `src/app/sitemap.ts`.
 * **Type Safety**: Strictly typed props, models, and states. Disallow `any` types.
 
