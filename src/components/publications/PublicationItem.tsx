@@ -27,12 +27,12 @@ export function PublicationItem({ pub, t, htmlLang }: { pub: Publication; t: Pub
   };
 
   return (
-    <li className="grid gap-3 border-b border-line py-8 lg:grid-cols-12 lg:gap-12">
-      <p className="hud text-mute lg:col-span-3 lg:pt-1">
+    <li className="group grid gap-3 border-b border-line py-8 transition-colors duration-300 hover:bg-frost/50 lg:-mx-4 lg:grid-cols-12 lg:gap-8 lg:px-4">
+      <p className="hud text-mute lg:col-span-2 lg:pt-1">
         <span className="text-ink">{t.types[pub.type]}</span>
         {month && <span className="ml-2">{month}</span>}
       </p>
-      <div className="lg:col-span-9">
+      <div className="lg:col-span-10">
         <h3 className="max-w-[60ch] font-display text-[1.0625rem] font-light leading-snug md:text-[1.25rem]">{pub.title}</h3>
         <div className="mt-3 max-w-[80ch]">
           <AuthorList authors={pub.authors} />

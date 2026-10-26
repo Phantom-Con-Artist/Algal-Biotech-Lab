@@ -1,4 +1,5 @@
 import { Container } from '../layout/Container';
+import { Decode } from './Decode';
 
 interface Props {
   number: string;
@@ -16,7 +17,7 @@ export function PageIntro({ number, label, title, lede }: Props) {
         <span>{label}</span>
         <span aria-hidden="true" className="h-px flex-1 bg-line-strong" />
       </div>
-      <h1 className="text-page mt-8 max-w-[20ch] md:mt-12">{title}</h1>
+      <h1 className="text-page mt-8 max-w-[20ch] md:mt-12"><Decode text={title} /></h1>
       <p className="text-lede mt-8 max-w-[52ch] text-ink-2 md:mt-10">{lede}</p>
     </Container>
   );

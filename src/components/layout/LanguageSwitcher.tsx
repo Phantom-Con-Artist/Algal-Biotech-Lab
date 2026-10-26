@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { Globe } from 'lucide-react';
-import { LOCALES, localePath, stripLocale, type Locale } from '../../i18n/config';
+import { LOCALES, localePath, stripLocale, type Locale } from '../../i18n/locales-meta';
 import { cn } from '../../utils/cn';
 
 interface Props {

@@ -15,8 +15,8 @@ import {
  * fringes) and, during a scale jump, dissolves one world into the next: a frost front grows out from
  * the centre through drifting noise, with a glowing ice edge, a radial zoom blur and a flash at its peak.
  */
-export function createPost(renderer: WebGLRenderer) {
-  const make = () => new WebGLRenderTarget(1, 1, { type: HalfFloatType, samples: 2 });
+export function createPost(renderer: WebGLRenderer, samples = 2) {
+  const make = () => new WebGLRenderTarget(1, 1, { type: HalfFloatType, samples });
   const targetA = make();
   const targetB = make();
   const material = new ShaderMaterial({
@@ -45,7 +45,7 @@ export function createPost(renderer: WebGLRenderer) {
       vec3 lens(sampler2D t, vec2 uv, float blur) {
         vec2 c = uv - 0.5;
         float r = length(c * vec2(uRes.x / uRes.y, 1.0));
-        vec2 fringe = c * pow(r, 2.0) * (0.012 + blur * 0.05);
+        vec2 fringe = c * pow(r, 2.0) * (0.006 + blur * 0.05);
         if (blur < 0.01) return vec3(texture2D(t, uv + fringe).r, texture2D(t, uv).g, texture2D(t, uv - fringe).b);
         vec3 acc = vec3(0.0);
         for (int i = 0; i < 10; i++) {
@@ -71,15 +71,17 @@ export function createPost(renderer: WebGLRenderer) {
           col = mix(next, col, keep) + vec3(0.85, 0.94, 1.0) * edge * 0.9 * step(0.001, uMix) * step(uMix, 0.999);
         }
         col += vec3(0.95, 0.97, 1.0) * uFlash * (1.0 - smoothstep(0.0, 0.9, r));
-        // Grade: a little more contrast and colour, so the stains read through the mist.
+        // Grade: a little more contrast and colour, so the stains read against the daylight field.
         float luma = dot(col, vec3(0.2126, 0.7152, 0.0722));
         col = mix(vec3(luma), col, 1.22);
         col = max((col - 0.18) * 1.08 + 0.18, 0.0);
-        col *= mix(1.0, 0.82, smoothstep(0.35, 1.05, r));
+        col *= mix(1.0, 0.92, smoothstep(0.45, 1.1, r));
         col += (hash(vUv * uRes + fract(uTime) * 91.0) - 0.5) * 0.028;
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
+        // Lift the graded field to the page's daylight white, so the frame has no edge against the page.
+        gl_FragColor.rgb *= vec3(1.098, 1.112, 1.104);
       }`,
     depthTest: false,
     depthWrite: false,

@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { LAB_INFO, NAV_ITEMS } from '../../data/labData';
-import { localePath, stripLocale, type Dictionary, type Locale } from '../../i18n/config';
+import type { Dictionary } from '../../i18n/config';
+import { localePath, stripLocale, type Locale } from '../../i18n/locales-meta';
 import { cn } from '../../utils/cn';
 import { Container } from './Container';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -46,8 +47,8 @@ export function Header({ locale, nav, machineNote }: Props) {
     <>
     <header className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-mist/85 to-transparent">
       <Container className="flex h-20 items-center justify-between gap-3 lg:gap-6">
-        <Link href={localePath(locale)} className="flex min-h-11 min-w-0 max-w-[220px] flex-1 items-center sm:max-w-[260px] lg:max-w-[280px]" aria-label={`${LAB_INFO.name}, ${nav.home}`}>
-          <Image src={wordmark} alt="" priority sizes="(min-width: 1024px) 280px, (min-width: 640px) 260px, 220px" className="h-auto w-full" />
+        <Link href={localePath(locale)} className="flex min-h-11 min-w-0 max-w-[148px] flex-1 items-center sm:max-w-[168px] lg:max-w-[188px]" aria-label={`${LAB_INFO.name}, ${nav.home}`}>
+          <Image src={wordmark} alt="" priority sizes="(min-width: 1024px) 188px, (min-width: 640px) 168px, 148px" className="h-auto w-full" />
         </Link>
 
         <nav aria-label={nav.primary} className="hidden items-center gap-8 lg:flex">

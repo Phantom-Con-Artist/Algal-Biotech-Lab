@@ -10,6 +10,7 @@ const ko: PartialDictionary = {
     home: '홈',
     research: '연구',
     people: '구성원',
+    lab: '연구실',
     publications: '논문',
     contact: '문의하기',
     primary: '주 메뉴',

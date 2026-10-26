@@ -1,40 +1,40 @@
 import { getDictionary, type Locale } from '../../i18n/config';
 import { GRANTS, RECOGNITION } from '../../data/recognition';
-import { BentoTile } from '../common/BentoTile';
 
+/** Grants and awards as two ledgers: period or year on the left, what and from whom on the right. */
 export function FundingList({ locale }: { locale: Locale }) {
   const t = getDictionary(locale).people;
   return (
-    <div className="grid gap-2 sm:gap-3 lg:grid-cols-2">
-      <BentoTile>
-        <h3 className="label mb-4">{t.grants}</h3>
-        <ul className="border-t border-line">
+    <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
+      <section aria-labelledby="grants-title">
+        <h3 id="grants-title" className="hud mb-4 text-mute">{t.grants}</h3>
+        <ul className="border-t border-line-strong">
           {GRANTS.map((g) => (
-            <li key={g.title} className="border-b border-line py-4 last:border-b-0">
-              <div className="flex items-baseline justify-between gap-6">
-                <p className="font-medium">{g.title}</p>
-                <span className="hud shrink-0 text-mute">{g.period}</span>
-              </div>
-              <p className="mt-1 text-[0.875rem] text-mute">{g.agency}</p>
-              <p className="hud mt-2 text-ink">{t.grantRoles[g.role]}</p>
-            </li>
-          ))}
-        </ul>
-      </BentoTile>
-      <BentoTile>
-        <h3 className="label mb-4">{t.awards}</h3>
-        <ul className="border-t border-line">
-          {RECOGNITION.map((r) => (
-            <li key={r.title + r.year} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-line py-4 last:border-b-0">
-              <span className="hud text-mute">{r.year}</span>
+            <li key={g.title} className="grid gap-1 border-b border-line py-5 sm:grid-cols-[7.5rem_1fr] sm:gap-6">
+              <span className="hud text-mute sm:pt-1">{g.period}</span>
               <div>
-                <p className="font-medium">{r.title}</p>
-                <p className="text-[0.875rem] text-mute">{r.body}</p>
+                <p className="font-display text-[1.0625rem] font-light leading-snug">{g.title}</p>
+                <p className="mt-1 text-[0.875rem] text-ink-2">{g.agency}</p>
+                <p className="hud mt-2 text-ink">{t.grantRoles[g.role]}</p>
               </div>
             </li>
           ))}
         </ul>
-      </BentoTile>
+      </section>
+      <section aria-labelledby="awards-title">
+        <h3 id="awards-title" className="hud mb-4 text-mute">{t.awards}</h3>
+        <ul className="border-t border-line-strong">
+          {RECOGNITION.map((r) => (
+            <li key={r.title + r.year} className="grid gap-1 border-b border-line py-5 sm:grid-cols-[7.5rem_1fr] sm:gap-6">
+              <span className="hud text-mute sm:pt-1">{r.year}</span>
+              <div>
+                <p className="font-display text-[1.0625rem] font-light leading-snug">{r.title}</p>
+                {r.body && <p className="mt-1 text-[0.875rem] text-ink-2">{r.body}</p>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

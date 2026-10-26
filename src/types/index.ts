@@ -72,7 +72,7 @@ export type ProgramId =
   | 'polyphosphate'
   | 'biofuels'
   | 'bioactives-bioeconomy';
-export type NavKey = 'research' | 'people' | 'publications' | 'contact' | 'explore';
+export type NavKey = 'research' | 'people' | 'lab' | 'publications' | 'contact' | 'explore';
 export type GrantRole = 'pi' | 'copi' | 'copiFunk';
 
 export interface ResearchProgram {
@@ -147,7 +147,8 @@ export type JourneyId = 'culture' | 'cultivate' | 'stress' | 'harvest' | 'produc
 /** A readout pinned to an object in the lab scene, shown while its chapter is on screen. */
 export interface JourneyTag {
   id: string;
-  chapter: JourneyId;
+  /** The chapter that shows it; 'lead' is the closing shot of the lab room. */
+  chapter: JourneyId | 'lead';
   /** Lab node the tag points at (glTF node name), and an offset from its origin in centimetres, Blender axes. */
   node: string;
   offset: [number, number, number];
@@ -175,3 +176,25 @@ export interface PlacedTile extends WallTile {
   col: number;
   row: number;
 }
+
+/** A point in the lab room, in metres, Blender axes (Z up), as the room is authored. */
+export type RoomPoint = [x: number, y: number, z: number];
+
+/** One stop on the scroll tour of the lab room. */
+export interface TourStop {
+  id: TourStopId;
+  /** Where the camera stands and what it looks at. */
+  eye: RoomPoint;
+  look: RoomPoint;
+  /** Centre and radius of the patch of the room that turns from ash to colour. */
+  focus: RoomPoint;
+  radius: number;
+  /** Readout anchors (Label_* nodes in the room model) shown while this stop is read. */
+  labels: TourLabelId[];
+}
+
+export type TourStopId = 'corridor' | 'threshold' | 'cultures' | 'cold' | 'laminar' | 'utility' | 'reagents' | 'weighing' | 'optics' | 'window' | 'prep' | 'molecular' | 'overview' | 'loop';
+export type TourLabelId =
+  | 'laminar' | 'sterile' | 'utility' | 'fridge' | 'freezer' | 'rack' | 'cultures' | 'oven' | 'windows'
+  | 'stirrer' | 'pipettes' | 'psu' | 'centrifuge' | 'balance' | 'phmeter' | 'spectro' | 'microscope'
+  | 'vortex' | 'waterbath' | 'geldoc' | 'pcr' | 'autoclave' | 'incubator' | 'hotairoven';

@@ -26,9 +26,10 @@ export const LAB_INFO = {
 export const NAV_ITEMS: NavItem[] = [
   { path: '/research', key: 'research', number: '01' },
   { path: '/people', key: 'people', number: '02' },
-  { path: '/publications', key: 'publications', number: '03' },
-  { path: '/contact', key: 'contact', number: '04' },
-  { path: '/explore', key: 'explore', number: '05' },
+  { path: '/lab', key: 'lab', number: '03' },
+  { path: '/publications', key: 'publications', number: '04' },
+  { path: '/contact', key: 'contact', number: '05' },
+  { path: '/explore', key: 'explore', number: '06' },
 ];
 
 export const DEVELOPER = {

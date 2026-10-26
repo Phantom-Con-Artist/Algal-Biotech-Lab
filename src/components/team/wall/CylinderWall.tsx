@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, type CSSProperties, type ReactNode } from 'react';
 import type { PlacedTile } from '../../../types';
 import { Leader } from '../../common/ActionLink';
 import { WallPanel } from './WallPanel';
@@ -34,7 +34,11 @@ const fade = (rel: number) => 1 - Math.min(1, Math.max(0, (Math.abs(rel) - 34) /
  */
 export function CylinderWall({ tiles: set, columns: setColumns, rows, copy, children }: Props) {
   const columns = setColumns * REPEAT;
-  const tiles = Array.from({ length: REPEAT }, (_, r) => set.map((t) => ({ ...t, id: r ? `${t.id}~${r}` : t.id, col: t.col + r * setColumns }))).flat();
+  // Stable across renders, so a re-render never tears the wall down (and briefly unlocks the page).
+  const tiles = useMemo(
+    () => Array.from({ length: REPEAT }, (_, r) => set.map((t) => ({ ...t, id: r ? `${t.id}~${r}` : t.id, col: t.col + r * setColumns }))).flat(),
+    [set, setColumns],
+  );
   const host = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const panels = useRef<(HTMLLIElement | null)[]>([]);
@@ -156,7 +160,18 @@ export function CylinderWall({ tiles: set, columns: setColumns, rows, copy, chil
     window.addEventListener('wheel', onWheel, { passive: false });
     window.addEventListener('keydown', onKey);
     el.addEventListener('focusin', onFocus);
-    const onVisibility = () => (document.hidden ? cancelAnimationFrame(raf) : kick());
+    // Hidden tabs stop the loop; the frame id must be cleared too, or kick() would think a frame is still
+    // pending and the wall would never move again after the visitor comes back.
+    const onVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        dragging = false;
+      } else {
+        lastInput = performance.now();
+        kick();
+      }
+    };
     document.addEventListener('visibilitychange', onVisibility);
     apply();
     kick();

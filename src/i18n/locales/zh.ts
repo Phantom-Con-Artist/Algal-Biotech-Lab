@@ -10,6 +10,7 @@ const zh: PartialDictionary = {
     home: '首页',
     research: '研究',
     people: '成员',
+    lab: '实验室',
     publications: '论文发表',
     contact: '联系我们',
     primary: '主导航',

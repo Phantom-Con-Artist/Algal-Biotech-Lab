@@ -10,6 +10,7 @@ const ja: PartialDictionary = {
     home: 'ホーム',
     research: '研究',
     people: 'メンバー',
+    lab: 'ラボ',
     publications: '業績',
     contact: 'お問い合わせ',
     primary: 'メインナビゲーション',

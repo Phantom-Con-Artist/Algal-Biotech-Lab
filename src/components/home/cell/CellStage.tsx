@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { JOURNEY, JOURNEY_START } from '../../../data/journey';
+import { JOURNEY, JOURNEY_START, LEAD_BLOCK } from '../../../data/journey';
 import type { CellPart, CellPartId, JourneyId, JourneyTag } from '../../../types';
+import { HOME_CRITICAL } from '../../../data/assets3d';
+import { assetsReady } from '../../../utils/preload';
 import { activeStage, FINAL } from './engine/choreography';
 import type { CellScene, Projection } from './engine/scene';
 import { CellOverlay, type OverlayHandle, type PartLabels } from './CellOverlay';
@@ -11,7 +13,7 @@ interface Props {
   parts: CellPart[];
   labels: PartLabels;
   tags: (JourneyTag & { name: string })[];
-  copy: { keyLabel: string; scale: string; loading: string; fallback: string };
+  copy: { keyLabel: string; scale: string; fallback: string };
 }
 
 type Status = 'idle' | 'loading' | 'ready' | 'failed';
@@ -41,7 +43,7 @@ export function CellStage({ parts, labels, tags, copy }: Props) {
   const [status, setStatus] = useState<Status>('idle');
   const [active, setActive] = useState<CellPartId | null>(null);
   const [final, setFinal] = useState(false);
-  const [chapter, setChapter] = useState<JourneyId | null>(null);
+  const [chapter, setChapter] = useState<JourneyId | 'lead' | null>(null);
 
   useEffect(() => {
     const el = host.current;
@@ -79,7 +81,7 @@ export function CellStage({ parts, labels, tags, copy }: Props) {
       const plate = Math.abs(p - FINAL) < 0.45;
       setFinal(plate);
       const k = Math.round(p);
-      setChapter(k >= JOURNEY_START && Math.abs(p - k) < 0.3 ? (JOURNEY[k - JOURNEY_START] ?? null) : null);
+      setChapter(k === LEAD_BLOCK && p > LEAD_BLOCK - 0.4 ? 'lead' : k >= JOURNEY_START && Math.abs(p - k) < 0.3 ? (JOURNEY[k - JOURNEY_START] ?? null) : null);
       scene?.setStained(p > FINAL - 0.6 ? 'all' : stage ? [stage] : []);
     };
     const onScroll = () => {
@@ -91,8 +93,13 @@ export function CellStage({ parts, labels, tags, copy }: Props) {
       onScroll();
     };
 
+    // One scene per mount, however many times the section re-enters view while it loads.
+    let starting = false;
     const start = async () => {
+      if (starting) return;
+      starting = true;
       setStatus('loading');
+      await assetsReady(...HOME_CRITICAL);
       const { createCellScene } = await import('./engine/scene');
       if (cancelled) return;
       scene = createCellScene({

@@ -7,6 +7,7 @@ import { SectionHeader } from '../components/common/SectionHeader';
 import { JsonLd } from '../components/common/JsonLd';
 import { FocusArea } from '../components/research/FocusArea';
 import { ProgramList } from '../components/research/ProgramList';
+import { SpecimenStage } from '../components/research/SpecimenStage';
 
 export function ResearchView({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
@@ -29,6 +30,7 @@ export function ResearchView({ locale }: { locale: Locale }) {
         <ProgramList locale={locale} />
       </Container>
 
+      <SpecimenStage />
       <JsonLd data={breadcrumbs(locale, [{ name: t.nav.research, path: '/research' }])} />
     </>
   );

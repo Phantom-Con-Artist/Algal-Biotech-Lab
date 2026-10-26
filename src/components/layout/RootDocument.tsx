@@ -10,7 +10,7 @@ import { Footer } from './Footer';
 export function RootDocument({ locale, children }: { locale: Locale; children: ReactNode }) {
   const t = getDictionary(locale);
   return (
-    <html lang={localeInfo(locale).htmlLang} className={`${display.variable} ${text.variable}`}>
+    <html lang={localeInfo(locale).htmlLang} className={`${display.variable} ${text.variable}`} data-scroll-behavior="smooth">
       <body className="flex min-h-svh flex-col">
         <a
           href="#main"

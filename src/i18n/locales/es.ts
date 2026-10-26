@@ -10,6 +10,7 @@ const es: PartialDictionary = {
     home: 'Inicio',
     research: 'Investigación',
     people: 'Equipo',
+    lab: 'El laboratorio',
     publications: 'Publicaciones',
     contact: 'Contacto',
     primary: 'Navegación principal',

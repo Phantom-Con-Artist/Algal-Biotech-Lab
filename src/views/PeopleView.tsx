@@ -1,12 +1,14 @@
 import { getDictionary, type Locale } from '../i18n/config';
 import { fullName, PI, RESEARCHERS } from '../data/members';
+import { fmt, localePath } from '../i18n/config';
+import { memberPath } from '../utils/lab';
 import { breadcrumbs } from '../utils/structuredData';
 import { Container } from '../components/layout/Container';
 import { PageIntro } from '../components/common/PageIntro';
 import { SectionHeader } from '../components/common/SectionHeader';
 import { JsonLd } from '../components/common/JsonLd';
 import { PiFeature } from '../components/team/PiFeature';
-import { MemberCard } from '../components/team/MemberCard';
+import { Roster } from '../components/team/Roster';
 import { AlumniList } from '../components/team/AlumniList';
 import { FundingList } from '../components/team/FundingList';
 import { ServiceAndTalks } from '../components/team/ServiceAndTalks';
@@ -25,11 +27,20 @@ export function PeopleView({ locale }: { locale: Locale }) {
 
       <Container as="section" aria-labelledby="team-title" className="pb-24 md:pb-40">
         <SectionHeader number="02" label={p.teamLabel} title={p.teamTitle} id="team-title" />
-        <div className="grid grid-cols-2 gap-x-3 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-4">
-          {RESEARCHERS.map((m) => (
-            <MemberCard key={m.slug} member={m} locale={locale} />
-          ))}
-        </div>
+        <Roster
+          rows={RESEARCHERS.map((m) => ({
+            slug: m.slug,
+            href: localePath(locale, memberPath(m)),
+            name: fullName(m),
+            role: p.roles[m.role],
+            joined: m.joined,
+            joinedText: fmt(p.joined, { year: m.joined }),
+            focus: m.interests.slice(0, 3).join(' · '),
+            photo: m.photo,
+            position: m.photoPosition,
+            alt: fmt(t.common.portraitOf, { name: fullName(m) }),
+          }))}
+        />
       </Container>
 
       <Container as="section" aria-labelledby="alumni-title" className="pb-24 md:pb-40">

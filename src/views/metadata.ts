@@ -13,6 +13,7 @@ export const PAGE_METADATA = {
   publications: (locale: Locale): Metadata => sectionMetadata(locale, 'publications', '/publications'),
   contact: (locale: Locale): Metadata => sectionMetadata(locale, 'contact', '/contact'),
   explore: (locale: Locale): Metadata => sectionMetadata(locale, 'explore', '/explore'),
+  lab: (locale: Locale): Metadata => sectionMetadata(locale, 'lab', '/lab'),
   member: (locale: Locale, slug: string): Metadata => {
     const member = getMember(slug);
     if (!member) return {};
@@ -42,7 +43,7 @@ export const PAGE_METADATA = {
   },
 };
 
-function sectionMetadata(locale: Locale, key: 'research' | 'people' | 'publications' | 'contact' | 'explore', path: string): Metadata {
+function sectionMetadata(locale: Locale, key: 'research' | 'people' | 'lab' | 'publications' | 'contact' | 'explore', path: string): Metadata {
   const m = getDictionary(locale).meta[key];
   return pageMetadata({ locale, path, title: m.title, description: m.description });
 }

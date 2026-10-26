@@ -10,6 +10,7 @@ const de: PartialDictionary = {
     home: 'Start',
     research: 'Forschung',
     people: 'Team',
+    lab: 'Das Labor',
     publications: 'Publikationen',
     contact: 'Kontakt',
     primary: 'Hauptnavigation',

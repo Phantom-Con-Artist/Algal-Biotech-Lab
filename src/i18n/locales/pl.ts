@@ -10,6 +10,7 @@ const pl: PartialDictionary = {
     home: 'Start',
     research: 'Badania',
     people: 'Zespół',
+    lab: 'Laboratorium',
     publications: 'Publikacje',
     contact: 'Kontakt',
     primary: 'Nawigacja główna',

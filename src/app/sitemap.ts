@@ -17,6 +17,7 @@ const PAGES: { path: string; priority: number; changeFrequency: 'monthly' | 'yea
   { path: '/people', priority: 0.9, changeFrequency: 'monthly' },
   { path: '/publications', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/contact', priority: 0.6, changeFrequency: 'yearly' },
+  { path: '/lab', priority: 0.7, changeFrequency: 'yearly' },
   { path: '/explore', priority: 0.7, changeFrequency: 'monthly' },
   ...MEMBERS.map((m) => ({ path: memberPath(m), priority: m.status === 'pi' ? 0.8 : 0.6, changeFrequency: 'yearly' as const })),
   ...LAB_PHOTO_SLUGS.map((slug) => ({ path: `/lab/${slug}`, priority: 0.4, changeFrequency: 'yearly' as const })),

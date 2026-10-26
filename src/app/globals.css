@@ -1,24 +1,25 @@
 @import "tailwindcss";
 
 /*
- * Cold mist. The cell hangs in a pale, fogged field; the interface is a thin instrument layer over it:
- * wide light headings, monospace readings, hairline leaders. Colour is rationed: the stain of the
- * structure being read is the only saturated thing on screen, and the eyespot's vermilion marks action.
+ * Clinical daylight. A pale, faintly green-white field, like a lit lab corridor; the interface is a thin
+ * instrument layer over it: wide light headings, monospace readings, hairline leaders. Colour is rationed:
+ * the stain of the structure being read is the only saturated thing on screen, and the eyespot's vermilion
+ * marks action.
  */
 @theme static {
-  --color-mist: oklch(0.77 0.017 240);
-  --color-mist-hi: oklch(0.84 0.013 240);
-  --color-mist-lo: oklch(0.7 0.018 240);
-  --color-frost: oklch(0.975 0.004 240);
-  --color-ink: oklch(0.24 0.018 245);
-  --color-ink-2: oklch(0.3 0.018 245);
-  --color-mute: oklch(0.36 0.018 245);
-  --color-line: oklch(0.24 0.018 245 / 0.16);
-  --color-line-strong: oklch(0.24 0.018 245 / 0.38);
+  --color-mist: oklch(0.945 0.006 140);
+  --color-mist-hi: oklch(0.975 0.004 140);
+  --color-mist-lo: oklch(0.9 0.008 140);
+  --color-frost: oklch(0.99 0.003 140);
+  --color-ink: oklch(0.23 0.02 200);
+  --color-ink-2: oklch(0.31 0.018 200);
+  --color-mute: oklch(0.42 0.016 200);
+  --color-line: oklch(0.23 0.02 200 / 0.14);
+  --color-line-strong: oklch(0.23 0.02 200 / 0.34);
   /* The deep end of the fog, for the footer and dense passages. */
-  --color-deep: oklch(0.27 0.016 245);
-  --color-deep-ink: oklch(0.93 0.008 240);
-  --color-deep-mute: oklch(0.74 0.014 240);
+  --color-deep: oklch(0.24 0.018 200);
+  --color-deep-ink: oklch(0.94 0.006 140);
+  --color-deep-mute: oklch(0.74 0.012 160);
 
   /* Stains: each structure in the colour that shows it under the microscope */
   --color-chlorophyll: oklch(0.55 0.14 148);
@@ -70,6 +71,8 @@
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
     scroll-padding-top: 5rem;
+    /* The scrollbar's room is kept while a page is locked (preloader, Explore), so unlocking never reflows it. */
+    scrollbar-gutter: stable;
     scrollbar-color: var(--color-mute) var(--color-mist);
   }
 
@@ -195,7 +198,7 @@
 }
 
 /* The Explore wall owns the whole screen: the page does not scroll and the site chrome steps aside. */
-html[data-fullscreen] { overflow: hidden; }
+html[data-fullscreen], html[data-loading] { overflow: hidden; }
 html[data-fullscreen] body > header,
 html[data-fullscreen] body > footer,
 html[data-fullscreen] #mobile-menu { display: none; }
@@ -214,6 +217,33 @@ html[data-fullscreen] #mobile-menu { display: none; }
 @keyframes reveal {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
+}
+
+/*
+ * Film grain over every page, the same fine grain the 3D film's grade adds, so the flat pages and the
+ * scenes read as one material. One static layer: nothing animates, nothing repaints.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.14 0 0 0 0 0.14 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The preloader's mark breathes while the scene's files arrive. */
+@keyframes preload-breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.96); }
+}
+
+/* The scroll hint: a hairline that draws down and fades, again and again. */
+@keyframes tour-hint {
+  0% { transform: scaleY(0); opacity: 1; }
+  60% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
 }
 
 /* CJK locales fall through to the reader's system fonts; headings relax their tight tracking. */

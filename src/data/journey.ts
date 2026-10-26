@@ -1,8 +1,18 @@
-import type { JourneyId, JourneyTag } from '../types';
+import type { JourneyId, JourneyTag, RoomPoint } from '../types';
 
 /** Chapter order after the cell's own nine stages; block indices continue from the full plate (10). */
 export const JOURNEY: JourneyId[] = ['culture', 'cultivate', 'stress', 'harvest', 'products'];
 export const JOURNEY_START = 11;
+
+/** The last block of the home scroll: the lab room, coming into colour around the PI's desk. */
+export const LEAD_BLOCK = JOURNEY_START + JOURNEY.length;
+/** The PI's desk in the lab room (a chair at the north bench), in metres, Blender axes. */
+export const LEAD_ANCHOR: RoomPoint = [1.0, 4.25, 1.25];
+/** The home scroll's last shot of the room: from just inside the door, rising as the room develops. */
+export const LEAD_SHOT = {
+  from: { eye: [3.9, -4.6, 1.8] as RoomPoint, look: [0.4, 2.8, 1.1] as RoomPoint },
+  to: { eye: [5.6, -4.5, 3.1] as RoomPoint, look: [0.2, 2.6, 0.9] as RoomPoint },
+};
 
 /** Condition order of the five flasks in the stress row, left to right. */
 export const CONDITIONS = ['control', 'phosphate', 'salt', 'cold', 'co2'] as const;

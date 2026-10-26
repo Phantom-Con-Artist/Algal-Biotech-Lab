@@ -66,6 +66,8 @@ transformed.z += cos(uTime * 7.0 + aPhase - s * 3.0) * 0.05 * s;`,
   const q = new Quaternion();
   const roll = new Quaternion();
   const tilt = new Quaternion();
+  // Scratch for each flagellum's rotation, so the swarm allocates nothing per frame.
+  const qf = new Quaternion();
   const e = new Euler();
   const scale = new Vector3(4.2, 5.2, 4.2);
   const flagScale = new Vector3(12, 12, 12);
@@ -97,7 +99,7 @@ transformed.z += cos(uTime * 7.0 + aPhase - s * 3.0) * 0.05 * s;`,
       for (let s = 0; s < 2; s++) {
         tip.set(0, 5.3, 0).applyQuaternion(q).add(p);
         tilt.setFromEuler(e.set(0, 0, s ? 0.75 : -0.75));
-        flagella.setMatrixAt(i * 2 + s, m.compose(tip, q.clone().multiply(tilt), tmpFlag.copy(flagScale).multiplyScalar(near)));
+        flagella.setMatrixAt(i * 2 + s, m.compose(tip, qf.copy(q).multiply(tilt), tmpFlag.copy(flagScale).multiplyScalar(near)));
       }
     }
     cells.instanceMatrix.needsUpdate = true;

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn } from '../../utils/cn';
+import { Decode } from './Decode';
 
 interface Props {
   number: string;
@@ -21,7 +22,7 @@ export function SectionHeader({ number, label, title, id, action, className }: P
         <span aria-hidden="true" className="h-px flex-1 bg-line-strong" />
         {action}
       </div>
-      <h2 id={id} className="text-h2 mt-6 max-w-[22ch] md:mt-8">{title}</h2>
+      <h2 id={id} className="text-h2 mt-6 max-w-[22ch] md:mt-8"><Decode text={title} /></h2>
     </header>
   );
 }

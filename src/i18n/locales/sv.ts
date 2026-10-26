@@ -10,6 +10,7 @@ const sv: PartialDictionary = {
     home: 'Hem',
     research: 'Forskning',
     people: 'Medarbetare',
+    lab: 'Labbet',
     publications: 'Publikationer',
     contact: 'Kontakt',
     primary: 'Huvudnavigering',

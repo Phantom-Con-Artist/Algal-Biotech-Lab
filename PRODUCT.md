@@ -24,7 +24,7 @@ Visitors read paper titles, DOIs and author lists; copy citations; open member p
 
 ## Capabilities and Constraints
 
-- Next.js 16 App Router static export, React 19, TypeScript strict, Tailwind CSS 4. Pages: Home, Research, People, member profiles, Publications (search, type filters, citation copy), Contact (mailto templates), not-found.
+- Next.js 16 App Router static export, React 19, TypeScript strict, Tailwind CSS 4. Pages: Home, Research, People, member profiles, The Lab (a scroll tour of a 3D reconstruction of the lab room, labelled "illustrative" and drawn more spacious than the room is), Publications (search, type filters, citation copy), Contact (mailto templates), not-found.
 - Content lives in `src/data/` and `src/i18n/locales/`; `en.ts` defines the dictionary type every locale must match.
 - SEO: canonical, hreflang, Open Graph, JSON-LD, sitemap; every new page joins `src/app/sitemap.ts`.
 - 3D: the user chose (26 Oct 2026) a live glTF model rendered with three.js for the homepage hero, authored in Blender. It must lazy-load, pause off screen, respect reduced motion and fall back to a static image.

@@ -15,7 +15,11 @@ import {
   WebGLRenderer,
 } from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { JOURNEY_TAGS } from '../../../../data/journey';
+import { JOURNEY, JOURNEY_START, JOURNEY_TAGS, LEAD_ANCHOR, LEAD_BLOCK, LEAD_SHOT } from '../../../../data/journey';
+import { MODELS, ROOM_LIGHTMAPS } from '../../../../data/assets3d';
+import { assetsReady, releaseAssets } from '../../../../utils/preload';
+import { createRoom, loadLightmaps, ROOM_URL, roomPoint, type Room } from '../../../lab/engine/room';
+import { createRoomUniforms } from '../../../lab/engine/roomMaterial';
 import type { CellPart } from '../../../../types';
 import { createLoader, loadDetailMaps } from './assets';
 import { createCell, type Cell } from './cell';
@@ -26,10 +30,12 @@ import { createPost } from './post';
 import { createSwarm } from './swarm';
 
 /** The mist everything hangs in. Matches --color-mist in globals.css. */
-const MIST = new Color('#a9b3bd');
+const MIST = new Color('#ebeeea');
 /** Scroll positions of the two scale jumps, each carried by a frost dissolve between two worlds. */
 const TO_CULTURE = 10.58;
 const TO_LAB = 11.6;
+/** The third jump, out of the last lab station and into the lab room itself. */
+const TO_ROOM = JOURNEY_START + JOURNEY.length - 0.42;
 /** Where the key light sits relative to the lab station in view, in centimetres. */
 const SUN = new Vector3(70, 130, 90);
 
@@ -38,7 +44,7 @@ export interface Projection {
   anchors: Record<string, { x: number; y: number }>;
   /** Length of one unit of the current world on screen, and that unit. */
   pxPerUnit: number;
-  unit: 'µm' | 'cm';
+  unit: 'µm' | 'cm' | 'm';
 }
 
 interface Options {
@@ -65,7 +71,8 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
   const maxDpr = Math.min(window.devicePixelRatio || 1, 1.5);
   let dpr = maxDpr;
   renderer.setPixelRatio(dpr);
-  const post = createPost(renderer);
+  // Phones skip multisampling on the film's targets: at their pixel density it buys little and costs a lot.
+  const post = createPost(renderer, window.innerWidth < 768 ? 0 : 2);
 
   const scene = new Scene();
   scene.background = MIST;
@@ -110,6 +117,14 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
   let cell: Cell | null = null;
   let lab: Lab | null = null;
   let swarm: ReturnType<typeof createSwarm> | null = null;
+  let labRoom: Room | null = null;
+  // The room keeps its own ash-to-colour uniforms; its floor reflection stays off here.
+  const roomUniforms = createRoomUniforms();
+  // The film's grade adds contrast and lift of its own, so the room's baked light goes in softer here.
+  roomUniforms.uLightGain.value = 1.5;
+  const leadAnchor = roomPoint(LEAD_ANCHOR);
+  const shotEye = [roomPoint(LEAD_SHOT.from.eye), roomPoint(LEAD_SHOT.to.eye)];
+  const shotLook = [roomPoint(LEAD_SHOT.from.look), roomPoint(LEAD_SHOT.to.look)];
   /** Scroll position as delivered, and the eased value the scene shows. */
   let target = 0;
   let progress = 0;
@@ -122,32 +137,76 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
   let time = 0;
   let frameCount = 0;
 
+  let maps: Awaited<ReturnType<typeof loadDetailMaps>> | null = null;
   (async () => {
-    const maps = await loadDetailMaps(renderer);
-    const gltf = await loader.gltf.loadAsync('/models/chlamydomonas.glb');
+    maps = await loadDetailMaps(renderer);
+    const gltf = await loader.gltf.loadAsync(MODELS.cell);
     if (disposed) return;
+    releaseAssets(MODELS.cell);
     cell = createCell(gltf, maps, parts, reducedMotion);
     scene.add(cell.root);
     swarm = createSwarm(maps, width < 700 ? 140 : 260, reducedMotion);
     scene.add(swarm.group);
+    // Shaders compile before the canvas is revealed, not in its first visible frames.
+    await renderer.compileAsync(scene, camera).catch(() => undefined);
+    if (disposed) return;
     onReady();
     dirty = true;
     kick();
-    // The lab loads once the cell is on screen; it is not needed until the second half of the scroll.
-    const labGltf = await loader.gltf.loadAsync('/models/lab.glb');
-    if (disposed) return;
-    lab = createLab(labGltf, maps, reducedMotion);
-    scene.add(lab.root);
-    dirty = true;
+    upcoming(target);
   })().catch((error: unknown) => {
     if (!disposed) onError(error);
   });
+
+  /**
+   * The lab and the room are parsed only as the scroll approaches them, so neither stalls the opening
+   * screen; their files have been streaming in behind the page since it was revealed.
+   */
+  let labStarted = false;
+  let roomStarted = false;
+  function upcoming(p: number) {
+    if (!maps || disposed) return;
+    const m = maps;
+    if (!labStarted && p >= 6) {
+      labStarted = true;
+      void (async () => {
+        await assetsReady(MODELS.lab);
+        const labGltf = await loader.gltf.loadAsync(MODELS.lab);
+        if (disposed) return;
+        releaseAssets(MODELS.lab);
+        lab = createLab(labGltf, m, reducedMotion);
+        lab.root.visible = false;
+        scene.add(lab.root);
+        dirty = true;
+        kick();
+      })().catch((error: unknown) => {
+        if (!disposed) onError(error);
+      });
+    }
+    if (!roomStarted && p >= JOURNEY_START + 1) {
+      roomStarted = true;
+      // Without it the scroll simply ends in the lab, so a failed load is not an error for the scene.
+      void (async () => {
+        await assetsReady(MODELS.room, ...Object.values(ROOM_LIGHTMAPS));
+        const [roomGltf, lightmaps] = await Promise.all([loader.gltf.loadAsync(ROOM_URL), loadLightmaps(renderer)]);
+        if (disposed) return;
+        releaseAssets(MODELS.room, ...Object.values(ROOM_LIGHTMAPS));
+        labRoom = createRoom(roomGltf, lightmaps, roomUniforms);
+        labRoom.root.visible = false;
+        scene.add(labRoom.root);
+        dirty = true;
+        kick();
+      })().catch(() => {
+        labRoom = null;
+      });
+    }
+  }
 
   const lookAt = new Vector3();
   const tmp = new Vector3();
   const tmp2 = new Vector3();
   const right = new Vector3();
-  type World = 'cell' | 'culture' | 'lab';
+  type World = 'cell' | 'culture' | 'lab' | 'room';
   /** The world whose anchors and scale the overlay reads: the one that owns most of the frame. */
   let shown: World = 'cell';
 
@@ -185,6 +244,23 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
       const t = smooth(TO_CULTURE - 0.4, TO_LAB + 0.3, p);
       lookAt.set(0, 0, 0);
       d = orbit(60 + t * 260, 45 - t * 20, 62 - t * 44, 0.1);
+    } else if (w === 'room' && labRoom) {
+      // From just inside the door the camera rises while paint lands on the PI's desk.
+      // The scroll position stops at the last block's centre, so everything has arrived by then.
+      const t = smooth(TO_ROOM - 0.3, LEAD_BLOCK, p);
+      camera.position.lerpVectors(shotEye[0], shotEye[1], t);
+      lookAt.lerpVectors(shotLook[0], shotLook[1], t);
+      const drift = reducedMotion ? 0 : 1;
+      camera.position.x += (pointer.ex * 0.15 + Math.sin(time * 0.2) * 0.04) * drift;
+      camera.position.y += (-pointer.ey * 0.08) * drift;
+      camera.lookAt(lookAt);
+      const aspect = width / height;
+      camera.setViewOffset(width, height, aspect > 1.1 ? -width * 0.14 : 0, aspect < 0.9 ? height * 0.17 : 0, width, height);
+      camera.updateMatrixWorld();
+      roomUniforms.uFocus.value.copy(leadAnchor);
+      // The room stays clay; only the PI's desk is splattered into colour as the camera settles.
+      roomUniforms.uRadius.value = 2.2 * smooth(TO_ROOM - 0.1, LEAD_BLOCK - 0.05, p);
+      d = 9;
     } else if (lab) {
       const k = labKeyAt(p);
       const i = Math.min(LAB_KEYS.length - 2, Math.floor(k));
@@ -200,8 +276,17 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
     if (cell) cell.root.visible = w === 'cell';
     if (swarm) swarm.group.visible = w === 'culture';
     if (lab) lab.root.visible = w === 'lab';
-    fog.near = d * (1.05 - haze);
-    fog.far = d * (3.4 - 2.2 * haze);
+    if (labRoom) labRoom.root.visible = w === 'room';
+    // The room is modelled in metres; the other worlds in micrometres and centimetres.
+    const near = w === 'room' ? 0.05 : 0.3;
+    if (camera.near !== near) {
+      camera.near = near;
+      camera.far = w === 'room' ? 200 : 2000;
+      camera.fov = w === 'room' ? 50 : 30;
+      camera.updateProjectionMatrix();
+    }
+    fog.near = w === 'room' ? 14 : d * (1.05 - haze);
+    fog.far = w === 'room' ? 60 : d * (3.4 - 2.2 * haze);
     motes.points.scale.setScalar(w === 'cell' ? 1 : w === 'culture' ? 5 : 3);
     motes.points.position.copy(lookAt);
     // In the lab the key light casts soft contact shadows, following the camera from station to station.
@@ -226,7 +311,11 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
     if (!lab) return { a: 'culture', b: null, mix: 0 };
     const toLab = smooth(TO_LAB - 0.4, TO_LAB + 0.35, p);
     if (toLab > 0 && toLab < 1) return { a: 'culture', b: 'lab', mix: toLab };
-    return { a: toLab === 0 ? 'culture' : 'lab', b: null, mix: 0 };
+    if (toLab === 0) return { a: 'culture', b: null, mix: 0 };
+    if (!labRoom) return { a: 'lab', b: null, mix: 0 };
+    const toRoom = smooth(TO_ROOM - 0.4, TO_ROOM + 0.35, p);
+    if (toRoom > 0 && toRoom < 1) return { a: 'lab', b: 'room', mix: toRoom };
+    return { a: toRoom === 0 ? 'lab' : 'room', b: null, mix: 0 };
   }
 
   function project(w: World): Projection {
@@ -240,20 +329,40 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
       for (const part of parts) if (cell.anchor(part, Math.min(progress, 10), tmp)) put(part.id);
     } else if (w === 'lab' && lab) {
       for (const tag of JOURNEY_TAGS) if (lab.anchor(tag, tmp)) put(tag.id);
+    } else if (w === 'room') {
+      tmp.copy(leadAnchor);
+      put('lead');
     }
     right.setFromMatrixColumn(camera.matrixWorld, 0).multiplyScalar(0.5);
     tmp.copy(lookAt).sub(right).project(camera);
     tmp2.copy(lookAt).add(right).project(camera);
-    return { anchors, pxPerUnit: Math.abs(tmp2.x - tmp.x) * 0.5 * width, unit: w === 'lab' ? 'cm' : 'µm' };
+    return { anchors, pxPerUnit: Math.abs(tmp2.x - tmp.x) * 0.5 * width, unit: w === 'room' ? 'm' : w === 'lab' ? 'cm' : 'µm' };
   }
 
+  let lastActive = 0;
+  let odd = false;
   function loop(now: number) {
     if (disposed) return;
     raf = 0;
     if (!visible || !cell) return;
     timer.update(now);
     const delta = Math.min(timer.getDelta(), 0.05);
+    // A queued pixel-ratio change lands here, in the same frame that redraws the canvas.
+    if (pendingDpr) {
+      dpr = pendingDpr;
+      pendingDpr = 0;
+      resizeTargets();
+      dirty = true;
+    }
     time += delta;
+    // Two seconds after the last scroll or pointer movement the living cell carries on at half rate:
+    // nothing the visitor is steering, so nothing they can feel, and half the GPU work while they read.
+    if (target !== progress || Math.abs(pointer.x - pointer.ex) + Math.abs(pointer.y - pointer.ey) > 0.001) lastActive = now;
+    odd = !odd;
+    if (!dirty && odd && now - lastActive > 2000) {
+      raf = requestAnimationFrame(loop);
+      return;
+    }
     motes.update(time, dpr);
     pointer.ex += (pointer.x - pointer.ex) * 0.04;
     pointer.ey += (pointer.y - pointer.ey) * 0.04;
@@ -268,6 +377,7 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
     const uses = (w: World) => f.a === w || f.b === w;
     if (uses('culture')) swarm?.update(time, delta, camera.position);
     if (uses('lab')) lab?.update(progress, time, delta);
+    if (uses('room')) roomUniforms.uTime.value = reducedMotion ? 0 : time;
     const animating = !reducedMotion || staining;
     if (dirty || animating) {
       // The second world renders first, so the camera ends on the first for the overlay's projection.
@@ -306,19 +416,25 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
   let frameAvg = 16.7;
   let slow = 0;
   let fast = 0;
+  /** Frames to ignore after the first render: shaders compile then, and slow frames say nothing about the device. */
+  let warmup = 90;
+  /** A pixel-ratio change waits for the start of the next frame, so the canvas is never shown cleared. */
+  let pendingDpr = 0;
   function adapt(ms: number) {
+    if (warmup > 0) {
+      warmup--;
+      return;
+    }
     if (ms <= 0 || ms > 100) return;
     frameAvg += (ms - frameAvg) * 0.1;
     slow = frameAvg > 18.5 ? slow + 1 : Math.max(0, slow - 1);
     fast = frameAvg < 15.5 ? fast + 1 : 0;
     if (slow > 10 && dpr > 0.75) {
-      dpr = Math.max(0.75, dpr - 0.15);
-      resizeTargets();
+      pendingDpr = Math.max(0.75, dpr - 0.15);
       slow = 0;
       frameAvg = 16.7;
     } else if (fast > 240 && dpr < maxDpr) {
-      dpr = Math.min(maxDpr, dpr + 0.1);
-      resizeTargets();
+      pendingDpr = Math.min(maxDpr, dpr + 0.1);
       fast = 0;
     }
   }
@@ -337,6 +453,7 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
     setProgress(p: number) {
       if (p === target) return;
       target = p;
+      upcoming(p);
       kick();
     },
     setStained(ids: Parameters<Cell['setStained']>[0]) {
@@ -366,6 +483,9 @@ export function createCellScene({ canvas, parts, reducedMotion, onFrame, onReady
       timer.dispose();
       motes.dispose();
       swarm?.dispose();
+      labRoom?.dispose();
+      // Materials do not own their textures; the shared detail maps are released here.
+      if (maps) for (const t of Object.values(maps)) t.dispose();
       window.removeEventListener('pointermove', onPointer);
       scene.traverse((o) => {
         if (o instanceof Mesh) {

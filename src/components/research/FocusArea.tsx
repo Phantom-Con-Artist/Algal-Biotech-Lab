@@ -1,23 +1,24 @@
 import { getDictionary, type Locale } from '../../i18n/config';
 import type { FocusArea as Area } from '../../types';
 import { cn } from '../../utils/cn';
-import { Specimen } from '../common/Specimen';
 import { PaperRefs } from './PaperRefs';
 
-/** One focus area: its specimens on one side; the field, the lab's angle and its papers on the other. */
+/** One focus area: its 3D specimen on one side; the field, the lab's angle and its papers on the other. */
 export function FocusArea({ area, locale, flip }: { area: Area; locale: Locale; flip: boolean }) {
   const t = getDictionary(locale).research;
   const copy = t.areas[area.id];
-  const [lead, ...rest] = area.images;
-
   return (
     <article id={area.id} aria-labelledby={`${area.id}-title`} className="reveal grid scroll-mt-24 gap-8 lg:grid-cols-12 lg:gap-12">
-      <div className={cn('grid grid-cols-2 gap-4 lg:col-span-7', flip && 'lg:order-2')}>
-        <Specimen src={lead} alt={copy.alts[0]} sizes="(min-width: 1024px) 55vw, 100vw" className="col-span-2" imageClassName="aspect-[16/9]" caption={copy.label} index={`${area.number} / 04`} />
-        {rest.map((src, i) => (
-          <Specimen key={src.src} src={src} alt={copy.alts[i + 1]} sizes="(min-width: 1024px) 27vw, 50vw" className={cn(rest.length === 1 && 'col-span-2')} imageClassName={rest.length === 1 ? 'aspect-[16/7]' : 'aspect-[4/3]'} />
-        ))}
-      </div>
+      {/* The specimen: a 3D object drawn into this frame by the page's one shared canvas. */}
+      <figure className={cn('lg:col-span-7', flip && 'lg:order-2')}>
+        <div className="ticks p-2 text-ink/70">
+          <div data-specimen={area.id} role="img" aria-label={copy.alts[0]} className="aspect-square bg-[radial-gradient(60%_55%_at_50%_45%,var(--color-mist-hi),transparent)] sm:aspect-[4/3]" />
+        </div>
+        <figcaption className="hud mt-3 flex items-baseline justify-between gap-4 text-mute">
+          <span>{copy.label}</span>
+          <span className="text-ink">{`${area.number} / 04`}</span>
+        </figcaption>
+      </figure>
 
       <div className={cn('flex flex-col gap-8 lg:col-span-5', flip && 'lg:order-1')}>
         <h3 id={`${area.id}-title`} className="text-h2">{copy.title}</h3>
