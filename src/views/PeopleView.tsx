@@ -12,6 +12,7 @@ import { Roster } from '../components/team/Roster';
 import { AlumniList } from '../components/team/AlumniList';
 import { FundingList } from '../components/team/FundingList';
 import { ServiceAndTalks } from '../components/team/ServiceAndTalks';
+import { FunderStrip } from '../components/common/FunderStrip';
 
 export function PeopleView({ locale }: { locale: Locale }) {
   const t = getDictionary(locale);
@@ -50,6 +51,7 @@ export function PeopleView({ locale }: { locale: Locale }) {
 
       <Container as="section" id="funding" aria-labelledby="funding-title" className="scroll-mt-24 pb-24 md:pb-40">
         <SectionHeader number="04" label={p.fundingLabel} title={p.fundingTitle} id="funding-title" />
+        <FunderStrip label={t.common.supportedBy} className="mb-14" />
         <FundingList locale={locale} />
       </Container>
 

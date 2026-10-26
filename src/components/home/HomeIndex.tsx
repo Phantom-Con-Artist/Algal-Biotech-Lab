@@ -3,6 +3,7 @@ import { getDictionary, localePath, type Locale } from '../../i18n/config';
 import { NAV_ITEMS } from '../../data/labData';
 import { Leader } from '../common/ActionLink';
 import { Container } from '../layout/Container';
+import { FunderStrip } from '../common/FunderStrip';
 
 /** The close of the home scroll, after the lab room: the way into the rest of the site. */
 export function HomeIndex({ locale }: { locale: Locale }) {
@@ -12,6 +13,7 @@ export function HomeIndex({ locale }: { locale: Locale }) {
 
   return (
     <section aria-labelledby="home-index-title" className="relative py-24 md:py-32">
+      <FunderStrip label={t.common.supportedBy} className="mb-20 md:mb-28" />
       <Container>
         <nav aria-labelledby="home-index-title" className="lg:ml-[33%]">
           <h2 id="home-index-title" className="hud mb-4 text-mute">{lead.explore}</h2>

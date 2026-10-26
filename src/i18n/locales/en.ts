@@ -35,6 +35,8 @@ const en = {
     portraitOf: 'Portrait of {name}',
     /** The opening screen of pages with 3D, while their models load. */
     preparing: 'Preparing the lab',
+    /** The strip of funders' wordmarks. */
+    supportedBy: 'Supported and recognised by',
     viewAll: 'View all',
   },
   home: {
@@ -286,6 +288,9 @@ const en = {
       srf: 'Senior Research Fellow · Ph.D. scholar',
       phd: 'Ph.D. scholar',
       jrf: 'Junior Research Fellow',
+      anrf: 'ANRF Junior Research Fellow',
+      inspire: 'DST-INSPIRE Junior Research Fellow · Ph.D. scholar',
+      urf: 'University Research Fellow · Ph.D. scholar',
       mentee: 'Research mentee',
       trainee: 'Research trainee',
       student: 'Student',

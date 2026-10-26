@@ -12,7 +12,7 @@ const CUTN_MSC = 'M.Sc. Microbiology, Department of Microbiology, Central Univer
 /** Matched to the supplied member spreadsheet by name and worksheet image row. */
 export const NEW_RESEARCHERS: LabMember[] = [
   {
-    slug: 'krishnakumar-m', name: 'Krishnakumar M', status: 'current', role: 'phd', joined: 2023,
+    slug: 'krishnakumar-m', name: 'Krishnakumar M', status: 'current', role: 'urf', joined: 2023,
     photo: krishnakumarPhoto, photoPosition: '50% 25%',
     education: ['M.Sc. Microbiology, Madurai Kamaraj University, Tamil Nadu'],
     interests: ['Algal biotechnology', 'Microalgal stress dynamics', 'Algal carbon metabolism', 'Transcription factor engineering', 'Algal bioplastics production'],
