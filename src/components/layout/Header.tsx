@@ -1,25 +1,34 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { LAB_INFO, NAV_ITEMS } from '../../data/labData';
-import { useScrolled } from '../../hooks/useScrolled';
+import type { Dictionary } from '../../i18n/config';
+import { localePath, stripLocale, type Locale } from '../../i18n/locales-meta';
 import { cn } from '../../utils/cn';
 import { Container } from './Container';
-import { MobileMenu } from './MobileMenu';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { useT } from '../../i18n/I18nProvider';
-import markSrc from '../../assets/brand/abl-mark.png';
+import wordmark from '../../assets/brand/abl-wordmark.webp';
 
-export function Header() {
+interface Props {
+  locale: Locale;
+  nav: Dictionary['nav'];
+  machineNote: string;
+}
+
+export function Header({ locale, nav, machineNote }: Props) {
   const [open, setOpen] = useState(false);
-  const scrolled = useScrolled();
-  const { pathname } = useLocation();
-  const t = useT();
+  const pathname = usePathname() ?? '/';
+  const current = stripLocale(pathname);
 
   useEffect(() => setOpen(false), [pathname]);
 
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (!open) return;
+    document.body.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
     window.addEventListener('keydown', onKey);
     return () => {
@@ -28,43 +37,38 @@ export function Header() {
     };
   }, [open]);
 
+  const links = NAV_ITEMS.map((item) => ({
+    ...item,
+    href: localePath(locale, item.path),
+    active: current === item.path || current.startsWith(`${item.path}/`),
+  }));
+
   return (
     <>
-    <header
-      className={cn(
-        'fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300',
-        scrolled || open ? 'border-line bg-ink/85 backdrop-blur-md' : 'border-transparent',
-      )}
-    >
-      <Container className="flex h-16 items-center justify-between">
-        <Link to="/" className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, ${t.nav.home}`}>
-          <img src={markSrc} alt="" width={30} height={26} className="h-[26px] w-auto" />
-          <span className="text-[15px] font-medium tracking-tight">{LAB_INFO.shortName}</span>
+    <header className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-mist/85 to-transparent">
+      <Container className="flex h-20 items-center justify-between gap-3 lg:gap-6">
+        <Link href={localePath(locale)} className="flex min-h-11 min-w-0 max-w-[148px] flex-1 items-center sm:max-w-[168px] lg:max-w-[188px]" aria-label={`${LAB_INFO.name}, ${nav.home}`}>
+          <Image src={wordmark} alt="" priority sizes="(min-width: 1024px) 188px, (min-width: 640px) 168px, 148px" className="h-auto w-full" />
         </Link>
 
-        <nav aria-label={t.nav.primary} className="hidden items-center gap-8 md:flex">
-          <ul className="flex items-center gap-7 lg:gap-9">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.to === '/'}
-                  className={({ isActive }) =>
-                    cn(
-                      'relative flex h-11 items-center gap-2 text-sm transition-colors hover:text-paper',
-                      isActive
-                        ? 'text-paper after:absolute after:inset-x-0 after:bottom-2 after:h-px after:bg-leaf'
-                        : 'text-mute',
-                    )
-                  }
+        <nav aria-label={nav.primary} className="hidden items-center gap-8 lg:flex">
+          <ul className="flex items-center gap-6 lg:gap-8">
+            {links.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={item.href}
+                  aria-current={item.active ? 'page' : undefined}
+                  className={cn(
+                    'hud relative flex h-11 items-center gap-2 transition-colors',
+                    item.active ? 'text-ink after:absolute after:inset-x-0 after:bottom-2 after:h-px after:bg-ink' : 'text-ink-2 hover:text-ink',
+                  )}
                 >
-                  <span className="font-mono text-[11px] text-mute/70">{item.number}</span>
-                  {t.nav[item.key]}
-                </NavLink>
+                  {nav[item.key]}
+                </Link>
               </li>
             ))}
           </ul>
-          <LanguageSwitcher />
+          <LanguageSwitcher variant="menu" locale={locale} label={nav.language} note={machineNote} />
         </nav>
 
         <button
@@ -72,14 +76,38 @@ export function Header() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
-          className="-mr-2 grid h-11 w-11 place-items-center text-paper md:hidden"
+          aria-label={open ? nav.closeMenu : nav.openMenu}
+          className="-mr-2 grid h-11 w-11 shrink-0 place-items-center lg:hidden"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </Container>
     </header>
-    {open && <MobileMenu />}
+
+    {/* A sibling of the header, not a child: the header's backdrop blur would otherwise become the containing
+        block for this fixed panel and collapse it to the header's height. */}
+    {open && (
+      <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-20 z-40 overflow-y-auto bg-mist lg:hidden">
+        <Container as="nav" aria-label={nav.primary} className="flex min-h-full flex-col justify-between gap-10 py-8">
+          <ul className="border-t border-line">
+            {links.map((item) => (
+              <li key={item.key} className="border-b border-line">
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={item.active ? 'page' : undefined}
+                  className={cn('flex min-h-16 items-center gap-4 font-display text-2xl font-light', item.active && 'text-ink')}
+                >
+                  <span className="hud text-mute">{item.number}</span>
+                  {nav[item.key]}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <LanguageSwitcher variant="list" locale={locale} label={nav.language} note={machineNote} />
+        </Container>
+      </div>
+    )}
     </>
   );
 }

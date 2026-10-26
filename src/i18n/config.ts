@@ -1,39 +1,32 @@
 import en from './locales/en';
+import fr from './locales/fr';
+import es from './locales/es';
+import de from './locales/de';
+import pl from './locales/pl';
+import sv from './locales/sv';
+import zh from './locales/zh';
+import ja from './locales/ja';
+import ko from './locales/ko';
+import type { Locale } from './locales-meta';
+
+export * from './locales-meta';
 
 export type Dictionary = typeof en;
 
-export const LOCALES = [
-  { code: 'en', name: 'English', htmlLang: 'en' },
-  { code: 'fr', name: 'Français', htmlLang: 'fr' },
-  { code: 'es', name: 'Español', htmlLang: 'es' },
-  { code: 'de', name: 'Deutsch', htmlLang: 'de' },
-  { code: 'pl', name: 'Polski', htmlLang: 'pl' },
-  { code: 'sv', name: 'Svenska', htmlLang: 'sv' },
-  { code: 'zh', name: '简体中文', htmlLang: 'zh-Hans' },
-  { code: 'ja', name: '日本語', htmlLang: 'ja' },
-  { code: 'ko', name: '한국어', htmlLang: 'ko' },
-] as const;
+/** A translation may lag behind English; anything it lacks falls back to the English string. */
+export type PartialDictionary = { [K in keyof Dictionary]?: DeepPartial<Dictionary[K]> };
+type DeepPartial<T> = T extends string ? string : T extends readonly (infer U)[] ? readonly DeepPartial<U>[] : { [K in keyof T]?: DeepPartial<T[K]> };
 
-export type Locale = (typeof LOCALES)[number]['code'];
+function withFallback<T>(base: T, over: unknown): T {
+  if (Array.isArray(base) || typeof base !== 'object' || base === null) return (over ?? base) as T;
+  const out: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+  for (const [k, v] of Object.entries((over ?? {}) as Record<string, unknown>)) out[k] = withFallback(out[k], v);
+  return out as T;
+}
 
-/** Non-English dictionaries are separate chunks, fetched only when chosen. */
-export const LOADERS: Record<Exclude<Locale, 'en'>, () => Promise<{ default: Dictionary }>> = {
-  fr: () => import('./locales/fr'),
-  es: () => import('./locales/es'),
-  de: () => import('./locales/de'),
-  pl: () => import('./locales/pl'),
-  sv: () => import('./locales/sv'),
-  zh: () => import('./locales/zh'),
-  ja: () => import('./locales/ja'),
-  ko: () => import('./locales/ko'),
-};
+const DICTIONARIES: Record<Locale, Dictionary> = {
+  en,
+  ...Object.fromEntries(Object.entries({ fr, es, de, pl, sv, zh, ja, ko }).map(([code, d]) => [code, withFallback(en, d)])),
+} as Record<Locale, Dictionary>;
 
-export const STORAGE_KEY = 'abl-locale';
-
-export const isLocale = (value: string | null): value is Locale => LOCALES.some((l) => l.code === value);
-
-/** Replaces {placeholders} in a dictionary string. */
-export const fmt = (template: string, vars: Record<string, string | number>) =>
-  template.replace(/\{(\w+)\}/g, (_, key: string) => String(vars[key] ?? ''));
-
-export { en };
+export const getDictionary = (locale: Locale): Dictionary => DICTIONARIES[locale];

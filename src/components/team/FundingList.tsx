@@ -1,39 +1,40 @@
+import { getDictionary, type Locale } from '../../i18n/config';
 import { GRANTS, RECOGNITION } from '../../data/recognition';
-import { useT } from '../../i18n/I18nProvider';
 
-export function FundingList() {
-  const t = useT().about;
+/** Grants and awards as two ledgers: period or year on the left, what and from whom on the right. */
+export function FundingList({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale).people;
   return (
-    <div className="grid gap-14 lg:grid-cols-2 lg:gap-16">
-      <div>
-        <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.14em] text-mute">{t.grants}</h3>
-        <ul className="border-t border-line">
+    <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
+      <section aria-labelledby="grants-title">
+        <h3 id="grants-title" className="hud mb-4 text-mute">{t.grants}</h3>
+        <ul className="border-t border-line-strong">
           {GRANTS.map((g) => (
-            <li key={g.title} className="border-b border-line py-5">
-              <div className="flex items-baseline justify-between gap-6">
-                <p className="text-[15px] text-paper">{g.title}</p>
-                <span className="shrink-0 font-mono text-xs text-mute">{g.period}</span>
-              </div>
-              <p className="mt-1 text-sm text-mute">{g.agency}</p>
-              <p className="mt-1 text-sm text-leaf">{t.roles[g.role]}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h3 className="mb-4 font-mono text-xs uppercase tracking-[0.14em] text-mute">{t.awards}</h3>
-        <ul className="border-t border-line">
-          {RECOGNITION.map((r) => (
-            <li key={r.title + r.year} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-line py-5">
-              <span className="font-mono text-xs text-mute">{r.year}</span>
+            <li key={g.title} className="grid gap-1 border-b border-line py-5 sm:grid-cols-[7.5rem_1fr] sm:gap-6">
+              <span className="hud text-mute sm:pt-1">{g.period}</span>
               <div>
-                <p className="text-[15px] text-paper">{r.title}</p>
-                <p className="text-sm text-mute">{r.body}</p>
+                <p className="font-display text-[1.0625rem] font-light leading-snug">{g.title}</p>
+                <p className="mt-1 text-[0.875rem] text-ink-2">{g.agency}</p>
+                <p className="hud mt-2 text-ink">{t.grantRoles[g.role]}</p>
               </div>
             </li>
           ))}
         </ul>
-      </div>
+      </section>
+      <section aria-labelledby="awards-title">
+        <h3 id="awards-title" className="hud mb-4 text-mute">{t.awards}</h3>
+        <ul className="border-t border-line-strong">
+          {RECOGNITION.map((r) => (
+            <li key={r.title + r.year} className="grid gap-1 border-b border-line py-5 sm:grid-cols-[7.5rem_1fr] sm:gap-6">
+              <span className="hud text-mute sm:pt-1">{r.year}</span>
+              <div>
+                <p className="font-display text-[1.0625rem] font-light leading-snug">{r.title}</p>
+                {r.body && <p className="mt-1 text-[0.875rem] text-ink-2">{r.body}</p>}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

@@ -1,25 +1,24 @@
-import type { ReactNode } from 'react';
 import { Container } from '../layout/Container';
-import { Eyebrow } from './Eyebrow';
-import { Reveal } from './Reveal';
+import { Decode } from './Decode';
 
 interface Props {
   number: string;
   label: string;
-  title: ReactNode;
+  title: string;
   lede: string;
 }
 
+/** Opening of an inner page: the page's readout line, a wide light title, then the lede. */
 export function PageIntro({ number, label, title, lede }: Props) {
   return (
-    <Container as="section" className="pb-14 pt-32 md:pb-24 md:pt-44">
-      <Reveal>
-        <Eyebrow number={number}>{label}</Eyebrow>
-        <h1 className="mt-6 max-w-[20ch] font-serif text-[clamp(2.4rem,6.6vw,5.5rem)] leading-[0.95] tracking-[-0.02em]">
-          {title}
-        </h1>
-        <p className="mt-8 max-w-xl text-base leading-relaxed text-soft md:text-lg">{lede}</p>
-      </Reveal>
+    <Container as="header" className="pb-16 pt-14 md:pb-28 md:pt-24">
+      <div className="hud flex items-center gap-4 text-mute">
+        <span className="text-ink">{number}</span>
+        <span>{label}</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-line-strong" />
+      </div>
+      <h1 className="text-page mt-8 max-w-[20ch] md:mt-12"><Decode text={title} /></h1>
+      <p className="text-lede mt-8 max-w-[52ch] text-ink-2 md:mt-10">{lede}</p>
     </Container>
   );
 }

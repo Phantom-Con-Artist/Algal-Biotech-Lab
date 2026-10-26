@@ -1,33 +1,36 @@
+import { getDictionary, type Locale } from '../../i18n/config';
 import { LAB_INFO } from '../../data/labData';
-import { Eyebrow } from '../common/Eyebrow';
 import { ArrowLink } from '../common/ArrowLink';
-import { useT } from '../../i18n/I18nProvider';
+import { BentoTile } from '../common/BentoTile';
 
-const link = 'inline-flex min-h-11 items-center text-[17px] text-paper underline decoration-line underline-offset-4 transition-colors hover:text-leaf hover:decoration-leaf';
+const link = 'ruled inline-flex min-h-11 items-center font-display text-[1.0625rem] font-light break-all';
 
-export function ContactDetails() {
-  const t = useT();
+export function ContactDetails({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
   const c = t.contact;
   return (
-    <div className="space-y-9">
+    <BentoTile as="address" className="gap-8 not-italic">
       <div>
-        <Eyebrow>{c.email}</Eyebrow>
-        <div className="mt-1"><a href={`mailto:${LAB_INFO.email}`} className={link}>{LAB_INFO.email}</a></div>
+        <p className="label mb-1">{c.email}</p>
+        <a href={`mailto:${LAB_INFO.email}`} className={link}>{LAB_INFO.email}</a>
       </div>
       <div>
-        <Eyebrow>{c.telephone}</Eyebrow>
-        <div className="mt-1"><a href={LAB_INFO.phoneHref} className={link}>{LAB_INFO.phone}</a></div>
+        <p className="label mb-1">{c.telephone}</p>
+        <a href={LAB_INFO.phoneHref} className={link}>{LAB_INFO.phone}</a>
       </div>
       <div>
-        <Eyebrow>{c.visit}</Eyebrow>
-        <div className="mt-2 text-[17px] leading-relaxed text-soft">
-          {LAB_INFO.name}<br />
-          {t.lab.department}, {t.lab.school}<br />
-          {LAB_INFO.institution}<br />
-          {LAB_INFO.address.map((l) => (<span key={l}>{l}<br /></span>))}
-        </div>
+        <p className="label mb-2">{c.visit}</p>
+        <p className="leading-relaxed text-ink-2">
+          {LAB_INFO.name}
+          <br />
+          {t.lab.department}, {t.lab.school}
+          <br />
+          {LAB_INFO.institution}
+          <br />
+          {LAB_INFO.address.join(', ')}
+        </p>
         <div className="mt-3"><ArrowLink href={LAB_INFO.mapHref}>{c.openMaps}</ArrowLink></div>
       </div>
-    </div>
+    </BentoTile>
   );
 }

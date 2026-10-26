@@ -1,20 +1,20 @@
+'use client';
+
 import { useState } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { Leader } from '../common/ActionLink';
 import type { Publication } from '../../types';
 import { doiUrl, formatCitation } from '../../utils/citation';
-import { AuthorList } from './AuthorList';
 import { MONTHS } from '../../data/publications';
-import { useI18n } from '../../i18n/I18nProvider';
+import { AuthorList } from './AuthorList';
+import type { PublicationStrings } from './PublicationList';
 
-const action =
-  'inline-flex min-h-11 items-center gap-2 font-mono text-xs uppercase tracking-[0.1em] text-soft transition-colors hover:text-leaf';
+const action = 'hud group inline-flex min-h-11 items-center gap-2 text-ink-2 transition-colors hover:text-ink';
 
-export function PublicationItem({ pub }: { pub: Publication }) {
-  const { t, locale } = useI18n();
+export function PublicationItem({ pub, t, htmlLang }: { pub: Publication; t: PublicationStrings; htmlLang: string }) {
   const [copied, setCopied] = useState(false);
   const month = pub.month
-    ? new Intl.DateTimeFormat(locale, { month: 'long' }).format(new Date(2000, MONTHS.indexOf(pub.month), 1))
-    : String(pub.year);
+    ? new Intl.DateTimeFormat(htmlLang, { month: 'long' }).format(new Date(2000, MONTHS.indexOf(pub.month), 1))
+    : '';
 
   const copy = async () => {
     try {
@@ -27,28 +27,27 @@ export function PublicationItem({ pub }: { pub: Publication }) {
   };
 
   return (
-    <li className="grid gap-3 border-b border-line py-7 md:grid-cols-[9rem_1fr] md:gap-8">
-      <div className="font-mono text-xs text-mute md:pt-1.5">
-        <p>{month}</p>
-        <p className="mt-1 text-leaf">{t.explore.types[pub.type]}</p>
-      </div>
-      <div>
-        <h4 className="max-w-3xl text-[17px] font-medium leading-snug text-paper md:text-lg">{pub.title}</h4>
-        <div className="mt-2 max-w-3xl">
+    <li className="group grid gap-3 border-b border-line py-8 transition-colors duration-300 hover:bg-frost/50 lg:-mx-4 lg:grid-cols-12 lg:gap-8 lg:px-4">
+      <p className="hud text-mute lg:col-span-2 lg:pt-1">
+        <span className="text-ink">{t.types[pub.type]}</span>
+        {month && <span className="ml-2">{month}</span>}
+      </p>
+      <div className="lg:col-span-10">
+        <h3 className="max-w-[60ch] font-display text-[1.0625rem] font-light leading-snug md:text-[1.25rem]">{pub.title}</h3>
+        <div className="mt-3 max-w-[80ch]">
           <AuthorList authors={pub.authors} />
         </div>
-        <p className="mt-2 text-sm italic text-soft">
-          {pub.venue}
-          {pub.detail && <span className="not-italic text-mute"> · {pub.detail}</span>}
+        <p className="mt-2 text-sm text-ink-2">
+          <em>{pub.venue}</em>
+          {pub.detail && <span className="text-mute"> · {pub.detail}</span>}
         </p>
-        <div className="-mb-2 mt-2 flex flex-wrap gap-x-6">
-          <a href={doiUrl(pub)} target="_blank" rel="noreferrer" className={action}>DOI ↗</a>
+        <div className="mt-2 flex flex-wrap gap-x-6">
+          <a href={doiUrl(pub)} target="_blank" rel="noopener" className={action}>DOI <Leader external /></a>
           {pub.pmid && (
-            <a href={`https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}/`} target="_blank" rel="noreferrer" className={action}>PubMed ↗</a>
+            <a href={`https://pubmed.ncbi.nlm.nih.gov/${pub.pmid}/`} target="_blank" rel="noopener" className={action}>PubMed <Leader external /></a>
           )}
           <button type="button" onClick={copy} className={action}>
-            {copied ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
-            <span aria-live="polite">{copied ? t.explore.copied : t.explore.copy}</span>
+            <span aria-live="polite">{copied ? t.copied : t.copy}</span>
           </button>
         </div>
       </div>

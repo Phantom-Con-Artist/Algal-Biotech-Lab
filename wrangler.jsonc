@@ -1,0 +1,8 @@
+// Cloudflare Pages: the site is a static export in ./dist (next.config.ts `output: 'export'`).
+// Deploy with `npm run deploy` (builds, then uploads with Wrangler).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "algal-biotech-lab",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-01"
+}

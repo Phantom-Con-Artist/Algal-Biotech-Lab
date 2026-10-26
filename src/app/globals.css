@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/*
+ * Clinical daylight. A pale, faintly green-white field, like a lit lab corridor; the interface is a thin
+ * instrument layer over it: wide light headings, monospace readings, hairline leaders. Colour is rationed:
+ * the stain of the structure being read is the only saturated thing on screen, and the eyespot's vermilion
+ * marks action.
+ */
+@theme static {
+  --color-mist: oklch(0.945 0.006 140);
+  --color-mist-hi: oklch(0.975 0.004 140);
+  --color-mist-lo: oklch(0.9 0.008 140);
+  --color-frost: oklch(0.99 0.003 140);
+  --color-ink: oklch(0.23 0.02 200);
+  --color-ink-2: oklch(0.31 0.018 200);
+  --color-mute: oklch(0.42 0.016 200);
+  --color-line: oklch(0.23 0.02 200 / 0.14);
+  --color-line-strong: oklch(0.23 0.02 200 / 0.34);
+  /* The deep end of the fog, for the footer and dense passages. */
+  --color-deep: oklch(0.24 0.018 200);
+  --color-deep-ink: oklch(0.94 0.006 140);
+  --color-deep-mute: oklch(0.74 0.012 160);
+
+  /* Stains: each structure in the colour that shows it under the microscope */
+  --color-chlorophyll: oklch(0.55 0.14 148);
+  --color-carmine: oklch(0.5 0.17 12);
+  --color-lugol: oklch(0.42 0.12 290);
+  --color-nile: oklch(0.74 0.15 75);
+  --color-toluidine: oklch(0.52 0.15 335);
+  --color-janus: oklch(0.56 0.09 190);
+  --color-glycoprotein: oklch(0.62 0.05 110);
+  --color-membrane: oklch(0.66 0.1 65);
+  --color-eyespot: oklch(0.63 0.2 36);
+
+  /* Aliases kept for components that predate the mist world. */
+  --color-paper: var(--color-mist);
+  --color-tile: var(--color-frost);
+  --color-leaf: var(--color-ink);
+  --color-leaf-soft: var(--color-mist-hi);
+
+  --font-display: var(--font-unbounded), "Arial Black", ui-sans-serif, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-mono);
+
+  --ease-out-quart: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Fluid scales, 360px to 1440px. Unbounded is wide, so its sizes sit lower than a narrow face's. */
+  --text-display: clamp(2.125rem, calc(1.375rem + 3.333vw), 4.375rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-page: clamp(2rem, calc(1.375rem + 2.778vw), 3.875rem);
+  --text-page--line-height: 1.04;
+  --text-page--letter-spacing: -0.028em;
+  --text-h2: clamp(1.5rem, calc(1.125rem + 1.667vw), 2.625rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.022em;
+  --text-h3: clamp(1.0625rem, calc(0.979rem + 0.37vw), 1.3125rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lede: clamp(0.9375rem, calc(0.875rem + 0.278vw), 1.125rem);
+  --text-lede--line-height: 1.7;
+  --text-key: clamp(2.5rem, calc(1.75rem + 3.333vw), 4.75rem);
+  --text-key--line-height: 0.9;
+  --text-key--letter-spacing: -0.04em;
+}
+
+@layer base {
+  html {
+    background: var(--color-mist);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+    /* The scrollbar's room is kept while a page is locked (preloader, Explore), so unlocking never reflows it. */
+    scrollbar-gutter: stable;
+    scrollbar-color: var(--color-mute) var(--color-mist);
+  }
+
+  body {
+    /* The field brightens toward the middle, the way a lit fog does. */
+    background:
+      radial-gradient(120% 60rem at 50% 30rem, var(--color-mist-hi), transparent 70%),
+      var(--color-mist);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    caret-color: var(--color-eyespot);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-frost);
+  }
+
+  :focus-visible {
+    outline: 1.5px solid var(--color-ink);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+}
+
+@layer components {
+  /* Instrument readout: the small caps line used for callouts, measurements and indices. */
+  .hud {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.45;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.45;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+  .measure {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+  }
+
+  /* Index numerals beside a structure or a list entry. */
+  .key {
+    font-family: var(--font-display);
+    font-weight: 200;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Figure caption: the figure number set as a readout, the sentence in reading mono. */
+  .caption {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+  .caption b {
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-right: 0.6em;
+  }
+
+  /* Underline drawn as a hairline leader; it tightens toward the text on hover. */
+  .ruled {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+    transition: text-decoration-color 0.3s, text-underline-offset 0.4s var(--ease-out-quart);
+  }
+  .ruled:hover,
+  .ruled:focus-visible,
+  .group:hover .ruled {
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.22em;
+  }
+
+  /* A stain swatch: the colour chip beside a structure's name in every key on the site. */
+  .swatch {
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 50%;
+    background: var(--stain, currentColor);
+    flex: none;
+  }
+
+  /* Corner ticks around a region, the frame of a viewfinder rather than a box. */
+  .ticks {
+    background:
+      linear-gradient(currentColor, currentColor) top left / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) top left / 1px 10px no-repeat,
+      linear-gradient(currentColor, currentColor) top right / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) top right / 1px 10px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom left / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom left / 1px 10px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom right / 10px 1px no-repeat,
+      linear-gradient(currentColor, currentColor) bottom right / 1px 10px no-repeat;
+  }
+}
+
+/* The Explore wall owns the whole screen: the page does not scroll and the site chrome steps aside. */
+html[data-fullscreen], html[data-loading] { overflow: hidden; }
+html[data-fullscreen] body > header,
+html[data-fullscreen] body > footer,
+html[data-fullscreen] #mobile-menu { display: none; }
+
+/* Reading blocks surface out of the fog as they enter. Browsers without scroll timelines show them at rest. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 50%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/*
+ * Film grain over every page, the same fine grain the 3D film's grade adds, so the flat pages and the
+ * scenes read as one material. One static layer: nothing animates, nothing repaints.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.14 0 0 0 0 0.14 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The funder strip travels one copy of its list, then repeats seamlessly. */
+@keyframes funders {
+  to { transform: translateX(-50%); }
+}
+
+/* The preloader's mark breathes while the scene's files arrive. */
+@keyframes preload-breathe {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.96); }
+}
+
+/* The scroll hint: a hairline that draws down and fades, again and again. */
+@keyframes tour-hint {
+  0% { transform: scaleY(0); opacity: 1; }
+  60% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* CJK locales fall through to the reader's system fonts; headings relax their tight tracking. */
+:root:lang(zh-Hans) { --font-mono: var(--font-plex-mono), "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", monospace; --font-display: var(--font-unbounded), "PingFang SC", "Noto Sans CJK SC", sans-serif; }
+:root:lang(ja) { --font-mono: var(--font-plex-mono), "Hiragino Sans", "Yu Gothic", "Noto Sans CJK JP", monospace; --font-display: var(--font-unbounded), "Hiragino Sans", "Yu Gothic", sans-serif; }
+:root:lang(ko) { --font-mono: var(--font-plex-mono), "Apple SD Gothic Neo", "Noto Sans CJK KR", monospace; --font-display: var(--font-unbounded), "Apple SD Gothic Neo", sans-serif; word-break: keep-all; }
+:root:is(:lang(zh-Hans), :lang(ja), :lang(ko)) :is(h1, h2, h3) {
+  letter-spacing: 0;
+  line-height: 1.25;
+}
