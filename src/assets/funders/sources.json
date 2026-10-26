@@ -1,0 +1,140 @@
+{
+  "created": "2026-10-26",
+  "color": {
+    "token": "text-ink/45",
+    "ink": "#112021",
+    "opacity": 0.45
+  },
+  "sources": [
+    {
+      "id": "dst",
+      "name": "Department of Science and Technology",
+      "url": "https://anrfonline.in/ANRF/resources/app_srv/serb/gl/homepage/img/imlinks/dstimp.png",
+      "box": [
+        32,
+        42,
+        390,
+        110
+      ],
+      "mode": "paper",
+      "original": "originals/dst.png",
+      "svg": "grey-svg/dst.svg",
+      "png": "grey-png/dst.png",
+      "colourPng": "dst-colour.png"
+    },
+    {
+      "id": "anrf",
+      "name": "Anusandhan National Research Foundation",
+      "url": "https://anrf.gov.in/assets/img/logo.png",
+      "box": [
+        14,
+        10,
+        202,
+        176
+      ],
+      "mode": "alpha",
+      "original": "originals/anrf.png",
+      "svg": "grey-svg/anrf.svg",
+      "png": "grey-png/anrf.png",
+      "colourPng": "anrf-colour.png"
+    },
+    {
+      "id": "inspire",
+      "name": "DST INSPIRE",
+      "url": "https://online-inspire.gov.in/images/dst-logo.jpg",
+      "box": [
+        790,
+        10,
+        77,
+        74
+      ],
+      "mode": "paper",
+      "original": "originals/inspire.jpg",
+      "svg": "grey-svg/inspire.svg",
+      "png": "grey-png/inspire.png",
+      "colourPng": "inspire-colour.png"
+    },
+    {
+      "id": "horizon-2020-eu",
+      "name": "European Union emblem for Horizon 2020",
+      "url": "https://european-union.europa.eu/document/download/701e0782-2116-4ec4-aede-dbedd76fcc35_en?filename=flag_black_white_0.pdf",
+      "box": [
+        148,
+        331,
+        296,
+        201
+      ],
+      "mode": "paper",
+      "original": "originals/horizon-2020-eu.pdf",
+      "svg": "grey-svg/horizon-2020-eu.svg",
+      "png": "grey-png/horizon-2020-eu.png",
+      "colourPng": "horizon-2020-eu-colour.png",
+      "colourSource": "https://european-union.europa.eu/document/download/8fd15c1e-c5b8-44e7-a9eb-824609d68150_en?filename=Normal%20reproduction%20in%20colour%20-%20SVG.zip"
+    },
+    {
+      "id": "wallenberg",
+      "name": "Knut and Alice Wallenberg Foundation",
+      "url": "https://kaw.wallenberg.org/themes/custom/kaw/logo_en.svg",
+      "box": [
+        0,
+        0,
+        226.35,
+        111.34
+      ],
+      "mode": "alpha",
+      "original": "originals/wallenberg.svg",
+      "svg": "grey-svg/wallenberg.svg",
+      "png": "grey-png/wallenberg.png",
+      "colourPng": "wallenberg-colour.png"
+    },
+    {
+      "id": "company-of-biologists",
+      "name": "The Company of Biologists",
+      "url": "https://www.biologists.com/wp-content/themes/cob2025/assets/images/umbrella-logo-white.svg",
+      "box": [
+        0,
+        0,
+        519,
+        291
+      ],
+      "mode": "tones",
+      "original": "originals/company-of-biologists.svg",
+      "svg": "grey-svg/company-of-biologists.svg",
+      "png": "grey-png/company-of-biologists.png",
+      "colourPng": "company-of-biologists-colour.png"
+    },
+    {
+      "id": "umea-university",
+      "name": "Umeå University",
+      "url": "https://www.umu.se/Static/img/umu-logo-left-neg-EN.svg",
+      "box": [
+        0,
+        0,
+        1622.4667,
+        386.30667
+      ],
+      "mode": "mask",
+      "original": "originals/umea-university.svg",
+      "svg": "grey-svg/umea-university.svg",
+      "png": "grey-png/umea-university.png",
+      "colourPng": "umea-university-colour.png"
+    },
+    {
+      "id": "cutn",
+      "name": "Central University of Tamil Nadu",
+      "url": "https://cutn.ac.in/wp-content/uploads/2023/07/LOGO_ORIGINAL_CUTN-scaled.jpg",
+      "box": [
+        0,
+        0,
+        1910,
+        2560
+      ],
+      "mode": "paper",
+      "original": "originals/cutn.jpg",
+      "svg": "grey-svg/cutn.svg",
+      "png": "grey-png/cutn.png",
+      "colourPng": "cutn-colour.png"
+    }
+  ],
+  "colourNotes": "Original colours on transparent backgrounds; white wordmarks adapted to dark ink for this pale surface. Monochrome marks retain their monochrome identity."
+}

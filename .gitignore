@@ -41,3 +41,7 @@ lab details.xlsx
 /lab details.pdf
 /lab details(Sheet1).csv
 /WhatsApp Image*.pdf
+
+# Local asset exports and Blender recovery copies
+/output/
+*.blend[0-9]*
