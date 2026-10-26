@@ -88,7 +88,7 @@ const es: Dictionary = {
         general: 'Muchas microalgas almacenan gran parte de su biomasa en forma de lípidos, que pueden refinarse en biodiésel y combustible de aviación sin quitar tierras a los cultivos alimentarios.',
         lab: 'Separamos el crecimiento de la producción de aceite mediante un cultivo inducible en dos pasos, y estudiamos el biohidrógeno y la biomasa pretratada en una biorrefinería circular.',
         alts: [
-          'Matraz de bioaceite de algas junto a una cubeta sobre una superficie de pizarra',
+          'Aceite de algas de color ámbar que fluye desde una salida de acero hacia un recipiente',
           'Gota verde de aceite de algas cayendo de una pipeta',
           'Tres frascos que muestran crudo algal, biodiésel y combustible de aviación',
         ],
@@ -99,7 +99,7 @@ const es: Dictionary = {
         general: 'Las microalgas convierten el CO₂ en biomasa mediante la fotosíntesis, en fotobiorreactores cerrados o en estanques abiertos, sobre terrenos que no sirven para cultivar.',
         lab: 'Estudiamos cómo Chlamydomonas activa su mecanismo de concentración de carbono cuando el CO₂ escasea: el proteoma nuclear y los cambios en lípidos y carotenoides que siguen.',
         alts: [
-          'Fila de columnas de fotobiorreactores iluminadas llenas de cultivo verde',
+          'Fotobiorreactores de algas de panel plano en un invernadero soleado',
           'Estanques de cultivo de algas con ruedas de paletas al amanecer',
           'Fachada de un edificio con paneles de vidrio llenos de cultivo de algas',
         ],
@@ -110,7 +110,7 @@ const es: Dictionary = {
         general: 'Las algas producen ácidos grasos omega-3, pigmentos carotenoides, vitaminas y compuestos que filtran la radiación UV, muy demandados como suplementos y alimentos funcionales.',
         lab: 'Modificamos microalgas para producir vitamina D3 y aminoácidos tipo micosporina, y revisamos los derivados de microalgas como nutracéuticos y fármacos.',
         alts: [
-          'Cápsulas doradas y rubí de aceite de algas sobre un plato de vidrio encima de agua ondulante',
+          'Polvo de espirulina y extracto de pigmentos de algas rojo anaranjado sobre una mesa de laboratorio',
           'Cuenco de espirulina en polvo con una cuchara de madera y un frasco cuentagotas sobre piedra',
         ],
       },
@@ -120,7 +120,7 @@ const es: Dictionary = {
         general: 'Al crecer, las microalgas absorben nitrógeno, fósforo y metales de las aguas residuales, de modo que el tratamiento y la producción de biomasa pueden darse en el mismo tanque.',
         lab: 'Nuestras revisiones y capítulos tratan la ficorremediación de contaminantes emergentes, la eliminación de metales pesados y las cianobacterias en el tratamiento de aguas residuales.',
         alts: [
-          'Dos probetas que comparan agua residual sin tratar con agua tratada con microalgas',
+          'Rueda de paletas que hace circular agua verde en un canal de tratamiento con algas',
           'Perlas verdes de algas sobre una malla de acero bajo un chorro de agua',
           'Tanque transparente donde el agua tratada cae desde agua con algas',
         ],
@@ -175,6 +175,7 @@ const es: Dictionary = {
       jrf: 'Junior Research Fellow',
       mentee: 'Mentorado/a de investigación',
       trainee: 'Estudiante en prácticas',
+      student: 'Estudiante',
     },
     joined: 'Desde {year}',
     now: 'Actualmente',

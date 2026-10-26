@@ -88,7 +88,7 @@ const pl: Dictionary = {
         general: 'Wiele mikroalg magazynuje dużą część biomasy w postaci lipidów, które można rafinować na biodiesel i paliwo lotnicze, nie zabierając ziemi uprawom żywności.',
         lab: 'Rozdzielamy wzrost i produkcję oleju za pomocą indukowanej hodowli dwuetapowej oraz badamy biowodór i wstępnie przetworzoną biomasę w biorafinerii o obiegu zamkniętym.',
         alts: [
-          'Kolba z bioolejem z alg obok kuwety na łupkowej płycie',
+          'Bursztynowy olej z alg spływający ze stalowego wylotu do naczynia',
           'Zielona kropla oleju z alg spadająca z pipety',
           'Trzy butelki pokazujące surowy olej z alg, biodiesel i paliwo lotnicze',
         ],
@@ -99,7 +99,7 @@ const pl: Dictionary = {
         general: 'Mikroalgi przekształcają CO₂ w biomasę w procesie fotosyntezy, w zamkniętych fotobioreaktorach lub otwartych stawach, na terenach nienadających się pod uprawy.',
         lab: 'Badamy, jak Chlamydomonas włącza mechanizm koncentracji węgla, gdy brakuje CO₂: proteom jądrowy oraz następujące po tym zmiany w lipidach i karotenoidach.',
         alts: [
-          'Rząd świecących kolumn fotobioreaktorów wypełnionych zieloną kulturą',
+          'Płaskie fotobioreaktory z algami w nasłonecznionej szklarni',
           'Stawy hodowlane alg z kołami łopatkowymi o wschodzie słońca',
           'Fasada budynku ze szklanych paneli wypełnionych kulturą alg',
         ],
@@ -110,7 +110,7 @@ const pl: Dictionary = {
         general: 'Algi wytwarzają kwasy tłuszczowe omega-3, barwniki karotenoidowe, witaminy i związki filtrujące UV, poszukiwane jako suplementy i żywność funkcjonalna.',
         lab: 'Modyfikujemy mikroalgi pod kątem witaminy D3 i aminokwasów mykosporynopodobnych oraz opracowujemy przeglądy pochodnych mikroalg jako nutraceutyków i farmaceutyków.',
         alts: [
-          'Złote i rubinowe kapsułki oleju z alg na szklanym naczyniu nad falującą wodą',
+          'Proszek spiruliny i czerwono-pomarańczowy ekstrakt pigmentów z alg na stole laboratoryjnym',
           'Miska sproszkowanej spiruliny z drewnianą łyżką i butelką z zakraplaczem na kamieniu',
         ],
       },
@@ -120,7 +120,7 @@ const pl: Dictionary = {
         general: 'Rosnąc, mikroalgi pobierają ze ścieków azot, fosfor i metale, więc oczyszczanie i produkcja biomasy mogą zachodzić w tym samym zbiorniku.',
         lab: 'Nasze przeglądy i rozdziały obejmują fikoremediację nowych zanieczyszczeń, usuwanie metali ciężkich oraz cyjanobakterie w oczyszczaniu ścieków.',
         alts: [
-          'Dwa cylindry miarowe: ścieki nieoczyszczone i woda oczyszczona przez mikroalgi',
+          'Koło łopatkowe wprawiające w ruch zieloną wodę w kanale oczyszczania z użyciem alg',
           'Zielone kulki z alg na stalowej siatce pod strumieniem wody',
           'Przezroczysty zbiornik, w którym oczyszczona woda przelewa się z wody pełnej alg',
         ],
@@ -175,6 +175,7 @@ const pl: Dictionary = {
       jrf: 'Junior Research Fellow',
       mentee: 'Podopieczny/a naukowy/a',
       trainee: 'Stażysta/ka naukowy/a',
+      student: 'Student / studentka',
     },
     joined: 'Od {year}',
     now: 'Obecnie',

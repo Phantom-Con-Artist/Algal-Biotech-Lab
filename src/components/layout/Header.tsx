@@ -10,7 +10,7 @@ import { localePath, stripLocale, type Dictionary, type Locale } from '../../i18
 import { cn } from '../../utils/cn';
 import { Container } from './Container';
 import { LanguageSwitcher } from './LanguageSwitcher';
-import mark from '../../assets/brand/abl-mark.webp';
+import wordmark from '../../assets/brand/abl-wordmark.webp';
 
 interface Props {
   locale: Locale;
@@ -45,14 +45,12 @@ export function Header({ locale, nav, machineNote }: Props) {
   return (
     <>
     <header className="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-md">
-      <Container className="flex h-16 items-center justify-between gap-6">
-        <Link href={localePath(locale)} className="flex min-h-11 items-center gap-3" aria-label={`${LAB_INFO.shortName}, ${nav.home}`}>
-          <Image src={mark} alt="" width={30} height={26} priority className="h-[26px] w-auto" />
-          <span className="text-base font-semibold tracking-tight">{LAB_INFO.shortName}</span>
-          <span className="label hidden border-l border-line-strong pl-3 sm:inline">{LAB_INFO.institutionShort}</span>
+      <Container className="flex h-20 items-center justify-between gap-3 lg:gap-6">
+        <Link href={localePath(locale)} className="flex min-h-11 min-w-0 max-w-[220px] flex-1 items-center sm:max-w-[260px] lg:max-w-[280px]" aria-label={`${LAB_INFO.name}, ${nav.home}`}>
+          <Image src={wordmark} alt="" priority sizes="(min-width: 1024px) 280px, (min-width: 640px) 260px, 220px" className="h-auto w-full" />
         </Link>
 
-        <nav aria-label={nav.primary} className="hidden items-center gap-8 md:flex">
+        <nav aria-label={nav.primary} className="hidden items-center gap-8 lg:flex">
           <ul className="flex items-center gap-6 lg:gap-8">
             {links.map((item) => (
               <li key={item.key}>
@@ -79,7 +77,7 @@ export function Header({ locale, nav, machineNote }: Props) {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? nav.closeMenu : nav.openMenu}
-          className="-mr-2 grid h-11 w-11 place-items-center md:hidden"
+          className="-mr-2 grid h-11 w-11 shrink-0 place-items-center lg:hidden"
         >
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -89,7 +87,7 @@ export function Header({ locale, nav, machineNote }: Props) {
     {/* A sibling of the header, not a child: the header's backdrop blur would otherwise become the containing
         block for this fixed panel and collapse it to the header's height. */}
     {open && (
-      <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-paper md:hidden">
+      <div id="mobile-menu" className="fixed inset-x-0 bottom-0 top-20 z-40 overflow-y-auto bg-paper lg:hidden">
         <Container as="nav" aria-label={nav.primary} className="flex min-h-full flex-col justify-between gap-10 py-8">
           <ul className="border-t border-line">
             {links.map((item) => (

@@ -40,7 +40,7 @@ export function siteGraph(locale: Locale) {
         description: getDictionary('en').meta.description,
         foundingDate: String(LAB_INFO.founded),
         email: LAB_INFO.email,
-        telephone: LAB_INFO.phone,
+        telephone: LAB_INFO.phoneHref.replace('tel:', ''),
         address: ADDRESS,
         parentOrganization: { ...UNIVERSITY, department: { '@type': 'Organization', name: getDictionary('en').lab.department } },
         founder: { '@id': personId(PI) },

@@ -88,7 +88,7 @@ const fr: Dictionary = {
         general: 'De nombreuses microalgues stockent une grande part de leur biomasse sous forme de lipides, que l’on peut raffiner en biodiesel et en carburant d’aviation sans prendre de terres aux cultures alimentaires.',
         lab: 'Nous séparons la croissance de la production d’huile grâce à une culture inductible en deux étapes, et étudions le biohydrogène et la biomasse prétraitée dans une bioraffinerie circulaire.',
         alts: [
-          'Fiole de bio-huile algale à côté d’une cuvette sur une plaque d’ardoise',
+          'Huile algale ambrée coulant dans un récipient depuis une sortie en acier',
           'Goutte verte d’huile algale tombant d’une pipette',
           'Trois flacons montrant le brut algal, le biodiesel et le carburant d’aviation',
         ],
@@ -99,7 +99,7 @@ const fr: Dictionary = {
         general: 'Les microalgues transforment le CO₂ en biomasse par photosynthèse, dans des photobioréacteurs fermés ou des bassins ouverts, sur des terres impropres aux cultures.',
         lab: 'Nous étudions comment Chlamydomonas active son mécanisme de concentration du carbone quand le CO₂ se fait rare : le protéome nucléaire, puis les changements des lipides et des caroténoïdes.',
         alts: [
-          'Rangée de colonnes de photobioréacteurs lumineuses remplies de culture verte',
+          'Photobioréacteurs à panneaux plats dans une serre ensoleillée',
           'Bassins de culture d’algues avec roues à aubes au lever du soleil',
           'Façade d’immeuble en panneaux de verre remplis de culture d’algues',
         ],
@@ -110,7 +110,7 @@ const fr: Dictionary = {
         general: 'Les algues produisent des acides gras oméga-3, des pigments caroténoïdes, des vitamines et des composés filtrant les UV, recherchés comme compléments et aliments fonctionnels.',
         lab: 'Nous modifions des microalgues pour produire la vitamine D3 et des acides aminés de type mycosporine, et passons en revue les dérivés microalgaux comme nutraceutiques et produits pharmaceutiques.',
         alts: [
-          'Capsules d’huile algale dorées et rubis sur une coupelle en verre au-dessus d’une eau ondulante',
+          'Poudre de spiruline et extrait de pigments algaux rouge orangé sur une paillasse',
           'Bol de poudre de spiruline avec une cuillère en bois et un flacon compte-gouttes sur de la pierre',
         ],
       },
@@ -120,7 +120,7 @@ const fr: Dictionary = {
         general: 'En poussant, les microalgues absorbent l’azote, le phosphore et les métaux des eaux usées : traitement et production de biomasse peuvent avoir lieu dans le même bassin.',
         lab: 'Nos revues et chapitres couvrent la phycoremédiation des contaminants émergents, l’élimination des métaux lourds et les cyanobactéries dans le traitement des eaux usées.',
         alts: [
-          'Deux éprouvettes comparant une eau usée non traitée et une eau traitée par microalgues',
+          'Roue à aubes faisant circuler une eau verte dans un bassin de traitement par les algues',
           'Billes d’algues vertes sur une grille en acier sous un filet d’eau',
           'Bac transparent où l’eau traitée se déverse depuis une eau chargée d’algues',
         ],
@@ -175,6 +175,7 @@ const fr: Dictionary = {
       jrf: 'Junior Research Fellow',
       mentee: 'Mentoré·e de recherche',
       trainee: 'Stagiaire de recherche',
+      student: 'Étudiant·e',
     },
     joined: 'Arrivé·e en {year}',
     now: 'Aujourd’hui',

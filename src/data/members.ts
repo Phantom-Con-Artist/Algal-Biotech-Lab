@@ -1,4 +1,5 @@
 import type { LabMember } from '../types';
+import { NEW_ALUMNI, NEW_RESEARCHERS } from './memberAdditions';
 import amitPhoto from '../assets/team/amit-kumar-bajhaiya.webp';
 import arathiPhoto from '../assets/team/arathi-sreenikethanam.webp';
 import subhishaPhoto from '../assets/team/subhisha-raj.webp';
@@ -54,7 +55,7 @@ export const PI_PATH = [
 ];
 
 /** Current researchers, most senior first. Biographies are as supplied by each member, lightly edited. */
-export const RESEARCHERS: LabMember[] = [
+const EXISTING_RESEARCHERS: LabMember[] = [
   {
     slug: 'arathi-sreenikethanam',
     name: 'Arathi Sreenikethanam',
@@ -169,7 +170,7 @@ export const RESEARCHERS: LabMember[] = [
   },
 ];
 
-export const ALUMNI: LabMember[] = [
+const EXISTING_ALUMNI: LabMember[] = [
   {
     slug: 'abhrajit-mukherjee',
     name: 'Abhrajit Mukherjee',
@@ -212,6 +213,9 @@ export const ALUMNI: LabMember[] = [
   },
 ];
 
+export const RESEARCHERS: LabMember[] = [...EXISTING_RESEARCHERS, ...NEW_RESEARCHERS]
+  .sort((a, b) => a.joined - b.joined);
+export const ALUMNI: LabMember[] = [...EXISTING_ALUMNI, ...NEW_ALUMNI];
 export const MEMBERS: LabMember[] = [PI, ...RESEARCHERS, ...ALUMNI];
 
 export const getMember = (slug: string): LabMember | undefined => MEMBERS.find((m) => m.slug === slug);

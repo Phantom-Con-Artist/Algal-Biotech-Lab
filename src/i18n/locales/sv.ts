@@ -88,7 +88,7 @@ const sv: Dictionary = {
         general: 'Många mikroalger lagrar en stor del av sin biomassa som lipider, som kan raffineras till biodiesel och flygbränsle utan att ta åkermark från livsmedelsgrödor.',
         lab: 'Vi skiljer tillväxt från oljeproduktion med inducerbar tvåstegsodling, och studerar biovätgas och förbehandlad biomassa i ett cirkulärt bioraffinaderi.',
         alts: [
-          'Kolv med algbioolja bredvid en kyvett på en skifferskiva',
+          'Bärnstensfärgad algolja rinner från ett stålutlopp till ett uppsamlingskärl',
           'Grön droppe algolja som faller från en pipett',
           'Tre flaskor som visar algråolja, biodiesel och flygbränsle',
         ],
@@ -99,7 +99,7 @@ const sv: Dictionary = {
         general: 'Mikroalger omvandlar CO₂ till biomassa genom fotosyntes, i slutna fotobioreaktorer eller öppna dammar på mark som inte går att odla.',
         lab: 'Vi studerar hur Chlamydomonas slår på sin kolkoncentrerande mekanism när CO₂ är knappt: kärnproteomet och de förändringar i lipider och karotenoider som följer.',
         alts: [
-          'Rad av lysande fotobioreaktorkolonner fyllda med grön kultur',
+          'Platta fotobioreaktorer med alger i ett solbelyst växthus',
           'Algdammar med skovelhjul i soluppgången',
           'Byggnadsfasad av glaspaneler fyllda med algkultur',
         ],
@@ -110,7 +110,7 @@ const sv: Dictionary = {
         general: 'Alger bildar omega-3-fettsyror, karotenoidpigment, vitaminer och UV-skyddande ämnen som efterfrågas som kosttillskott och funktionella livsmedel.',
         lab: 'Vi modifierar mikroalger för vitamin D3 och mykosporinliknande aminosyror, och ger översikter över mikroalgderivat som nutraceutika och läkemedel.',
         alts: [
-          'Gyllene och rubinröda algoljekapslar på ett glasfat över krusat vatten',
+          'Spirulinapulver och rödorange algpigmentextrakt på en laboratoriebänk',
           'Skål med spirulinapulver, träskopa och droppflaska på sten',
         ],
       },
@@ -120,7 +120,7 @@ const sv: Dictionary = {
         general: 'Mikroalger tar upp kväve, fosfor och metaller ur avloppsvatten när de växer, så rening och biomassaproduktion kan ske i samma tank.',
         lab: 'Våra översikter och bokkapitel behandlar fykoremediering av nya föroreningar, avlägsnande av tungmetaller och cyanobakterier i avloppsvattenrening.',
         alts: [
-          'Två mätcylindrar som jämför orenat avloppsvatten med vatten renat av mikroalger',
+          'Skovelhjul som cirkulerar grönt vatten i en reningskanal med alger',
           'Gröna algpärlor på ett stålnät under rinnande vatten',
           'Klar tank där renat vatten rinner över från algfyllt vatten',
         ],
@@ -175,6 +175,7 @@ const sv: Dictionary = {
       jrf: 'Junior Research Fellow',
       mentee: 'Forskningsadept',
       trainee: 'Forskningspraktikant',
+      student: 'Student',
     },
     joined: 'Sedan {year}',
     now: 'Nu',

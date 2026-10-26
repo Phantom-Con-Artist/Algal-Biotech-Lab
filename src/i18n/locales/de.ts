@@ -88,7 +88,7 @@ const de: Dictionary = {
         general: 'Viele Mikroalgen speichern einen großen Teil ihrer Biomasse als Lipide. Diese lassen sich zu Biodiesel und Flugkraftstoff raffinieren, ohne Ackerland für Nahrungspflanzen zu beanspruchen.',
         lab: 'Wir trennen Wachstum und Ölproduktion durch eine induzierbare zweistufige Kultivierung und untersuchen Biowasserstoff und vorbehandelte Biomasse in einer zirkulären Bioraffinerie.',
         alts: [
-          'Kolben mit Algen-Bioöl neben einer Küvette auf einer Schieferplatte',
+          'Bernsteinfarbenes Algenöl fließt aus einem Stahlauslass in einen Auffangbecher',
           'Grüner Tropfen Algenöl, der von einer Pipette fällt',
           'Drei Flaschen mit Algenrohöl, Biodiesel und Flugkraftstoff',
         ],
@@ -99,7 +99,7 @@ const de: Dictionary = {
         general: 'Mikroalgen verwandeln CO₂ durch Photosynthese in Biomasse, in geschlossenen Photobioreaktoren oder offenen Becken auf Flächen, die sich nicht für den Ackerbau eignen.',
         lab: 'Wir untersuchen, wie Chlamydomonas bei CO₂-Mangel ihren Kohlenstoff-Konzentrierungsmechanismus einschaltet: das Kernproteom und die folgenden Veränderungen bei Lipiden und Carotinoiden.',
         alts: [
-          'Reihe leuchtender Photobioreaktor-Säulen mit grüner Kultur',
+          'Flache Algen-Photobioreaktoren in einem sonnigen Gewächshaus',
           'Algenbecken mit Schaufelrädern bei Sonnenaufgang',
           'Gebäudefassade aus Glaspaneelen, gefüllt mit Algenkultur',
         ],
@@ -110,7 +110,7 @@ const de: Dictionary = {
         general: 'Algen bilden Omega-3-Fettsäuren, Carotinoid-Pigmente, Vitamine und UV-filternde Verbindungen, die als Nahrungsergänzung und funktionelle Lebensmittel gefragt sind.',
         lab: 'Wir verändern Mikroalgen gezielt für Vitamin D3 und mycosporinähnliche Aminosäuren und geben Übersichten zu Mikroalgen-Derivaten als Nutrazeutika und Pharmazeutika.',
         alts: [
-          'Goldene und rubinrote Algenöl-Kapseln auf einer Glasschale über gekräuseltem Wasser',
+          'Spirulinapulver und rotoranger Algenpigmentextrakt auf einer Laborbank',
           'Schale mit Spirulinapulver, Holzlöffel und Pipettenflasche auf Stein',
         ],
       },
@@ -120,7 +120,7 @@ const de: Dictionary = {
         general: 'Mikroalgen nehmen beim Wachsen Stickstoff, Phosphor und Metalle aus Abwasser auf. Reinigung und Biomasseproduktion können so im selben Becken stattfinden.',
         lab: 'Unsere Übersichtsarbeiten und Buchkapitel behandeln die Phykoremediation neuartiger Schadstoffe, die Entfernung von Schwermetallen und Cyanobakterien in der Abwasserbehandlung.',
         alts: [
-          'Zwei Messzylinder im Vergleich: unbehandeltes Abwasser und mit Mikroalgen behandeltes Wasser',
+          'Schaufelrad bewegt grünes Wasser in einem Algenbehandlungsbecken',
           'Grüne Algenperlen auf einem Stahlgitter unter fließendem Wasser',
           'Klarer Tank, in dem behandeltes Wasser aus algenhaltigem Wasser überläuft',
         ],
@@ -175,6 +175,7 @@ const de: Dictionary = {
       jrf: 'Junior Research Fellow',
       mentee: 'Forschungs-Mentee',
       trainee: 'Forschungspraktikant/in',
+      student: 'Studierende',
     },
     joined: 'Seit {year}',
     now: 'Heute',

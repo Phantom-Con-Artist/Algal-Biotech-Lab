@@ -16,7 +16,7 @@ export const LAB_INFO = {
   address: ['Neelakudi Campus, Thiruvarur', 'Tamil Nadu 610 005, India'],
   postal: { street: 'Neelakudi Campus', locality: 'Thiruvarur', region: 'Tamil Nadu', postalCode: '610005', country: 'IN' },
   email: 'amitkumar@cutn.ac.in',
-  phone: '+91 4366 277230',
+  phone: '04366-277230',
   phoneHref: 'tel:+914366277230',
   website: 'https://cutn.ac.in',
   mapHref:

@@ -76,7 +76,7 @@ const en = {
         general: 'Many microalgae store a large share of their biomass as lipids, which can be refined into biodiesel and aviation fuel without taking farmland from food crops.',
         lab: 'We separate growth from oil production with inducible two-step cultivation, and study biohydrogen and pretreated biomass in a circular biorefinery.',
         alts: [
-          'Flask of algal bio-oil beside a cuvette on a slate surface',
+          'Amber algal oil flowing from a steel outlet into a collection cup',
           'Green droplet of algal oil falling from a pipette',
           'Three bottles showing algal crude, biodiesel and aviation fuel stages',
         ],
@@ -87,7 +87,7 @@ const en = {
         general: 'Microalgae turn CO₂ into biomass by photosynthesis, in closed photobioreactors or open raceway ponds on land that cannot grow crops.',
         lab: 'We study how Chlamydomonas switches on its carbon-concentrating mechanism when CO₂ is scarce: the nuclear proteome, and the shifts in lipids and carotenoids that follow.',
         alts: [
-          'Array of glowing photobioreactor columns filled with green culture',
+          'Flat-panel algae photobioreactors in a sunlit greenhouse',
           'Algae raceway ponds with paddle wheels at sunrise',
           'Building facade of glass panels filled with algae culture',
         ],
@@ -98,7 +98,7 @@ const en = {
         general: 'Algae make omega-3 fatty acids, carotenoid pigments, vitamins and UV-screening compounds that are in demand as supplements and functional foods.',
         lab: 'We engineer microalgae toward vitamin D3 and mycosporine-like amino acids, and review microalgal derivatives as nutraceuticals and pharmaceuticals.',
         alts: [
-          'Golden and ruby algal oil capsules on a glass dish over rippling water',
+          'Spirulina powder and red-orange algal pigment extract on a laboratory bench',
           'Bowl of spirulina powder with a wooden scoop and a dropper bottle on stone',
         ],
       },
@@ -108,7 +108,7 @@ const en = {
         general: 'Microalgae take up nitrogen, phosphorus and metals from wastewater as they grow, so treatment and biomass production can happen in the same tank.',
         lab: 'Our reviews and chapters cover phycoremediation of emerging contaminants, heavy-metal removal and cyanobacteria in wastewater treatment.',
         alts: [
-          'Two measuring cylinders comparing untreated wastewater with microalgae-treated water',
+          'Paddlewheel circulating green water in an algae treatment raceway',
           'Green algal beads on a steel mesh under running water',
           'Clear tank where treated water spills over a weir from algae-filled water',
         ],
@@ -163,6 +163,7 @@ const en = {
       jrf: 'Junior Research Fellow',
       mentee: 'Research mentee',
       trainee: 'Research trainee',
+      student: 'Student',
     },
     joined: 'Joined {year}',
     now: 'Now',

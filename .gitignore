@@ -32,3 +32,12 @@ next-env.d.ts
 
 # Source data with personal contact details: keep out of the public repo
 lab details.xlsx
+
+# Local image experiments, review sheets, and source uploads
+/branding-review/
+/portrait-review/
+/research-image-review/
+/member-update-review/
+/lab details.pdf
+/lab details(Sheet1).csv
+/WhatsApp Image*.pdf

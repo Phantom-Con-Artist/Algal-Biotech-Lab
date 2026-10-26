@@ -69,10 +69,12 @@ export function MemberView({ member, locale }: { member: LabMember; locale: Loca
           {bio && <p className="text-lede mt-8 max-w-[60ch] text-ink-2">{bio}</p>}
           {!isPi && locale !== 'en' && <p className="mt-3 text-sm text-mute">{p.bioNote}</p>}
 
-          <div className="mt-8">
-            <p className="label mb-3">{p.interests}</p>
-            <Tags items={isPi ? p.pi.focus : member.interests} />
-          </div>
+          {(isPi || member.interests.length > 0) && (
+            <div className="mt-8">
+              <p className="label mb-3">{p.interests}</p>
+              <Tags items={isPi ? p.pi.focus : member.interests} />
+            </div>
+          )}
 
           <div className="mt-12">
             <MemberDetails member={member} locale={locale} />

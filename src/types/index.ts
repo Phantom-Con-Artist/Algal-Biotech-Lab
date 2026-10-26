@@ -30,7 +30,7 @@ export interface Milestone {
   period: string;
 }
 
-export type MemberRole = 'pi' | 'srf' | 'phd' | 'jrf' | 'mentee' | 'trainee';
+export type MemberRole = 'pi' | 'srf' | 'phd' | 'jrf' | 'mentee' | 'trainee' | 'student';
 export type MemberStatus = 'pi' | 'current' | 'alumni';
 
 /** A work listed by a member that is not in the lab's publication list. */
