@@ -1,0 +1,34 @@
+---
+import type { Publication } from '../../types';
+import Icon from './Icon.astro';
+import { citation, doiUrl, labMemberFor, searchText } from '../../data/lib';
+import { PUB_TYPE_LABEL } from '../../data/content';
+
+interface Props { p: Publication; showType?: boolean; filterable?: boolean }
+const { p, showType = true, filterable = false } = Astro.props;
+const date = p.month ? `${p.month.slice(0, 3)} ${p.year}` : String(p.year);
+---
+<li class="pub" data-pub={filterable ? '' : undefined} data-type={p.type} data-text={filterable ? searchText(p) : undefined}>
+  <article class="pub__row">
+    <p class="pub__year"><time datetime={String(p.year)}>{date}</time></p>
+    <div>
+      <h3 class="pub__title"><a href={doiUrl(p.doi)} target="_blank" rel="noopener">{p.title}</a></h3>
+      <p class="pub__authors">
+        {p.authors.map((a, i) => {
+          const m = labMemberFor(a);
+          const sep = i < p.authors.length - 1 ? ', ' : '';
+          return m ? <><b>{a}</b>{sep}</> : <>{a}{sep}</>;
+        })}
+      </p>
+    </div>
+    <div class="pub__side">
+      <p class="pub__venue"><i>{p.venue}</i>{p.detail && <>, {p.detail}</>}</p>
+      {showType && <p class="pub__type">{PUB_TYPE_LABEL[p.type]}</p>}
+      <div class="pub__actions">
+        <a href={doiUrl(p.doi)} target="_blank" rel="noopener" aria-label={`DOI ${p.doi} (opens publisher page)`}><Icon name="doi" />DOI</a>
+        {p.pmid && <a href={`https://pubmed.ncbi.nlm.nih.gov/${p.pmid}/`} target="_blank" rel="noopener">PubMed</a>}
+        <button type="button" data-copy={citation(p)} aria-label={`Copy citation: ${p.title}`}><Icon name="copy" /><span data-copy-label>Copy citation</span></button>
+      </div>
+    </div>
+  </article>
+</li>

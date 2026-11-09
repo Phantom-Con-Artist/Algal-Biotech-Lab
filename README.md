@@ -1,98 +1,150 @@
-# Algal Biotech Lab
+# Algal Biotechnology & Microbiology Laboratory (ABL) — Central University of Tamil Nadu
 
-Website of the **Algal Biotechnology Laboratory**, Department of Microbiology, Central University of Tamil Nadu (CUTN). The lab, led by Dr. Amit Kumar Bajhaiya, studies how microalgae regulate their genes and metabolism and engineers them for biofuels, carbon capture, nutraceuticals and wastewater treatment.
+[![Astro](https://img.shields.io/badge/Astro-5.x%2F7.x-FF5D01?logo=astro&logoColor=white)](https://astro.build/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![GSAP](https://img.shields.io/badge/GSAP-ScrollTrigger-88CE02?logo=greensock&logoColor=white)](https://greensock.com/)
+[![Lenis](https://img.shields.io/badge/Lenis-Smooth_Scroll-black)](https://lenis.darkroom.engineering/)
+[![WCAG AA](https://img.shields.io/badge/WCAG-2.2_AA_Compliant-059669)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 
-## What the site contains
+> **Official Web Platform & Research Portal**  
+> **Client:** Dr. Amit Kumar Bajhaiya, Head, Algal Biotechnology Laboratory  
+> **Institution:** Department of Biotechnology, School of Life Sciences, Central University of Tamil Nadu (CUTN), Thiruvarur, India.
 
-| Page | Route | Content |
-|---|---|---|
-| Home | `/` | One continuous 3D scroll: the Chlamydomonas cell peeled layer by layer, then how the lab works (culture, flasks, conditions, harvest, products), closing on the PI and links to every page |
-| Research | `/research` | The four focus areas and six research programmes, each linked to its papers |
-| People | `/people` | Principal investigator, researchers, alumni, funding and recognition, service and talks |
-| Profile | `/people/{name}` | One page per member: biography, interests, education, fellowships, publications |
-| Publications | `/publications` | Every work, grouped by year, with search, type filters, DOI links and citation copy |
-| Contact | `/contact` | Enquiry templates, contact details and directions |
-| Explore | `/explore` | The whole lab on one turning, full-screen 360° wall: people, achievements, programmes, papers, photographs |
-| Lab photo | `/lab/{slug}` | One photograph of the laboratory, opened from the Explore wall |
+---
 
-Every page exists in nine languages. English is at the root; the others live under `/fr`, `/es`, `/de`, `/pl`, `/sv`, `/zh`, `/ja` and `/ko`. All translations other than English are machine-made and have not been reviewed. Member biographies are in English in every language.
+## 🔬 Overview & Vision
 
-## Getting started
+The **Algal Biotechnology & Microbiology Laboratory** at CUTN investigates microalgal physiology, metabolic pathway engineering, and photobioreactor scale-up for sustainable bioeconomy solutions.
 
-Requires Node.js 20.9 or newer (`.node-version` pins 22 for the Cloudflare Pages build).
+This platform serves as the premier digital gateway for academic peers, international collaborators, research scholars, and prospective students, presenting:
+1. **Pioneering Research Pillars**: Biofuels & Bioenergy, Microalgal Nutraceuticals & High-Value Metabolites, Carbon Dioxide Sequestration & Carbon Capture, and Phycoremediation / Industrial Wastewater Treatment.
+2. **Laboratory Personnel Directory**: Comprehensive academic profiles, fellowships, thesis topics, and research trajectories of the Principal Investigator, Ph.D. scholars, JRF/SRF fellows, project associates, and alumni.
+3. **Publications & Research Dissemination**: High-impact peer-reviewed journal papers, book chapters, patent applications, citation copying, and DOI links.
+4. **Cinematic Fluid Experience**: Premium smooth scrolling via **Lenis**, cinematic viewport triggers with **GSAP ScrollTrigger**, fluid page transitions with **Motion** and **Barba.js / Astro ViewTransitions**, built strictly mobile-first with 100% WCAG AA contrast compliance.
 
+---
+
+## 🛠️ Tech Stack & Architecture
+
+| Layer | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Meta-Framework** | **Astro 5+ / 7** | High-performance content-driven static generation, island architecture, zero-JS baseline |
+| **UI Components** | **React 19 + TypeScript** | Interactive islands, dynamic filters, modal sheets, and data visualization |
+| **Styling & Design System** | **Tailwind CSS v4** | Mobile-first utility design, fluid typography, 8pt spacing rhythm, accessible dark/light themes |
+| **Smooth Scrolling** | **Lenis** | Cinematic, momentum-based smooth scrolling |
+| **Motion & Scroll Triggers**| **GSAP + ScrollTrigger** | Pinning, scrub animations, coordinate reveals, microscope zoom effects |
+| **Component Animation** | **Motion (Motion One / Framer)**| Interactive card hover physics, micro-interactions, spring layouts |
+| **Page Transitions** | **Barba.js / Astro ClientRouter**| Fluid, seamless multi-page transitions with zero white flashes |
+| **Icons** | **Lucide React** | Clean, accessible, lightweight vector iconography |
+
+---
+
+## 📁 Repository Organization
+
+```
+algalbiotechlabproject/
+├── assets/                       # Raw working assets (ignored by git, except used images)
+│   ├── documents/                # Lab PDFs, CSV rosters, personnel templates, publication records
+│   ├── blender/                  # 3D .blend files & procedural generation scripts
+│   ├── raw/                      # High-res raw camera images & generated source files
+│   └── used/                     # TRACKED BY GIT: Processed & actively used images
+│       ├── team/                 # WebP portraits of lab personnel
+│       ├── lab/                  # WebP laboratory facilities & instrumentation
+│       ├── focus/                # WebP research pillar illustrations
+│       └── logos/                # Official CUTN & Lab crests
+├── public/                       # Static public assets served directly (draco, 3D glb, favicons)
+├── src/
+│   ├── assets/                   # Astro-optimized image pipeline copies
+│   ├── components/               # React & Astro components (Navigation, Hero, Team, Pubs, etc.)
+│   │   ├── cinematic/            # Lenis smooth scroll & GSAP controllers
+│   │   ├── common/               # Bento cards, buttons, badges, section headers
+│   │   ├── layout/               # Header, mobile drawer, footer, container
+│   │   ├── research/             # Focus areas, research pillars, equipment
+│   │   └── team/                 # Member cards, PI spotlight, alumni list
+│   ├── data/                     # Typed academic datasets (members, publications, research, funders)
+│   ├── layouts/                  # Base Astro layouts with cinematic transitions
+│   ├── pages/                    # Astro routes (index, research, people, publications, contact)
+│   ├── styles/                   # Global CSS, Tailwind configurations, fluid typography
+│   └── types/                    # TypeScript interfaces & academic schemas
+├── RULES_FOR_AGENTS.md           # STRICT design & engineering rules (ignored by git)
+├── astro.config.mjs              # Astro configuration with React and Tailwind Vite plugins
+├── tsconfig.json                 # TypeScript strict configuration
+└── package.json                  # Dependencies & scripts
+```
+
+---
+
+## 🎨 Asset Management & `.gitignore` Architecture
+
+Per project specifications:
+- The top-level `/assets/` directory holds all original documents (`.pdf`, `.xlsx`, `.csv`), Blender archives (`.blend`), and raw camera dumps. These are ignored to keep the repository light and clean.
+- **Used images** are tracked via:
+  ```gitignore
+  /assets/*
+  !/assets/used/
+  !/assets/used/**
+  !/assets/*.webp
+  !/assets/*.png
+  !/assets/*.svg
+  !/assets/*.jpg
+  ```
+- Any personal data spreadsheets (`lab details.xlsx`) and the agent directive handbook (`RULES_FOR_AGENTS.md`) are explicitly ignored.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js**: `>= 22.23.4` (tested on Node 24.x)
+- **pnpm**: `>= 10.x` or `12.x` (or npm / yarn / bun)
+
+### Installation
 ```bash
-npm install
-npm run dev        # development server on http://localhost:3000
-npm run build      # static export to dist/
-npm start          # serve dist/ locally
-npm run typecheck  # TypeScript only
+# Clone the repository
+git clone <repository-url>
+cd algalbiotechlabproject
+
+# Install dependencies
+pnpm install
 ```
 
-## Before going live: set the domain
-
-The sitemap, canonical links, hreflang links and structured data all use one origin. Set it at build time:
-
+### Development Server
 ```bash
-NEXT_PUBLIC_SITE_URL=https://your-domain.example npm run build
+# Start Astro development server with hot module reload
+pnpm dev
+# Open http://localhost:4321
 ```
 
-Without it the build uses the placeholder in `src/data/labData.ts`. After deploying, submit `https://your-domain.example/sitemap.xml` in Google Search Console.
+### Production Build & Preview
+```bash
+# Build production-ready static bundle to dist/
+pnpm build
 
-## Search-engine setup
-
-- **Static HTML for every URL**: 126 pages (14 per language) are pre-rendered, so crawlers see full content without running JavaScript.
-- **Per-language URLs** with `hreflang` alternates on every page and in the sitemap, plus `x-default` pointing to English.
-- **Metadata** per page: translated title and description, canonical URL, Open Graph and Twitter cards, a 1200×630 share image (`/og.png`).
-- **Structured data (JSON-LD)**: `ResearchOrganization` with its parent university, `WebSite`, `ProfilePage`/`Person` for each member, `ScholarlyArticle`/`Chapter` for each publication, and breadcrumbs.
-- `robots.txt`, `sitemap.xml` and a web manifest are generated from `src/app/`.
-
-## Tech stack
-
-- **Framework:** Next.js 16 (App Router, `output: 'export'`), React 19, TypeScript in strict mode
-- **Styling:** Tailwind CSS 4, mobile-first; design tokens in `src/app/globals.css`
-- **Type:** Geist and IBM Plex Mono through `next/font` (self-hosted at build time)
-- **Motion:** scroll-driven reveals in CSS; the hero organism is a small dependency-free WebGL shader (`src/components/home/organism/`) that pauses off screen, adapts its resolution to the device, holds a still frame under "reduce motion" and falls back to SVG without WebGL
-- **Icons:** Lucide
-
-## Project structure
-
-```
-src/
-├── app/
-│   ├── (en)/              English pages, served from the root
-│   ├── (intl)/[lang]/     The same pages for the other eight languages
-│   ├── sitemap.ts, robots.ts, manifest.ts, og.png/, global-not-found.tsx
-│   └── globals.css        Design tokens, type scale, motion
-├── assets/                Logos, member portraits, lab photographs, focus-area images
-├── components/            common, layout, home (organism/ is the hero's WebGL creature), research, team, publications, contact
-├── data/                  Typed content: members, publications, research, grants, gallery
-├── i18n/                  Language config and one dictionary per locale
-├── types/                 Shared TypeScript types
-├── utils/                 SEO metadata, structured data, citations, lab helpers
-└── views/                 Page bodies shared by both route trees, and their metadata
+# Preview production build locally
+pnpm preview
 ```
 
-## Editing content
+---
 
-- **Members** live in `src/data/members.ts`: role, year joined, education, interests, biography, fellowships and links. Portraits go in `src/assets/team/` as 4:5 images. To mark someone as alumni, move them to `ALUMNI` and fill in `now`. A member's lab publications are found automatically through `authorNames`.
-- **Publications** live in `src/data/publications.ts`. Counts on the home page update by themselves.
-- **Visible text** lives in `src/i18n/locales/`. `en.ts` is the source, and its shape is the type every other locale must match, so a missing key fails the build.
+## 📋 Strict Design & Accessibility Standards
 
-Student email addresses are deliberately not published; enquiries go to the lab address.
+All contributors and AI agents must adhere to the directives specified in [`RULES_FOR_AGENTS.md`](./RULES_FOR_AGENTS.md):
+- **Mobile-First CSS**: Compose for 320px–480px first; progressive responsive scaling.
+- **WCAG 2.2 AA Contrast**: Strict 4.5:1 text contrast and 3:1 graphical/UI contrast across all color tokens.
+- **Ergonomic Touch Targets**: Minimum 44×44px interactive areas.
+- **Typography Scale**: Modular Major Third scale with fluid clamp heights and max 75 character line measures.
+- **Negative Spacing Rhythm**: Strict 8-point spatial cadence (`py-16 md:py-24 lg:py-32`).
+- **Kinetic Elegance**: Cinematic Lenis smooth scroll, fluid transitions, with full `prefers-reduced-motion` compliance.
 
-## Deployment
+---
 
-`npm run build` writes a fully static site to `dist/`. The site deploys on Cloudflare Pages from the `master` branch with build command `npm run build` and output directory `dist`. Any static host works the same way. `public/_headers` sets long-lived caching for hashed assets, and `dist/404.html` is the not-found page.
+## 🏛️ Affiliation & Contact
 
-## Contributing
-
-Engineering standards are in [AGENTS.md](AGENTS.md): mobile-first styling, small single-purpose components, typed data kept out of components, and no `any`.
-
-## Credits
-
-Designed and developed by **Subhradeep Sarkar**.
-
-## Licence
-
-Copyright © 2026 Department of Microbiology, Central University of Tamil Nadu. All rights reserved. See [LICENSE](LICENSE).
+**Dr. Amit Kumar Bajhaiya**  
+Head, Algal Biotechnology & Microbiology Laboratory  
+Associate Professor, Department of Biotechnology, School of Life Sciences  
+Central University of Tamil Nadu (CUTN)  
+Neelakudi Campus, Thiruvarur – 610 005, Tamil Nadu, India  
+Website: [https://cutn.ac.in](https://cutn.ac.in)

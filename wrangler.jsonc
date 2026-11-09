@@ -1,5 +1,4 @@
-// Cloudflare Pages: the site is a static export in ./dist (next.config.ts `output: 'export'`).
-// Deploy with `npm run deploy` (builds, then uploads with Wrangler).
+// Cloudflare Pages: Astro builds a static site into ./dist (`pnpm build`).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "algal-biotech-lab",

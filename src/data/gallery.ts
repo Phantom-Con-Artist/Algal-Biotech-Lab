@@ -1,4 +1,4 @@
-import type { StaticImageData } from 'next/image';
+import type { StaticImageData } from '../types';
 import lab1 from '../assets/lab/lab-01.webp';
 import lab2 from '../assets/lab/lab-02.webp';
 import lab3 from '../assets/lab/lab-03.webp';

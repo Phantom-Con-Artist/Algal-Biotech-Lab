@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+import Nav from '../components/site/Nav.astro';
+import Footer from '../components/site/Footer.astro';
+import { SITE_URL } from '../data/labData';
+
+interface Props {
+  title?: string;
+  description?: string;
+  namespace?: string;
+  footerCta?: boolean;
+}
+
+const {
+  title = 'Algal Biotechnology Laboratory | CUTN',
+  description = 'The Algal Biotechnology Laboratory at the Central University of Tamil Nadu studies Chlamydomonas and related microalgae: gene regulation, stress, carbon concentration, phosphate storage, lipids for biofuel and bioactive products.',
+  namespace = 'page',
+  footerCta = true,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-icon.png" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={new URL('/icon.png', SITE_URL).href} />
+
+
+    <!-- Motion gate: content is visible without JS; with motion allowed, reveals start hidden.
+         If the app script never boots, the gate opens again after 2.5s. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          d.classList.add('motion');
+          try { if (!sessionStorage.getItem('abl-intro')) d.dataset.startup = 'on'; } catch (e) {}
+          setTimeout(function () { if (!window.__ablReady) { d.classList.remove('motion'); delete d.dataset.startup; } }, 2500);
+        }
+      })();
+    </script>
+  </head>
+  <body data-barba="wrapper">
+    <a class="skip" href="#main">Skip to content</a>
+    <!-- First visit in a session: a short count while fonts and the first clips load -->
+    <div class="startup" data-startup-screen aria-hidden="true">
+      <video class="startup__film" data-startup-film muted playsinline preload="none">
+        <source src="/clips/cut/intro.mp4" type="video/mp4" />
+      </video>
+      <p class="startup__word" data-startup-word></p>
+      <div class="startup__title" data-startup-title>
+        <p><span>Algal Biotechnology</span></p>
+        <p><span>Laboratory</span></p>
+      </div>
+      <p class="startup__copy startup__copy--tl">Algal Biotechnology Laboratory<br />Central University of Tamil Nadu</p>
+      <p class="startup__copy startup__copy--bl">Thiruvarur, Tamil Nadu</p>
+      <p class="startup__skip">Click or press any key to skip</p>
+    </div>
+    <Nav />
+
+    <main id="main" data-barba="container" data-barba-namespace={namespace}>
+      <slot />
+      <Footer cta={footerCta} />
+    </main>
+
+    <!-- Progressive blur along the bottom edge (after studiokalex) -->
+    <div class="bottom-blur" aria-hidden="true">
+      <i style="backdrop-filter:blur(0.5px);-webkit-backdrop-filter:blur(0.5px);mask-image:linear-gradient(to bottom,transparent 0%,#000 12.5%,#000 25%,transparent 37.5%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 12.5%,#000 25%,transparent 37.5%)"></i>
+      <i style="backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);mask-image:linear-gradient(to bottom,transparent 12.5%,#000 25%,#000 37.5%,transparent 50%);-webkit-mask-image:linear-gradient(to bottom,transparent 12.5%,#000 25%,#000 37.5%,transparent 50%)"></i>
+      <i style="backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);mask-image:linear-gradient(to bottom,transparent 25%,#000 37.5%,#000 50%,transparent 62.5%);-webkit-mask-image:linear-gradient(to bottom,transparent 25%,#000 37.5%,#000 50%,transparent 62.5%)"></i>
+      <i style="backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);mask-image:linear-gradient(to bottom,transparent 37.5%,#000 50%,#000 62.5%,transparent 75%);-webkit-mask-image:linear-gradient(to bottom,transparent 37.5%,#000 50%,#000 62.5%,transparent 75%)"></i>
+      <i style="backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);mask-image:linear-gradient(to bottom,transparent 50%,#000 62.5%,#000 75%,transparent 87.5%);-webkit-mask-image:linear-gradient(to bottom,transparent 50%,#000 62.5%,#000 75%,transparent 87.5%)"></i>
+      <i style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);mask-image:linear-gradient(to bottom,transparent 62.5%,#000 75%,#000 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 62.5%,#000 75%,#000 100%)"></i>
+    </div>
+    <p id="announcer" class="sr-only" aria-live="polite"></p>
+
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>

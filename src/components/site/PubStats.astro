@@ -1,0 +1,97 @@
+---
+/**
+ * Publication record at a glance: totals by type, then papers per year.
+ * Every number is computed from src/data/publications.ts. Each bar links to
+ * that year's list below; a table carries the same data for screen readers.
+ */
+import { PUBLICATIONS } from '../../data/publications';
+
+const count = (t: string) => PUBLICATIONS.filter((p) => p.type === t).length;
+const years = PUBLICATIONS.map((p) => p.year);
+const first = Math.min(...years);
+const last = Math.max(...years);
+const perYear = Array.from({ length: last - first + 1 }, (_, i) => {
+  const y = first + i;
+  return { y, n: PUBLICATIONS.filter((p) => p.year === y).length };
+});
+const max = Math.max(...perYear.map((d) => d.n));
+const FIGURES = [
+  { label: 'Works', value: String(PUBLICATIONS.length) },
+  { label: 'Articles', value: String(count('article')) },
+  { label: 'Chapters', value: String(count('chapter')) },
+  { label: 'Preprints', value: String(count('preprint')) },
+  { label: 'Years', value: `${first}–${String(last).slice(2)}` },
+];
+---
+<section class="pstats" aria-labelledby="pstats-title">
+  <h2 id="pstats-title" class="sr-only">Publication record</h2>
+  <dl class="pstats__figures" data-stagger>
+    {FIGURES.map((f) => (
+      <div><dt>{f.label}</dt><dd>{f.value}</dd></div>
+    ))}
+  </dl>
+
+  <figure class="pstats__chart" data-bars>
+    <figcaption>Papers per year</figcaption>
+    <div class="pstats__plot" aria-hidden="true">
+      {perYear.map((d) => (
+        <a class="pstats__bar" href={d.n ? `#y-${d.y}` : undefined} tabindex="-1" style={`--h:${d.n / max}`} data-tip={`${d.y}: ${d.n} ${d.n === 1 ? 'paper' : 'papers'}`}>
+          <i></i>
+          <span class="pstats__tip">{d.y}<b>{d.n} {d.n === 1 ? 'paper' : 'papers'}</b></span>
+        </a>
+      ))}
+    </div>
+    <div class="pstats__axis" aria-hidden="true">
+      {perYear.map((d) => <span>{String(d.y).slice(2)}</span>)}
+    </div>
+    <table class="sr-only">
+      <caption>Papers per year</caption>
+      <thead><tr><th scope="col">Year</th><th scope="col">Papers</th></tr></thead>
+      <tbody>{perYear.map((d) => <tr><th scope="row">{d.y}</th><td>{d.n}</td></tr>)}</tbody>
+    </table>
+  </figure>
+</section>
+
+<style>
+  .pstats { border-top: 1px solid var(--line-strong); padding-top: 24px; margin-bottom: clamp(56px, 7vw, 96px); }
+  .pstats__figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 24px; margin: 0; }
+  @media (min-width: 768px) { .pstats__figures { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+  .pstats__figures dt { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .pstats__figures dd { margin: 6px 0 0; font-size: var(--step-4); font-weight: 500; letter-spacing: -0.03em; line-height: 1; }
+
+  .pstats__chart { margin: clamp(48px, 6vw, 72px) 0 0; }
+  .pstats__chart figcaption { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 20px; }
+  .pstats__plot {
+    position: relative; height: clamp(120px, 14vw, 180px);
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px;
+    align-items: end;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .pstats__bar { position: relative; height: 100%; display: flex; align-items: flex-end; }
+  .pstats__bar i {
+    display: block; width: 100%;
+    height: calc(var(--h) * 100%);
+    min-height: 0;
+    background: var(--ink-2);
+    border-radius: 4px 4px 0 0;
+    transform-origin: 50% 100%;
+    transition: background-color 0.2s;
+  }
+  .pstats__bar[href]:hover i { background: var(--ink); }
+  .pstats__tip {
+    position: absolute; left: 50%; bottom: calc(var(--h) * 100% + 10px);
+    translate: -50% 4px;
+    display: grid; gap: 2px; white-space: nowrap;
+    padding: 8px 12px; border-radius: 10px;
+    background: var(--ink); color: var(--paper);
+    font-size: 0.8rem; line-height: 1.3;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s, translate 0.25s var(--ease-out);
+    z-index: 2;
+  }
+  .pstats__tip b { font-weight: 600; font-size: 0.95rem; }
+  .pstats__bar:hover .pstats__tip { opacity: 1; translate: -50% 0; }
+  .pstats__axis { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; margin-top: 10px; }
+  .pstats__axis span { text-align: center; font-size: 0.8rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  html.motion .pstats__bar i { transform: scaleY(0); }
+</style>

@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../../assets/logos/abl-mark.png';
+import { NAV } from '../../data/site';
+import { LAB_INFO } from '../../data/labData';
+---
+<!-- Transparent header, blended with difference so it reads over light and dark -->
+<header class="nav" data-nav>
+  <div class="nav__bar">
+    <a class="nav__brand" href="/" data-label="Algal Biotech Lab" aria-label="Algal Biotechnology Laboratory, home">
+      <Image src={logo} alt="" width={64} loading="eager" />
+      <span>algalbiotechlab</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="nav__links">
+        {NAV.map((item) => (
+          <li><a href={item.href} data-nav-link data-label={item.label}><span class="draw">{item.label}</span></a></li>
+        ))}
+      </ul>
+    </nav>
+    <button class="nav__burger" type="button" aria-expanded="false" aria-controls="site-menu" data-burger>
+      <span data-burger-label>Menu</span><i aria-hidden="true"></i>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu, outside the blended header -->
+<div class="menu" id="site-menu" data-sheet>
+  <nav aria-label="Mobile">
+    <ol>
+      <li><a href="/" data-nav-link data-label="Algal Biotech Lab">Home</a></li>
+      {NAV.map((item) => (
+        <li><a href={item.href} data-nav-link data-label={item.label}>{item.label}</a></li>
+      ))}
+    </ol>
+  </nav>
+  <div class="menu__foot">
+    <a class="link" href={`mailto:${LAB_INFO.email}`} data-no-barba>{LAB_INFO.email}</a>
+    <span>{LAB_INFO.address.join(', ')}</span>
+  </div>
+</div>

@@ -1,47 +1,45 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# Build output & dependencies
+node_modules/
+dist/
+.astro/
+.cache/
 
-node_modules
-dist
-dist-ssr
-*.local
+# Environment variables & local secrets
+.env
+.env.*
+!.env.example
 
-# Editor directories and files
+# OS and IDE metadata
+.DS_Store
+Thumbs.db
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
+.playwright-mcp/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Next.js
-.next
-out
-next-env.d.ts
-*.tsbuildinfo
-.playwright-mcp
+# Agent operational rules file (ignored per instructions)
+RULES_FOR_AGENTS.md
 
-# Source data with personal contact details: keep out of the public repo
+# Source data containing private personal contact details
+*.xlsx
 lab details.xlsx
 
-# Local image experiments, review sheets, and source uploads
-/branding-review/
-/portrait-review/
-/research-image-review/
-/member-update-review/
-/lab details.pdf
-/lab details(Sheet1).csv
-/WhatsApp Image*.pdf
+# Assets folder configuration:
+# Ignore raw assets, heavy blender archives, and working documents under assets/
+/assets/*
+# Allow used images to be tracked by git
+!/assets/used/
+!/assets/used/**
+!/assets/*.webp
+!/assets/*.png
+!/assets/*.svg
+!/assets/*.jpg
+!/assets/*.jpeg
 
-# Local asset exports and Blender recovery copies
-/output/
-*.blend[0-9]*
+# licensed stock footage sources (Mixkit), kept local
+motion/public/footage/

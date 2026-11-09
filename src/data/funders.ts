@@ -1,4 +1,4 @@
-import type { StaticImageData } from 'next/image';
+import type { StaticImageData } from '../types';
 import dst from '../assets/funders/dst.png';
 import anrf from '../assets/funders/anrf.png';
 import inspire from '../assets/funders/inspire.png';

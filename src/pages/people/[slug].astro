@@ -1,0 +1,110 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/site/Icon.astro';
+import PubItem from '../../components/site/PubItem.astro';
+import { MEMBERS, PI, PI_PATH, fullName } from '../../data/members';
+import { ROLE_LABEL } from '../../data/content';
+import { papersBy } from '../../data/lib';
+import type { LabMember } from '../../types';
+
+export function getStaticPaths() {
+  return MEMBERS.map((m) => ({ params: { slug: m.slug }, props: { m } }));
+}
+
+interface Props { m: LabMember }
+const { m } = Astro.props;
+const i = MEMBERS.findIndex((x) => x.slug === m.slug);
+const prev = MEMBERS[(i - 1 + MEMBERS.length) % MEMBERS.length];
+const next = MEMBERS[(i + 1) % MEMBERS.length];
+const papers = papersBy(m);
+const isPI = m.slug === PI.slug;
+const status = m.status === 'alumni' ? 'Former member' : isPI ? 'Head of the laboratory' : 'Current member';
+
+const LINK_LABELS: Record<string, string> = {
+  orcid: 'ORCID', scholar: 'Google Scholar', researchGate: 'ResearchGate', linkedin: 'LinkedIn', profile: 'CUTN profile', cv: 'Curriculum vitae',
+};
+const links = Object.entries(m.links).filter(([, v]) => v) as [string, string][];
+const summary = m.bio ?? `${fullName(m)} is a member of the Algal Biotechnology Laboratory at the Central University of Tamil Nadu.`;
+---
+<Layout
+  title={`${fullName(m)} | Algal Biotechnology Laboratory, CUTN`}
+  description={summary.slice(0, 155)}
+  namespace="profile"
+>
+  <section class="phero" data-intro>
+    <div class="wrap">
+      <div class="profile-hero">
+        <div class="pi__portrait" data-clip>
+          <Image src={m.photo} alt={`Portrait of ${fullName(m)}`} widths={[280, 560]} sizes="280px" loading="eager" style={`object-position:${m.photoPosition ?? '50% 30%'}`} />
+        </div>
+        <h1 class="h1" data-lines>{fullName(m)}</h1>
+        <p class="lead" data-reveal>{ROLE_LABEL[m.role]}. {status}, joined {m.joined}.{m.now && <><br /><span class="faint">Now: {m.now}</span></>}</p>
+        {links.length > 0 && (
+          <div class="chips" data-reveal>
+            {links.map(([k, href]) => (
+              <a class="chip" href={href} target="_blank" rel="noopener">{LINK_LABELS[k] ?? k}</a>
+            ))}
+            {m.email && <a class="chip" href={`mailto:${m.email}`} data-no-barba>{m.email}</a>}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--top-0">
+    <div class="wrap">
+      <div class="profile-cols">
+        <aside class="facts" data-stagger>
+          {m.interests.length > 0 && (
+            <div><h2>Research interests</h2><div class="chips">{m.interests.map((x) => <span class="chip">{x}</span>)}</div></div>
+          )}
+          <div><h2>Education</h2><ul>{m.education.map((e) => <li>{e}</li>)}</ul></div>
+          {m.fellowships.length > 0 && <div><h2>Fellowships & awards</h2><ul>{m.fellowships.map((f) => <li>{f}</li>)}</ul></div>}
+        </aside>
+        <div>
+          <div class="prose" style="font-size: var(--step-1); line-height: 1.6" data-reveal>
+            <p>{summary}</p>
+          </div>
+          {isPI && (
+            <ol class="path" data-stagger>
+              {PI_PATH.map((s) => <li><time>{s.period}</time><span>{s.place}</span></li>)}
+            </ol>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {papers.length > 0 && (
+    <section class="sec sec--top-0" aria-labelledby="papers-title">
+      <div class="wrap">
+        <h2 id="papers-title" class="h3" style="margin-bottom: 24px">Publications with the laboratory <span class="faint">({papers.length})</span></h2>
+        <ul class="pubs">{papers.map((p) => <PubItem p={p} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  {m.otherWorks.length > 0 && (
+    <section class="sec sec--top-0" aria-labelledby="other-title">
+      <div class="wrap">
+        <h2 id="other-title" class="h3" style="margin-bottom: 24px">Other publications</h2>
+        <ul class="ledger">
+          {m.otherWorks.map((w) => (
+            <li style="display:block"><span>{w.href ? <a class="link" href={w.href} target="_blank" rel="noopener">{w.citation}</a> : w.citation}</span></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="sec sec--tight">
+    <div class="wrap">
+      <nav class="pager" aria-label="More people">
+        <a href={`/people/${prev.slug}`} data-label={prev.name}><small>Previous</small>{fullName(prev)}</a>
+        <a href={`/people/${next.slug}`} data-label={next.name}><small>Next</small>{fullName(next)}</a>
+      </nav>
+      <p style="margin-top: 32px; text-align:center"><a class="arrow-link" href="/people">All members <Icon name="arrow-up" /></a></p>
+    </div>
+  </section>
+</Layout>

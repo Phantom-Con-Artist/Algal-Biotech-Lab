@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/site/Icon.astro';
+---
+<Layout title="Page not found | Algal Biotechnology Laboratory" namespace="404" footerCta={false}>
+  <section class="hero" data-intro>
+    <div class="wrap">
+      <div class="hero__inner">
+        <h1 class="h1" data-lines>Page not found</h1>
+        <p class="lead" data-reveal>The page you requested does not exist. It may have moved when the website was rebuilt.</p>
+        <div class="btn-row" data-reveal>
+          <a class="btn" href="/">Home <Icon name="arrow" /></a>
+          <a class="btn btn--ghost" href="/publications">Publications</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

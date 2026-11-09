@@ -1,0 +1,58 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Icon from '../components/site/Icon.astro';
+import { INQUIRY_TEMPLATES, mailto } from '../data/inquiries';
+import { LAB_INFO } from '../data/labData';
+import { PI, fullName } from '../data/members';
+import { DEPARTMENT } from '../data/site';
+
+const CARDS = [
+  { title: 'Collaboration', body: 'Joint research projects, or an exchange of strains or methods.' },
+  { title: 'Prospective students', body: 'Ph.D. and M.Sc. enquiries. The template asks for your degree, research interests and funding status.' },
+  { title: 'General enquiries', body: 'Questions about a publication, invitations to speak, or anything else.' },
+];
+---
+<Layout
+  title="Contact | Algal Biotechnology Laboratory, CUTN"
+  description="Contact the Algal Biotechnology Laboratory at CUTN about collaboration, research positions or general enquiries. Address, telephone and directions."
+  namespace="contact"
+  footerCta={false}
+>
+  <PageHero>
+    <Fragment slot="title">Contact</Fragment>
+    <Fragment slot="lead">Choose an enquiry type. Your email client opens a short template addressed to {fullName(PI)}.</Fragment>
+  </PageHero>
+
+  <section class="sec sec--top-0" aria-label="Enquiry types">
+    <div class="wrap">
+      <ul class="inquiries" data-stagger>
+        {INQUIRY_TEMPLATES.map((t, i) => (
+          <li>
+            <a class="inquiry" href={mailto(t.subject, t.body)} data-no-barba>
+              <div>
+                <h2 class="h3">{CARDS[i].title}</h2>
+                <p>{CARDS[i].body}</p>
+              </div>
+              <span class="go">Write an email <Icon name="arrow-up" /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" style="background: var(--paper-2)" aria-labelledby="details-title">
+    <div class="wrap">
+      <header class="head"><h2 id="details-title" class="h2" data-lines>Address and telephone</h2></header>
+      <dl class="details" data-stagger>
+        <div><dt>Email</dt><dd><a class="link" href={`mailto:${LAB_INFO.email}`} data-no-barba>{LAB_INFO.email}</a></dd></div>
+        <div><dt>Telephone</dt><dd><a class="link" href={LAB_INFO.phoneHref} data-no-barba>{LAB_INFO.phone}</a></dd></div>
+        <div><dt>Post</dt><dd>Algal Biotechnology Laboratory<br />{DEPARTMENT}<br />{LAB_INFO.institution}<br />{LAB_INFO.address[0]}<br />{LAB_INFO.address[1]}</dd></div>
+      </dl>
+      <p class="faint" style="margin-top: 56px; text-align:center" data-reveal>
+        Email addresses of students are not published. To reach a member of the laboratory, write to the address above.
+      </p>
+    </div>
+  </section>
+</Layout>

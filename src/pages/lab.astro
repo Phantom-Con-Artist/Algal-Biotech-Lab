@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import { LAB_GALLERY } from '../data/gallery';
+import { LAB_PHOTOS } from '../data/content';
+import { LAB_INFO } from '../data/labData';
+import { DEPARTMENT } from '../data/site';
+---
+<Layout
+  title="The Lab | Algal Biotechnology Laboratory, CUTN"
+  description="Photographs and location of the Algal Biotechnology Laboratory, Central University of Tamil Nadu, Neelakudi campus, Thiruvarur."
+  namespace="lab"
+>
+  <PageHero>
+    <Fragment slot="title">The laboratory</Fragment>
+    <Fragment slot="lead">{DEPARTMENT}, Central University of Tamil Nadu, Neelakudi campus, Thiruvarur.</Fragment>
+  </PageHero>
+
+  <section class="sec sec--top-0" aria-label="Photographs of the laboratory">
+    <div class="wrap">
+      <div class="gallery">
+        {LAB_GALLERY.map((img, i) => (
+          <figure>
+            <div class="media" data-clip>
+              <Image src={img} alt={LAB_PHOTOS[i].alt} widths={[640, 1024, 1600]} sizes={i === 0 ? '(min-width: 1280px) 1184px, 100vw' : '(min-width: 768px) 50vw, 100vw'} loading={i === 0 ? 'eager' : 'lazy'} />
+            </div>
+            <figcaption><b>{LAB_PHOTOS[i].title}</b></figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" style="background: var(--paper-2)" aria-labelledby="visit-title">
+    <div class="wrap">
+      <header class="head">
+        <h2 id="visit-title" class="h2" data-lines>Location</h2>
+        <p class="lead" data-reveal>Please write before visiting so that someone can meet you.</p>
+      </header>
+      <dl class="details" data-stagger>
+        <div><dt>Address</dt><dd>{LAB_INFO.address[0]}<br />{LAB_INFO.address[1]}</dd></div>
+        <div><dt>Department</dt><dd>{DEPARTMENT}<br />{LAB_INFO.institution}</dd></div>
+        <div><dt>Directions</dt><dd><a class="link" href={LAB_INFO.mapHref} target="_blank" rel="noopener">Open in Google Maps</a><br /><a class="link" href={`mailto:${LAB_INFO.email}`} data-no-barba>{LAB_INFO.email}</a></dd></div>
+      </dl>
+    </div>
+  </section>
+</Layout>

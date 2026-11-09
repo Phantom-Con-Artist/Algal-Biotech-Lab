@@ -1,0 +1,40 @@
+---
+/**
+ * A programme's process clip (rendered with Remotion from /motion).
+ * Muted, inline and looping; plays only while on screen. With reduced motion
+ * it stays on its poster frame with controls. The steps are also written out
+ * below as text, so nothing depends on watching the video.
+ */
+import type { Flow } from '../../data/content';
+import Icon from './Icon.astro';
+
+interface Props { id: string; flow: Flow; label: string; eager?: boolean }
+const { id, flow, label, eager = false } = Astro.props;
+const steps = [...flow.steps.map((s) => s.title), ...(flow.outcomes ? [flow.outcomes.join(', ')] : [])];
+---
+<figure class="clip">
+  <div class="clip__frame">
+    <video
+      data-clip-video
+      muted
+      loop
+      playsinline
+      preload={eager ? 'auto' : 'none'}
+      poster={`/clips/${id}.webp`}
+      width="1280"
+      height="800"
+      aria-label={`Animated diagram: ${label}`}
+    >
+      <source src={`/clips/${id}.mp4`} type="video/mp4" />
+    </video>
+  </div>
+  <figcaption class="clip__steps">
+    <span class="sr-only">Process: </span>
+    {steps.map((s, i) => (
+      <>
+        <span>{s}</span>
+        {i < steps.length - 1 && <Icon name="arrow" class="clip__arrow" />}
+      </>
+    ))}
+  </figcaption>
+</figure>

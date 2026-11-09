@@ -1,0 +1,189 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/site/Icon.astro';
+import PubItem from '../components/site/PubItem.astro';
+import { PROGRAMS } from '../data/research';
+import { PROGRAM_COPY, FOCUS_COPY, ROLE_LABEL, LAB_PHOTOS } from '../data/content';
+import { FOCUS_AREAS } from '../data/focus';
+import { PI, RESEARCHERS, ALUMNI, fullName } from '../data/members';
+import { PUBLICATIONS } from '../data/publications';
+import sDrop from '../assets/stills/s26408.jpg';
+import sLeaves from '../assets/stills/s1611.jpg';
+import sWeb from '../assets/stills/s7454.jpg';
+import sGrass from '../assets/stills/s46104.jpg';
+
+const recent = PUBLICATIONS.slice(0, 3);
+const people = RESEARCHERS.slice(0, 8);
+
+/* Hero carousel: fast-cut clips (edited in /motion from licensed footage) mixed with stills */
+type Reel = { kind: 'video'; id: string; label: string } | { kind: 'image'; src: ImageMetadata; label: string; alt: string };
+const REEL: Reel[] = [
+  { kind: 'video', id: 'colonies', label: 'Algal colonies' },
+  { kind: 'image', src: sDrop, label: 'A drop on a blade of grass', alt: 'A water drop on a blade of grass' },
+  { kind: 'video', id: 'bench', label: 'At the bench' },
+  { kind: 'video', id: 'moss', label: 'Moss and still water' },
+  { kind: 'image', src: sLeaves, label: 'Leaves in sunlight', alt: 'Sunlit maple leaves against the sky' },
+  { kind: 'video', id: 'insects', label: 'Insects and leaves' },
+  { kind: 'video', id: 'growth', label: 'Growth' },
+  { kind: 'image', src: sWeb, label: 'Dew on a web', alt: 'Dew drops on a spider web' },
+  { kind: 'video', id: 'microscope', label: 'Under the microscope' },
+  { kind: 'video', id: 'leaf', label: 'Leaf, water, light' },
+  { kind: 'image', src: sGrass, label: 'Morning dew', alt: 'Dew on grass' },
+  { kind: 'video', id: 'water', label: 'Ponds and cultures' },
+];
+
+const TAB: Record<string, string> = {
+  'transcriptional-engineering': 'Gene regulation',
+  'stress-biology': 'Stress',
+  'carbon-concentrating': 'Carbon uptake',
+  polyphosphate: 'Phosphate storage',
+  biofuels: 'Biofuels',
+  'bioactives-bioeconomy': 'Bioactives',
+};
+---
+<Layout namespace="home">
+  <!-- Hero: a short statement, then the lab itself -->
+  <section class="k-hero" data-intro aria-labelledby="hero-title">
+    <div class="wrap">
+      <h1 id="hero-title" class="display" data-lines>Microalgal biotechnology, from genes to biofuels</h1>
+      <div class="btn-row" data-reveal>
+        <a class="btn" href="/research" data-magnetic>Research <Icon name="arrow" /></a>
+        <a class="btn btn--ghost" href="/contact">Contact the lab</a>
+      </div>
+    </div>
+    <div class="carousel" data-carousel aria-roledescription="carousel" aria-label="Short clips of microalgae, cultures and their uses">
+      <div class="carousel__track" data-carousel-track>
+        {[...REEL, ...REEL].map((c, i) => (
+          <figure class="carousel__card" aria-hidden={i >= REEL.length ? 'true' : undefined}>
+            {c.kind === 'video' ? (
+              <video data-card-video muted loop playsinline preload="none" poster={`/clips/cut/${c.id}.webp`} width="540" height="720" aria-hidden="true">
+                <source src={`/clips/cut/${c.id}.mp4`} type="video/mp4" />
+              </video>
+            ) : (
+              <Image src={c.src} alt={i >= REEL.length ? '' : c.alt} widths={[300, 540]} sizes="(min-width: 768px) 38vw, 76vw" loading={i < 4 ? 'eager' : 'lazy'} />
+            )}
+          </figure>
+        ))}
+      </div>
+      <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Previous clip" data-carousel-prev><Icon name="arrow" /></button>
+      <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next clip" data-carousel-next><Icon name="arrow" /></button>
+    </div>
+  </section>
+
+  <!-- Statement recedes as the applications pass over it -->
+  <section class="k-statement" data-statement aria-labelledby="statement-title">
+    <div class="wrap">
+      <div class="k-statement__sticky" data-statement-sticky>
+        <h2 id="statement-title" class="h1" data-lines>How a single green cell controls its genes, survives stress and stores carbon</h2>
+        <p class="lead" data-reveal>
+          Our model is <span class="sp">Chlamydomonas reinhardtii</span>. Four applied areas follow from that work.
+        </p>
+      </div>
+      <div class="k-grid" data-statement-grid>
+        {FOCUS_AREAS.map((f) => {
+          const c = FOCUS_COPY[f.id];
+          return (
+            <a class="k-card" href="/research#applications" data-label="Research">
+              <div class="media" data-clip>
+                <Image src={f.images[0]} alt={c.alt[0]} widths={[480, 800, 1200]} sizes="(min-width: 768px) 50vw, 100vw" />
+              </div>
+              <div class="k-card__cap"><b>{c.title}</b><span>Application</span></div>
+              <p class="k-card__note">{c.body}</p>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Research programmes: an edge-to-edge carousel of process clips -->
+  <section class="sec sec--top-0 programmes" aria-labelledby="programmes-title">
+    <div class="wrap">
+      <header class="head head--split">
+        <h2 id="programmes-title" class="h2" data-lines>Six research programmes</h2>
+        <a class="arrow-link" href="/research" data-label="Research" data-reveal>All programmes and papers <Icon name="arrow-up" /></a>
+      </header>
+    </div>
+    <div class="carousel carousel--wide" data-carousel data-carousel-loop="false" data-carousel-auto="false" aria-roledescription="carousel" aria-label="Research programmes">
+      <div class="carousel__track" data-carousel-track>
+        {PROGRAMS.map((prog) => {
+          const c = PROGRAM_COPY[prog.id];
+          return (
+            <article class="carousel__card pcard">
+              <a class="pcard__media" href={`/research#${prog.id}`} data-label="Research" aria-label={`${c.title}: programme details`}>
+                <video data-card-video muted loop playsinline preload="none" poster={`/clips/${prog.id}.webp`} width="1280" height="800" aria-hidden="true">
+                  <source src={`/clips/${prog.id}.mp4`} type="video/mp4" />
+                </video>
+              </a>
+              <div class="pcard__text">
+                <h3>{c.title}</h3>
+                <p>{c.short}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+      <button class="carousel__btn carousel__btn--prev" type="button" aria-label="Previous programme" data-carousel-prev><Icon name="arrow" /></button>
+      <button class="carousel__btn carousel__btn--next" type="button" aria-label="Next programme" data-carousel-next><Icon name="arrow" /></button>
+    </div>
+  </section>
+
+  <!-- Introducing the laboratory: a pill between two words grows into a card (after Kalex) -->
+  <section class="k-intro" data-intro-window aria-labelledby="intro-title">
+    <div class="k-intro__stage">
+      <h2 id="intro-title" class="sr-only">Inside the laboratory</h2>
+      <span class="k-intro__word k-intro__word--l" aria-hidden="true">Inside</span>
+      <div class="k-intro__media">
+        <video data-lab-film muted loop playsinline preload="none" poster="/clips/cut/lab.webp" width="1280" height="720" aria-label="A short film of the laboratory: culture flasks, growth chambers, an orbital shaker, a spectrophotometer, a centrifuge, a laminar air-flow cabinet and gel electrophoresis">
+          <source src="/clips/cut/lab.mp4" type="video/mp4" />
+        </video>
+        <div class="k-intro__cap">
+          <p>Microalgae grown, studied and engineered at CUTN, Thiruvarur.</p>
+          <a class="btn" href="/lab" data-label="The Lab">See the laboratory <Icon name="arrow" /></a>
+        </div>
+      </div>
+      <span class="k-intro__word k-intro__word--r" aria-hidden="true">the laboratory</span>
+    </div>
+  </section>
+
+  <!-- Researchers in the black band, which opens from inside out -->
+  <section class="band dark sec" data-band data-theme="dark" aria-labelledby="people-title">
+    <div class="band__bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <header class="head">
+        <h2 id="people-title" class="h2" data-lines>The researchers</h2>
+        <p class="lead" data-reveal>{RESEARCHERS.length} researchers and {ALUMNI.length} alumni, led by {fullName(PI)}.</p>
+      </header>
+      <ul class="people-grid" data-stagger>
+        {people.map((m) => (
+          <li>
+            <a class="person" href={`/people/${m.slug}`} data-label={m.name}>
+              <div class="person__photo">
+                <Image src={m.photo} alt={`Portrait of ${m.name}`} widths={[320, 520]} sizes="(min-width: 1100px) 25vw, (min-width: 768px) 33vw, 50vw" style={`object-position:${m.photoPosition ?? '50% 30%'}`} />
+              </div>
+              <div class="person__text">
+                <p class="person__name">{m.name}</p>
+                <p class="person__role">{ROLE_LABEL[m.role]}</p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p style="margin-top: 56px; text-align:center" data-reveal>
+        <a class="btn btn--ghost" href="/people">All members <Icon name="arrow" /></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Recent publications -->
+  <section class="sec" aria-labelledby="pubs-title">
+    <div class="wrap">
+      <header class="head"><h2 id="pubs-title" class="h2" data-lines>Recent publications</h2></header>
+      <ul class="pubs" data-stagger>{recent.map((p) => <PubItem p={p} />)}</ul>
+      <p style="margin-top: 48px; text-align:center" data-reveal>
+        <a class="btn" href="/publications" data-magnetic>All {PUBLICATIONS.length} publications <Icon name="arrow" /></a>
+      </p>
+    </div>
+  </section>
+</Layout>

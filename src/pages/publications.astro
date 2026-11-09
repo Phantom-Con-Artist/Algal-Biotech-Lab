@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import PubItem from '../components/site/PubItem.astro';
+import Icon from '../components/site/Icon.astro';
+import PubStats from '../components/site/PubStats.astro';
+import { PUBLICATIONS } from '../data/publications';
+import { YEARS_ACTIVE } from '../data/lib';
+
+const byYear = new Map<number, typeof PUBLICATIONS>();
+for (const p of PUBLICATIONS) byYear.set(p.year, [...(byYear.get(p.year) ?? []), p]);
+const years = [...byYear.keys()].sort((a, b) => b - a);
+const count = (t: string) => PUBLICATIONS.filter((p) => p.type === t).length;
+const FILTERS = [
+  { key: 'all', label: 'All', n: PUBLICATIONS.length },
+  { key: 'article', label: 'Articles', n: count('article') },
+  { key: 'chapter', label: 'Chapters', n: count('chapter') },
+  { key: 'preprint', label: 'Preprints', n: count('preprint') },
+].filter((f) => f.n > 0);
+---
+<Layout
+  title="Publications | Algal Biotechnology Laboratory, CUTN"
+  description="Journal articles, book chapters and preprints from the Algal Biotechnology Laboratory at CUTN, with DOIs and copyable APA citations."
+  namespace="publications"
+>
+  <PageHero>
+    <Fragment slot="title">Publications</Fragment>
+    <Fragment slot="lead">{PUBLICATIONS.length} journal articles, book chapters and preprints, {YEARS_ACTIVE.first} to {YEARS_ACTIVE.last}. Laboratory members are shown in bold. Each entry links to its DOI and can be copied as an APA citation.</Fragment>
+  </PageHero>
+
+  <section class="sec sec--top-0" data-pubs aria-label="Publication list">
+    <div class="wrap">
+      <PubStats />
+      <div class="toolbar" role="search">
+        <label class="search">
+          <span class="sr-only">Search publications</span>
+          <Icon name="search" />
+          <input type="search" placeholder="Search by title, author, journal, year or DOI" autocomplete="off" data-q />
+        </label>
+        <div class="filters" role="group" aria-label="Filter by type">
+          {FILTERS.map((f) => (
+            <button type="button" data-type-filter={f.key} aria-pressed={f.key === 'all' ? 'true' : 'false'}>{f.label}<span>{f.n}</span></button>
+          ))}
+        </div>
+        <p class="toolbar__count" aria-live="polite" data-count-out>{PUBLICATIONS.length} of {PUBLICATIONS.length} shown</p>
+      </div>
+
+      {years.map((y) => (
+        <section class="year-group" data-year-group aria-labelledby={`y-${y}`}>
+          <h2 id={`y-${y}`}>{y} <small data-group-count>{byYear.get(y)!.length} {byYear.get(y)!.length === 1 ? 'paper' : 'papers'}</small></h2>
+          <ul class="pubs">
+            {byYear.get(y)!.map((p) => <PubItem p={p} filterable />)}
+          </ul>
+        </section>
+      ))}
+      <p class="empty" data-empty hidden>No publications match your search. Try a single keyword, an author’s surname or a year.</p>
+    </div>
+  </section>
+</Layout>

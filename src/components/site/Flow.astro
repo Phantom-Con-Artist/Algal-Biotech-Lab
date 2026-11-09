@@ -1,0 +1,31 @@
+---
+/**
+ * A process drawn as a flowchart: numbered steps joined by arrows, ending in
+ * the outcomes. Horizontal when its container is wide, vertical when narrow.
+ * Readable as an ordered list without CSS or JavaScript.
+ */
+import type { Flow } from '../../data/content';
+
+interface Props { flow: Flow; label: string }
+const { flow, label } = Astro.props;
+const last = flow.steps.length - 1;
+---
+<figure class="flow" data-flow aria-label={`Process: ${label}`}>
+  <ol class="flow__list">
+    {flow.steps.map((s, i) => (
+      <li class="flow__node flow__node--step">
+        <b>{s.title}</b>
+        {s.note && <span>{s.note}</span>}
+        {(i < last || flow.outcomes) && (
+          <i class="flow__link" aria-hidden="true"><i class="flow__pulse" style={`animation-delay:${i * 0.35}s`}></i></i>
+        )}
+      </li>
+    ))}
+    {flow.outcomes && (
+      <li class="flow__node flow__node--out">
+        <span class="flow__label">{flow.outcomes.length > 1 ? 'Outcomes' : 'Outcome'}</span>
+        <ul>{flow.outcomes.map((o) => <li>{o}</li>)}</ul>
+      </li>
+    )}
+  </ol>
+</figure>

@@ -1,0 +1,118 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Clip from '../components/site/Clip.astro';
+import { Image } from 'astro:assets';
+import Icon from '../components/site/Icon.astro';
+import { PROGRAMS } from '../data/research';
+import { PROGRAM_COPY, PROGRAM_FLOWS, FOCUS_COPY, GRANT_ROLE_LABEL } from '../data/content';
+import { FOCUS_AREAS } from '../data/focus';
+import { getPublication } from '../data/publications';
+import { GRANTS, RECOGNITION, TALKS } from '../data/recognition';
+---
+<Layout
+  title="Research | Algal Biotechnology Laboratory, CUTN"
+  description="Six research programmes on Chlamydomonas and related microalgae: transcriptional engineering, stress biology, the carbon-concentrating mechanism, polyphosphate storage, biofuels and bioactive compounds."
+  namespace="research"
+>
+  <PageHero>
+    <Fragment slot="title">Research</Fragment>
+    <Fragment slot="lead">Six programmes on the cell biology of microalgae, the four areas where that work is applied, and the grants that fund it.</Fragment>
+    <nav class="jump" aria-label="Programmes on this page" data-reveal>
+      {PROGRAMS.map((p) => <a class="chip" href={`#${p.id}`}>{PROGRAM_COPY[p.id].title}</a>)}
+    </nav>
+  </PageHero>
+
+  <section aria-label="Programmes">
+    <div class="wrap">
+      {PROGRAMS.map((prog) => {
+        const c = PROGRAM_COPY[prog.id];
+        return (
+          <article class="program" id={prog.id} aria-labelledby={`h-${prog.id}`}>
+            <div class="program__head">
+              <div>
+                <h2 id={`h-${prog.id}`} class="h2" data-lines>{c.title}</h2>
+                <p class="program__organ" data-reveal>Cell structure: {c.organelleLabel}</p>
+              </div>
+              <p data-reveal>{c.body}</p>
+            </div>
+            <Clip id={prog.id} flow={PROGRAM_FLOWS[prog.id]} label={c.title} />
+            <div class="papers-wrap">
+              <h3>Papers</h3>
+              <ul class="papers">
+                {prog.paperIds.map((id) => {
+                  const p = getPublication(id);
+                  return (
+                    <li><a href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener">
+                      <span>{p.title}<small>{p.venue}, {p.year}</small></span><Icon name="arrow-up" />
+                    </a></li>
+                  );
+                })}
+              </ul>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="band dark sec" id="applications" data-band data-theme="dark" aria-labelledby="apps-title">
+    <div class="band__bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <header class="head">
+        <h2 id="apps-title" class="h2" data-lines>Applications</h2>
+        <p class="lead" data-reveal>Where the programmes meet energy, climate, health and water.</p>
+      </header>
+      <ul class="apps">
+        {FOCUS_AREAS.map((f) => {
+          const c = FOCUS_COPY[f.id];
+          return (
+            <li class="app">
+              <div class="app__text">
+                <h3 class="h3">{c.title}</h3>
+                <p>{c.body}</p>
+                <ul style="list-style:none; padding:0; margin: 16px 0 0; display:grid; gap: 8px">
+                  {f.paperIds.map((id) => {
+                    const p = getPublication(id);
+                    return <li><a class="link" style="font-size:.92rem; color: var(--on-dark-2); text-decoration-color:#555" href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener">{p.title} ({p.year})</a></li>;
+                  })}
+                </ul>
+              </div>
+              <div class="media" style="aspect-ratio: 16 / 9" data-clip><Image src={f.images[1] ?? f.images[0]} alt={c.alt[1] ?? c.alt[0]} widths={[640, 1024]} sizes="(min-width: 1024px) 60vw, 100vw" /></div>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="grants-title">
+    <div class="wrap">
+      <header class="head"><h2 id="grants-title" class="h2" data-lines>Grants</h2></header>
+      <ul class="ledger" data-stagger>
+        {GRANTS.map((g) => <li><time>{g.period}</time><b>{g.title}</b><span>{g.agency}. {GRANT_ROLE_LABEL[g.role]}.</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--top-0" aria-labelledby="awards-title">
+    <div class="wrap">
+      <header class="head">
+        <h2 id="awards-title" class="h2" data-lines>Awards and fellowships</h2>
+        <p class="lead" data-reveal>Awarded to the Principal Investigator.</p>
+      </header>
+      <ul class="ledger" data-stagger>
+        {RECOGNITION.map((r) => <li><time>{r.year}</time><b>{r.title}</b><span>{r.body}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--top-0" aria-labelledby="talks-title">
+    <div class="wrap">
+      <header class="head"><h2 id="talks-title" class="h2" data-lines>Conference presentations</h2></header>
+      <ul class="ledger" data-stagger>
+        {TALKS.map((t) => <li><time>{t.venue}</time><b>{t.title}</b><span>{t.authors}</span></li>)}
+      </ul>
+    </div>
+  </section>
+</Layout>

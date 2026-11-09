@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/site/PageHero.astro';
+import Icon from '../../components/site/Icon.astro';
+import { PI, RESEARCHERS, ALUMNI, fullName } from '../../data/members';
+import { ROLE_LABEL } from '../../data/content';
+import { papersBy } from '../../data/lib';
+import { PROSPECTIVE_MAILTO } from '../../data/inquiries';
+---
+<Layout
+  title="People | Algal Biotechnology Laboratory, CUTN"
+  description="Members of the Algal Biotechnology Laboratory at CUTN, led by Dr. Amit Kumar Bajhaiya: research fellows, students and alumni."
+  namespace="people"
+>
+  <PageHero>
+    <Fragment slot="title">People</Fragment>
+    <Fragment slot="lead">{RESEARCHERS.length} researchers led by {fullName(PI)}, and {ALUMNI.length} alumni.</Fragment>
+  </PageHero>
+
+  <section class="sec sec--top-0" aria-labelledby="pi-title">
+    <div class="wrap wrap--narrow">
+      <div class="pi">
+        <a class="pi__portrait" href={`/people/${PI.slug}`} data-label={fullName(PI)} data-clip tabindex="-1" aria-hidden="true">
+          <Image src={PI.photo} alt="" widths={[240, 480]} sizes="220px" style={`object-position:${PI.photoPosition}`} loading="eager" />
+        </a>
+        <h2 id="pi-title" class="h2" data-lines><a href={`/people/${PI.slug}`} data-label={fullName(PI)}>{fullName(PI)}</a></h2>
+        <p class="pi__role" data-reveal>Principal Investigator and head of the laboratory</p>
+        <div class="chips" data-reveal>{PI.interests.map((i) => <span class="chip">{i}</span>)}</div>
+        <a class="arrow-link" href={`/people/${PI.slug}`} data-label={fullName(PI)} data-reveal>Profile, career and {papersBy(PI).length} publications <Icon name="arrow-up" /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--top-0" aria-labelledby="current-title">
+    <div class="wrap">
+      <header class="head"><h2 id="current-title" class="h2" data-lines>Current researchers</h2></header>
+      <ul class="people-grid" data-stagger>
+        {RESEARCHERS.map((m) => (
+          <li>
+            <a class="person" href={`/people/${m.slug}`} data-label={m.name}>
+              <div class="person__photo">
+                <Image src={m.photo} alt={`Portrait of ${m.name}`} widths={[320, 520]} sizes="(min-width: 1100px) 25vw, (min-width: 768px) 33vw, 50vw" style={`object-position:${m.photoPosition ?? '50% 30%'}`} />
+              </div>
+              <div class="person__text">
+                <p class="person__name">{m.name}</p>
+                <p class="person__role">{ROLE_LABEL[m.role]}</p>
+                <p class="person__meta">Joined {m.joined}</p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--top-0" aria-labelledby="alumni-title">
+    <div class="wrap">
+      <header class="head"><h2 id="alumni-title" class="h2" data-lines>Alumni</h2></header>
+      <ul class="alumni" data-stagger>
+        {ALUMNI.map((m) => (
+          <li>
+            <a href={`/people/${m.slug}`} data-label={m.name}>
+              <Image src={m.photo} alt="" width={112} height={112} style={`object-position:${m.photoPosition ?? '50% 30%'}`} />
+              <span><b>{m.name}</b><span>{m.now ?? ROLE_LABEL[m.role]}</span></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" style="background: var(--paper-2)" aria-labelledby="join-title">
+    <div class="wrap" style="text-align:center">
+      <h2 id="join-title" class="h2" style="max-width: 20ch; margin-inline: auto" data-lines>Prospective students</h2>
+      <p class="lead" style="margin: 20px auto 0; max-width: 54ch" data-reveal>
+        Ph.D. and M.Sc. applicants can write to the laboratory directly. The email template asks for your current degree,
+        the programme that interests you, and your funding or fellowship status.
+      </p>
+      <p style="margin-top: 36px" data-reveal>
+        <a class="btn" href={PROSPECTIVE_MAILTO} data-no-barba data-magnetic>Write a student enquiry <Icon name="arrow-up" /></a>
+      </p>
+    </div>
+  </section>
+</Layout>

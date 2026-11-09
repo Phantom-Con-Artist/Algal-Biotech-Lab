@@ -1,0 +1,10 @@
+---
+/** Inner-page heading: title and an optional one-paragraph summary, centred. */
+---
+<section class="phero" data-intro>
+  <div class="wrap">
+    <h1 class="h1" data-lines><slot name="title" /></h1>
+    {Astro.slots.has('lead') && <p class="lead" data-reveal><slot name="lead" /></p>}
+    <slot />
+  </div>
+</section>
